@@ -1,0 +1,41 @@
+[Header]
+; MPMS3 Data File (default extension .dat)
+; Copyright (c) 2007, Quantum Design, Inc. All rights reserved.
+TITLE,
+FILEOPENTIME,3874580405.65606,10/10/2022,4:20 pm
+BYAPP,MPMS3 w/ AC,1.0,1.1
+INFO,MPMS3 Measurement Release 1.1.16 Build 424, MultiVu Release 2.3.4.19,APPNAME
+INFO,Linear Motor Servo Controller,MOTOR_MODULE_NAME
+INFO,3101-100 J0,MOTOR_HW_VERSION
+INFO,MMC721,MOTOR_SERIAL_NUMBER
+INFO,01.04.28,MOTOR_SOFTWARE_VERSION
+INFO,Quantum Design Squid Module,SQUID_MODULE_NAME
+INFO,3101-501 B0,SQUID_HW_VERSION
+INFO,SQM195,SQUID_SERIAL_NUMBER
+INFO,01.03.04,SQUID_SOFTWARE_VERSION
+INFO,SQUID AC,AC_MODULE_NAME
+INFO,3101-401 f1,AC_HW_VERSION
+INFO,SAC107,AC_SERIAL_NUMBER
+INFO,SQUID AC 00.95.07,AC_SOFTWARE_VERSION
+INFO,TCI166,COIL_SERIAL_NUMBER
+INFO,0,MOMENT_UNITS
+INFO,Quidel - 101022,SAMPLE_MATERIAL
+INFO,,SAMPLE_COMMENT
+INFO,1.38,SAMPLE_MASS
+INFO,,SAMPLE_VOLUME
+INFO,,SAMPLE_MOLECULAR_WEIGHT
+INFO,,SAMPLE_SIZE
+INFO,,SAMPLE_SHAPE
+INFO,Brass,SAMPLE_HOLDER
+INFO,Standard,SAMPLE_HOLDER_DETAIL
+INFO,65.88,SAMPLE_OFFSET
+DATATYPE,COMMENT,1
+DATATYPE,TIME,2
+STARTUPAXIS,X,2
+STARTUPAXIS,Y1,5
+FIELDGROUP, VSM,2,3,4,5,6,8,9,10,11,14,15
+FIELDGROUP, DC, 2,3,4,14,56,57,58,59,60,61,62,63,64,65,66,67,68,69
+FIELDGROUP, AC, 2,3,4,11,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30
+STARTUPGROUP, All
+[Data]
+Comment,Time Stamp (sec),Temperature (K),Magnetic Field (Oe),Moment (emu),M. Std. Err. (emu),Transport Action,Averaging Time (sec),Frequency (Hz),Peak Amplitude (mm),Center Position (mm),Lockin Signal' (V),Lockin Signal (V),Range,M. Quad. Signal (emu),AC Moment (emu),AC M. Std Err. (emu),AC Phase (deg),AC Phase Std. Err. (deg),AC Susceptibility (emu/Oe),AC Suscept. Std Err. (emu/Oe),AC X' (emu/Oe),AC X' Std Err. (emu/Oe),AC X'' (emu/Oe),AC X'' Std Err. (emu/Oe),AC Drive (Oe),AC Frequency (Hz),AC Averaging Time (sec),AC Cycles,AC Range,AC Measure Type,AC Signal' (V),AC Signal'' (V),AC Trim Coil Ratio,AC Trim Coil Phase,Min. Temperature (K),Max. Temperature (K),Min. Field (Oe),Max. Field (Oe),Mass (grams),Motor Lag (deg),Pressure (Torr),Measure Count,Measurement Number,SQUID Status (code),Motor Status (code),Measure Status (code),Motor Current (amps),Motor Temp. (C),Temp. Status (code),Field Status (code),Chamber Status (code),Chamber Temp (K),Redirection State,Evercool Status,Average Temp (K),Rotation Angle (deg),Rotator state,DC Moment Fixed Ctr (emu),DC Moment Err Fixed Ctr (emu),DC Moment Free Ctr (emu),DC Moment Err Free Ctr (emu),DC Fixed Fit,DC Free Fit,DC Calculated Center (mm),DC Calculated Center Err (mm),DC Scan Length (mm),DC Scan Time (s),DC Number of Points,DC Squid Drift,DC Min V (V),DC Max V (V),DC Scans per Measure,Map 01,Map 02,Map 03,Map 04,Map 05,Map 06,Map 07,Map 08,Map 09,Map 10,Map 11,Map 12,Map 13,Map 14,Map 15,Map 16
