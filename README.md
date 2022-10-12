@@ -42,8 +42,9 @@ If we start doing a bunch of measurements for outside users, we might consider m
 
 ## Installation and Usage
 
-Note: I recommend using virtual environments, especially if you want to work on developing the package.
-{: .alert .alert-info}
+> **Note**
+> I recommend using virtual environments, especially if you want to work on developing the package.
+
 
 If you just want to use the code, you can install it with `pip install git+https://github.com/RinehartGroup/MagnetoPy.git`. I'm not a `conda` user, [but you can do similar with `conda`](https://stackoverflow.com/questions/19042389/conda-installing-upgrading-directly-from-github). The necessary requirements should install automatically, but if they don't check out `requirements.txt` and make sure you have the requisite packages.
 
