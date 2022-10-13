@@ -66,4 +66,8 @@ While working on package development, you can install the package in "developmen
 
 Both [VS Code](https://code.visualstudio.com/docs/sourcecontrol/overview) and [JupyterLab](https://github.com/jupyterlab/jupyterlab-git) have git extensions that make this process easy.
 
+> **Note:**
+> When developing a package, try to avoid using global variables (including `matplotlib` global variables). Most things should be functions or classes.
 
+> **Note:**
+> It's helpful to hava a consistent code style within a package. I use [`black`](https://github.com/psf/black) (`pip install black`), which automatically formats the code every time you save the `.py` file. For `.ipynb` files (notebooks) you'll have to use [alternatives](https://www.reddit.com/r/Python/comments/ixbibn/black_for_jupyter_notebook_and_jupyterlab/), but typically for package development you'll be making `.py` files, not `.ipynb` files, except for tests and examples.
