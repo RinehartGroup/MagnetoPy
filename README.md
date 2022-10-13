@@ -62,7 +62,7 @@ If you want to work on the code, you can:
 
 Once whatever you're working on is stable, make sure it doesn't break any of the existing tests/examples, consider adding a test or example notebook for your work to `/tests` or `/examples`, then push your changes to your forked repository or branch and make a pull request to this repository. I'll review it and merge it or make changes/comments before merging.
 
-While working on package development, you can install the package in "development mode" by running `python setup.py develop` (what I use) or `python -m pip install -e .` (what I think is now recommended) in the root directory of the repository ([more info here](https://stackoverflow.com/questions/19048732/python-setup-py-develop-vs-install)). Again, I recommend doing all of this in a virtual environment.
+While working on package development, you can install the package in "development mode" by running `python setup.py develop` (what I use) or `python -m pip install -e .` (what I think is now recommended) in the root directory of the repository ([more info here]([https://stackoverflow.com/questions/19048732/python-setup-py-develop-vs-install](https://packaging.python.org/en/latest/guides/distributing-packages-using-setuptools/#working-in-development-mode))). Again, I recommend doing all of this in a virtual environment.
 
 Both [VS Code](https://code.visualstudio.com/docs/sourcecontrol/overview) and [JupyterLab](https://github.com/jupyterlab/jupyterlab-git) have git extensions that make this process easy.
 
