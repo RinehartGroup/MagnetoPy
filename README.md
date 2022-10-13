@@ -60,7 +60,7 @@ If you want to work on the code, you can:
 - fork the repository so you have a copy on your own github account. Go to that repository and clone it to your local machine.
 - create a branch on this repository (name it either after yourself or the feature you're working on), clone the repository to your local machine, then __switch to that branch__ using `git checkout <branch name>`.
 
-Once whatever you're working on is stable, mamke sure it doesn't break any of the existing tests/examples, consider adding a test or example notebook for your work to `/tests` or `/examples`, then push your changes to your forked repository or branch and make a pull request to this repository. I'll review it and merge it or make changes/comments before merging.
+Once whatever you're working on is stable, make sure it doesn't break any of the existing tests/examples, consider adding a test or example notebook for your work to `/tests` or `/examples`, then push your changes to your forked repository or branch and make a pull request to this repository. I'll review it and merge it or make changes/comments before merging.
 
 While working on package development, you can install the package in "development mode" by running `python setup.py develop` (what I use) or `python -m pip install -e .` (what I think is now recommended) in the root directory of the repository ([more info here](https://stackoverflow.com/questions/19048732/python-setup-py-develop-vs-install)). Again, I recommend doing all of this in a virtual environment.
 
