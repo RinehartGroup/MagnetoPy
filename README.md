@@ -42,11 +42,14 @@ If we start doing a bunch of measurements for outside users, we might consider m
 
 ## Installation and Usage
 
-> **Note**
-> I recommend using virtual environments, especially if you want to work on developing the package.
+> **Recommendation:**
+> Use virtual environments to separate the different projects you work on. Definitely use a virtual environment if you want to work on developing the package. Here's some potentially helpful info to get you started:
+> - [official `venv` docs:](https://docs.python.org/3/library/venv.html)
+> - [a more thorough tutorial on virtual environments](https://realpython.com/python-virtual-environments-a-primer/)
+> - [using Jupyter Notebooks / ipython with virtual environments](https://janakiev.com/blog/jupyter-virtual-envs/)
 
 
-If you just want to use the code, you can install it with `pip install git+https://github.com/RinehartGroup/MagnetoPy.git`. I'm not a `conda` user, [but you can do similar with `conda`](https://stackoverflow.com/questions/19042389/conda-installing-upgrading-directly-from-github). The necessary requirements should install automatically, but if they don't check out `requirements.txt` and make sure you have the requisite packages.
+If you just want to use the code, you can install it with `pip install git+https://github.com/RinehartGroup/MagnetoPy.git`. I'm not a `conda` user, [but this should help](https://stackoverflow.com/questions/19042389/conda-installing-upgrading-directly-from-github). The necessary requirements should install automatically, but if they don't check out `requirements.txt` and make sure you have the requisite packages.
 
 Importing `magnetopy` exposes all classes and functions, as I show in [`example_report_creation.ipynb`](https://github.com/RinehartGroup/MagnetoPy/blob/master/examples/report_creation/example_report_creation.ipynb).
 
