@@ -1,6 +1,10 @@
 # MagnetoPy
 
-`MagnetoPy` is the magnetic successor to the `magdb` set of packages. At the time, I was working on low-moment magnetic data analysis, with the intent to develop code for doing our own background subtraction, moment determination, and data validation.
+![MagPy_logo](/MagPY/icons/54ppi/iconsArtboard%201ldpi.png)
+
+<img src=/MagPY/icons/72ppi/iconsArtboard%201mdpi.png alt="MagPy" width="200"/>
+
+`MagnetoPy` (aka `MagPy`) is the magnetic successor to the `magdb` set of packages. At the time, I was working on low-moment magnetic data analysis, with the intent to develop code for doing our own background subtraction, moment determination, and data validation.
 
 Here is a breakdown of the modules, in order of likely usefulness:
 
