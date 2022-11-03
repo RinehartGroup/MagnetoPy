@@ -51,7 +51,7 @@ If we start doing a bunch of measurements for outside users, we might consider m
 > - [using Jupyter Notebooks / ipython with virtual environments](https://janakiev.com/blog/jupyter-virtual-envs/)
 
 
-If you just want to use the code, you can install it with `pip install git+https://github.com/RinehartGroup/MagnetoPy.git`. I'm not a `conda` user, [but this should help](https://stackoverflow.com/questions/19042389/conda-installing-upgrading-directly-from-github). The necessary requirements should install automatically, but if they don't check out `requirements.txt` and make sure you have the requisite packages.
+If you just want to use the code, you can install it with `pip install git+https://github.com/RinehartGroup/MagnetoPy.git`. I'm not a `conda` user, [but this should help if you want to use `conda` instead of `pip`](https://stackoverflow.com/questions/19042389/conda-installing-upgrading-directly-from-github). The necessary requirements should install automatically, but if they don't check out `requirements.txt` and make sure you have the requisite packages.
 
 Importing `magnetopy` exposes all classes and functions, as I show in [`example_report_creation.ipynb`](https://github.com/RinehartGroup/MagnetoPy/blob/master/examples/report_creation/example_report_creation.ipynb).
 
