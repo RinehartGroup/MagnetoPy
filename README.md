@@ -1,7 +1,5 @@
 # MagnetoPy
 
-![MagPy_logo](/MagPY/icons/54ppi/iconsArtboard%201ldpi.png)
-
 <img src=/MagPY/icons/72ppi/iconsArtboard%201mdpi.png alt="MagPy" width="200"/>
 
 `MagnetoPy` (aka `MagPy`) is the magnetic successor to the `magdb` set of packages. At the time, I was working on low-moment magnetic data analysis, with the intent to develop code for doing our own background subtraction, moment determination, and data validation.
@@ -53,7 +51,7 @@ If we start doing a bunch of measurements for outside users, we might consider m
 > - [using Jupyter Notebooks / ipython with virtual environments](https://janakiev.com/blog/jupyter-virtual-envs/)
 
 
-If you just want to use the code, you can install it with `pip install git+https://github.com/RinehartGroup/MagnetoPy.git`. I'm not a `conda` user, [but this should help](https://stackoverflow.com/questions/19042389/conda-installing-upgrading-directly-from-github). The necessary requirements should install automatically, but if they don't check out `requirements.txt` and make sure you have the requisite packages.
+If you just want to use the code, you can install it with `pip install git+https://github.com/RinehartGroup/MagnetoPy.git`. I'm not a `conda` user, [but this should help if you want to use `conda` instead of `pip`](https://stackoverflow.com/questions/19042389/conda-installing-upgrading-directly-from-github). The necessary requirements should install automatically, but if they don't check out `requirements.txt` and make sure you have the requisite packages.
 
 Importing `magnetopy` exposes all classes and functions, as I show in [`example_report_creation.ipynb`](https://github.com/RinehartGroup/MagnetoPy/blob/master/examples/report_creation/example_report_creation.ipynb).
 
