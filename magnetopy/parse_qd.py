@@ -2,9 +2,7 @@
 TO DO:
 - in QDFile.__init__: add a method to detect the type of file (dc, dc_vsm, ac, etc.) and set attribute QDFile.type
 - add a QDFile.mass property that sets the property and adds a "Moment per mass" column to the QDFile.parsed_data based on QDFile.type
-"""
 
-"""
 Classes
 ----------
 QDFile
@@ -31,6 +29,7 @@ import pathlib
 import re
 from collections import namedtuple
 from typing import NamedTuple
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -63,8 +62,8 @@ class QDFile:
         in self.parsed_data
     """
 
-    def __init__(self, path: pathlib.Path):
-        self.path = path
+    def __init__(self, path: str | Path):
+        self.path = Path(path)
         self.header = self._import_header(path)
         self.sample_info = self._sample_info()
         self.data = self._import_data(path, len(self.header) + 2)
