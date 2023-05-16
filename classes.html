@@ -1,0 +1,71 @@
+<html>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+      <div class="mermaid">
+    
+        classDiagram
+          class AnalyzedSingleRawDCScan {
+            a
+            a_err
+            c
+            c_err
+            info
+            residual_analysis_by_sum
+            residual_symmetry
+            s
+            s_err
+            scan_obj
+          }
+          class BackgroundSubtraction {
+          }
+          class Calibration {
+            factors : DataFrame
+            file
+            select_cal_factor(range: int, field: float, temp: float) float
+          }
+          class DiamagneticCorrection {
+          }
+          class Measurement {
+            name
+          }
+          class QDFile {
+            comments
+            data : NoneType, TextFileReader
+            header : list
+            parsed_data
+            path : Path
+            raw_data : NoneType, TextFileReader
+            raw_header : list, NoneType
+            sample_info : Info
+            type : str
+            analyze_raw(background_subtracted: bool)
+          }
+          class QDFitAnalysis {
+          }
+          class Sample {
+            dataset : DataFrame
+          }
+          class SingleRawDCScan {
+            QD_fit_scan
+            avg_field
+            avg_temp
+            data : DataFrame
+            down : DirectionalScan
+            down_scan
+            fit_obj
+            info
+            processed_scan : DataFrame
+            scan_num : int
+            time
+            up : DirectionalScan
+            up_scan
+            analyze(background_subtracted: bool)
+            analyze_qd_residual()
+          }
+          AnalyzedSingleRawDCScan --* SingleRawDCScan : fit_obj
+          QDFile --* Calibration : file
+          SingleRawDCScan --o AnalyzedSingleRawDCScan : scan_obj
+  
+       </div>
+  </body>
+</html>
