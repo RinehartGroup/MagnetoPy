@@ -1,0 +1,5 @@
+[MASTER]
+docstring-min-length=10
+disable=missing-function-docstring,missing-class-docstring,missing-module-docstring,unnecessary-ellipsis
+[FORMAT]
+good-names=i,j,k,x,y,n,f,id,cm,rf,ax,df,sc,tc,ac

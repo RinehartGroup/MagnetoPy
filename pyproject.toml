@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "magnetopy"
+version = "0.1.0"
+description = "Magnetism in Python"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "numpy >=1.0.0, <2.0.0",
+    "pandas >=1.0.0, <2.0.0",
+    "scipy >=1.0.0, <2.0.0",
+    "matplotlib >=3.0.0, <4.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+]
+
+[tool.setuptools]
+packages = ["magnetopy"]
+
+[project.urls]
+"Homepage" = "https://github.com/RinehartGroup/MagnetoPy.git"

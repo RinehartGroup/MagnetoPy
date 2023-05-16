@@ -21,4 +21,3 @@ from magnetopy.plot import (
     plot_mvsh,
     plot_mvsh_w_fits,
 )
-from magnetopy.sample import Measurement, Sample, DiamagneticCorrection
