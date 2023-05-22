@@ -36,6 +36,8 @@ A lot of the magnetism code in `magdb` takes from `MagnetoPy`, though not everyt
 
 I don't plan on continuing to develop `MagnetoPy`, but it might be a good starting point for continued work on the raw data analysis. The code that Kyle used to do the parsing portion of the raw data plotting is all in `parse_qd`. Anything that gets done here will help start the process of getting it into `magdb`.
 
+5/22/2023 update: see [example_of_raw.ipynb](examples/raw_data/example_of_raw.ipynb) for an example of how to use `magnetopy` to look at voltage scans found within the .rw.dat files
+
 ## Report Creation
 
 The one thing I still use `MagnetoPy` for is report creation. I have an external SQUID user that runs the same measurements on every sample, so I have a somewhat polishhed script for generating the figures and csv files for the report. I included a sample notebook, [`example_report_creation.ipynb`](https://github.com/RinehartGroup/MagnetoPy/blob/master/examples/report_creation/example_report_creation.ipynb), with more info there on how that works.
