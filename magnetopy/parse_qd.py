@@ -62,7 +62,7 @@ class QDFile:
         in self.parsed_data
     """
 
-    def __init__(self, path: str | Path):
+    def __init__(self, path: str | Path, process_raw: bool = False):
         self.path = Path(path)
         self.header = self._import_header(path)
         self.sample_info = self._sample_info()
@@ -71,11 +71,8 @@ class QDFile:
         self.data = self.data[self.data["Comment"].isna()].reset_index(drop=True)
         self.raw_header = None
         self.raw_data = None
-        if path.with_suffix(".rw.dat").exists():
-            self.raw_header = self._import_header(path.with_suffix(".rw.dat"))
-            self.raw_data = self._import_data(
-                path.with_suffix(".rw.dat"), len(self.raw_header) + 2
-            )
+        if process_raw:
+            self.process_raw()
         self.parsed_data = self._parse_data()
         self._detect_type()
         self._normalize_moment()
@@ -96,8 +93,9 @@ class QDFile:
         return header
 
     def _sample_info(self) -> NamedTuple:
-        Info = namedtuple(
-            "Info", ["comment", "mass", "volume", "molecular_weight", "size", "shape"]
+        SampleInfo = namedtuple(
+            "SampleInfo",
+            ["comment", "mass", "volume", "molecular_weight", "size", "shape"],
         )
         for line in self.header:
             if "SAMPLE_COMMENT" in line:
@@ -124,7 +122,7 @@ class QDFile:
                     size = float(line[1])
             elif "SAMPLE_SHAPE" in line:
                 shape = line[1]
-        return Info(comment, mass, volume, molecular_weight, size, shape)
+        return SampleInfo(comment, mass, volume, molecular_weight, size, shape)
 
     @staticmethod
     def _import_data(path: pathlib.Path, skip_rows: int) -> pd.DataFrame:
@@ -166,6 +164,13 @@ class QDFile:
                 parsed_raw.append(SingleRawDCScan(data_slice))
             parsed_data["Raw Scans"] = parsed_raw
         return parsed_data
+
+    def process_raw(self):
+        if self.path.with_suffix(".rw.dat").exists():
+            self.raw_header = self._import_header(self.path.with_suffix(".rw.dat"))
+            self.raw_data = self._import_data(
+                self.path.with_suffix(".rw.dat"), len(self.raw_header) + 2
+            )
 
     def analyze_raw(self, background_subtracted: bool = False):
         if not isinstance(self.raw_data, pd.DataFrame):

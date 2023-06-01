@@ -1,0 +1,44 @@
+# Byte-compiled / optimized Python files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+venv/
+env/
+env*/
+*.venv/
+.venv/
+.venv*/
+.magnetopy_venv/*
+
+# IDE-specific files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Editor backup files
+*~
+*.bak
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Other generated files
+*.pyc
+
+# Ignore sensitive or environment-specific information
+config.ini
+.env
+
+# User-specific files
+scratch*/
+
