@@ -74,7 +74,7 @@ class QDFile:
         if process_raw:
             self.process_raw()
         self.parsed_data = self._parse_data()
-        self._detect_type()
+        self.measurement_type = self._detect_type()
         self._normalize_moment()
 
     def __repr__(self):
@@ -178,21 +178,23 @@ class QDFile:
         for scan_obj in self.parsed_data["Raw Scans"]:
             scan_obj.analyze(background_subtracted)
 
-    def _detect_type(self):
+    def _detect_type(self) -> str:
+        measurement_type = ""
         if "DC Moment Free Ctr (emu)" in self.parsed_data.columns:
-            self.type = "dc_dc"
+            measurement_type = "dc_dc"
         elif "Moment (emu)" in self.parsed_data.columns:
-            self.type = "dc_vsm"
+            measurement_type = "dc_vsm"
         else:
-            self.type = "unknown or not yet implemented"
+            measurement_type = "unknown or not yet implemented"
+        return measurement_type
 
     def _normalize_moment(self):
         if self.sample_info.mass != 0:
-            if self.type == "dc_vsm":
+            if self.measurement_type == "dc_vsm":
                 self.parsed_data["Moment_per_mass"] = (
                     1000 * self.parsed_data["Moment (emu)"] / self.sample_info.mass
                 )
-            elif self.type == "dc_dc":
+            elif self.measurement_type == "dc_dc":
                 self.parsed_data["Moment_per_mass"] = (
                     1000
                     * self.parsed_data["DC Moment Free Ctr (emu)"]
@@ -399,7 +401,7 @@ class SingleRawDCScan:
         up_scan_values = []
         down_scan_values = []
         for up, down in zip(str_up_scan_values, str_down_scan_values):
-            num_regex = re.compile("-?[0-9]+.?[0-9]*(E)?-?\+?[0-9]*")
+            num_regex = re.compile(r"-?[0-9]+.?[0-9]*(E)?-?\+?[0-9]*")
             up_scan_values.append(float(num_regex.search(up).group(0)))
             down_scan_values.append(float(num_regex.search(down).group(0)))
 

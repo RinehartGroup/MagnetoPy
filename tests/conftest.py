@@ -12,10 +12,10 @@ MVSH1_PATH = data_path / "mvsh1.dat"
 
 
 @pytest.fixture
-def mvsh1():
+def mvsh1() -> mp.QDFile:
     return mp.QDFile(MVSH1_PATH)
 
 
 @pytest.fixture
-def mvsh1_with_raw():
+def mvsh1_with_raw() -> mp.QDFile:
     return mp.QDFile(MVSH1_PATH, process_raw=True)
