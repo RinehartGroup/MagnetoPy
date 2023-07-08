@@ -21,3 +21,4 @@ from magnetopy.plot import (
     plot_mvsh,
     plot_mvsh_w_fits,
 )
+from magnetopy.data_files import GenericFile, DatFile
