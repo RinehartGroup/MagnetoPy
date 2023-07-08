@@ -8,14 +8,14 @@ import magnetopy as mp
 tests_path = Path(inspect.getfile(inspect.currentframe())).parent
 data_path = tests_path / "data"
 
-MVSH1_PATH = data_path / "mvsh1.dat"
+MVSH5_PATH = data_path / "mvsh5.dat"
 
 
 @pytest.fixture
-def mvsh1() -> mp.QDFile:
-    return mp.QDFile(MVSH1_PATH)
+def mvsh5() -> mp.QDFile:
+    return mp.QDFile(MVSH5_PATH)
 
 
 @pytest.fixture
-def mvsh1_with_raw() -> mp.QDFile:
-    return mp.QDFile(MVSH1_PATH, process_raw=True)
+def mvsh5_with_raw() -> mp.QDFile:
+    return mp.QDFile(MVSH5_PATH, process_raw=True)
