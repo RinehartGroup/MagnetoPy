@@ -38,19 +38,19 @@ class TestDatFileBaseAttrs:
     overwrites the date_created attribute, it won't be included in this test.
     """
 
-    def test_generic_file_repr(self):
+    def test_dat_file_repr(self):
         assert repr(mvsh1) == "DatFile(mvsh1.dat)"
 
-    def test_generic_file_str(self):
+    def test_dat_file_str(self):
         assert str(mvsh1) == "DatFile(mvsh1.dat)"
 
-    def test_generic_file_exp_type(self):
+    def test_dat_file_exp_type(self):
         assert mvsh1.experiment_type == "magnetometry"
 
-    def test_generic_file_local_path(self):
+    def test_dat_file_local_path(self):
         assert mvsh1.local_path == Path(DATA_PATH / "mvsh1.dat")
 
-    def test_generic_file_as_dict(self):
+    def test_dat_file_as_dict(self):
         serialized = mvsh1.as_dict()
         assert serialized["local_path"] == str(Path(DATA_PATH / "mvsh1.dat"))
 
