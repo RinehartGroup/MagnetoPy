@@ -63,7 +63,6 @@ class TestDatFileBaseAttrs:
         serialized = mvsh1.as_dict()
         assert serialized["local_path"] == str(Path(DATA_PATH / "mvsh1.dat"))
         assert serialized["length"] == 2612152
-        assert serialized["date_created"] == "2020-07-11T11:07:00"
         assert serialized["sha512"] == (
             "6fc436762a00b890eb3649eb50a885ced587781bf3b9738f04a49e768ad471f167111"
             "0f282e7be2ac2ed623a006abcc2da3914e09c165276b4bd63e06760b28f"

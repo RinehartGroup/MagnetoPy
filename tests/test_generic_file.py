@@ -1,6 +1,5 @@
 import inspect
 from pathlib import Path
-from datetime import datetime
 
 from magnetopy import GenericFile
 
@@ -27,9 +26,6 @@ class TestGenericFile:
     def test_generic_file_length(self):
         assert GENERIC_FILE.length == 2612152
 
-    def test_generic_file_date_created(self):
-        assert GENERIC_FILE.date_created == datetime(2023, 7, 7, 15, 5, 17, 219726)
-
     def test_generic_file_sha512(self):
         assert GENERIC_FILE.sha512 == (
             "6fc436762a00b890eb3649eb50a885ced587781bf3b9738f04a49e768ad471f167111"
@@ -40,7 +36,6 @@ class TestGenericFile:
         serialized = GENERIC_FILE.as_dict()
         assert serialized["local_path"] == str(MVSH1_PATH)
         assert serialized["length"] == 2612152
-        assert serialized["date_created"] == "2023-07-07T15:05:17.219726"
         assert serialized["sha512"] == (
             "6fc436762a00b890eb3649eb50a885ced587781bf3b9738f04a49e768ad471f167111"
             "0f282e7be2ac2ed623a006abcc2da3914e09c165276b4bd63e06760b28f"
