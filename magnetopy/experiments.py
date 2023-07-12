@@ -36,6 +36,7 @@ class MvsH:
         self.temperature = temperature
         self.data = self._set_data(file_data, eps, min_samples, ndigits)
         self.field_correction_file = ""
+        self.scaling = []
 
     def __str__(self) -> str:
         return f"MvsH at {self.temperature} K"
@@ -77,6 +78,22 @@ class MvsH:
         # time, temperature, field, moment, moment_err
         # sequence is one of: "", "virgin", "forward", "reverse", or "loop"
         pass
+
+    def scale_moment(
+        self,
+        mass: float = None,
+        eicosane_mass: float = None,
+        molecular_weight: float = None,
+        diamagnetic_correction: float = None,
+    ) -> None:
+        _scale_dc_data(
+            self.data,
+            self.scaling,
+            mass,
+            eicosane_mass,
+            molecular_weight,
+            diamagnetic_correction,
+        )
 
     def correct_field(self, field_correction_file: str) -> None:
         self.field_correction_file = field_correction_file
@@ -173,6 +190,7 @@ class ZFCFC:
     def __init__(self, dat_file: DatFile, turnaround: int, experiment: str) -> None:
         self.data = self._set_data(dat_file.data.copy(), turnaround, experiment)
         self.field = dat_file.data["Magnetic Field (Oe)"].mean()
+        self.scaling = []
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__} at {self.field} Oe"
@@ -194,6 +212,22 @@ class ZFCFC:
             df["DC Moment Err Free Ctr (emu)"]
         )
         return df
+
+    def scale_moment(
+        self,
+        mass: float = None,
+        eicosane_mass: float = None,
+        molecular_weight: float = None,
+        diamagnetic_correction: float = None,
+    ) -> None:
+        _scale_dc_data(
+            self.data,
+            self.scaling,
+            mass,
+            eicosane_mass,
+            molecular_weight,
+            diamagnetic_correction,
+        )
 
     def simplified_data(self) -> pd.DataFrame:
         pass
@@ -219,3 +253,67 @@ class FC(ZFCFC):
             find_temp_turnaround_point(dat_file.data) if data_contents == "zfcfc" else 0
         )
         super().__init__(dat_file, turnaround, "fc")
+
+
+def _scale_dc_data(
+    data: pd.DataFrame,
+    scaling: list[str],
+    mass: float = 0,
+    eicosane_mass: float = 0,
+    molecular_weight: float = 0,
+    diamagnetic_correction: float = 0,
+) -> None:
+    if mass and molecular_weight:
+        scaling.append("molar")
+        if eicosane_mass:
+            scaling.append("eicosane")
+        if diamagnetic_correction:
+            scaling.append("diamagnetic_correction")
+        mol = mass / molecular_weight
+        _scale_magnetic_data_molar_w_eicosane_and_diamagnet(
+            data, mol, eicosane_mass, diamagnetic_correction
+        )
+    elif mass:
+        scaling.append("mass")
+        _scale_magnetic_data_mass(data, mass)
+
+
+def _scale_magnetic_data_molar_w_eicosane_and_diamagnet(
+    data: pd.DataFrame,
+    mol_sample: float,
+    eicosane_mass: float,
+    diamagnetic_correction: float,
+) -> None:
+    mol_eicosane = eicosane_mass / 282.55 if eicosane_mass else 0
+    eicosane_diamagnetism = (
+        -0.00024306 * mol_eicosane
+    )  # eicosane chi_D = -0.00024306 emu/mol
+    sample_molar_diamagnetism = (
+        mol_sample * diamagnetic_correction if diamagnetic_correction else 0
+    )
+    # chi in units of cm^3/mol
+    data["chi"] = (
+        data["uncorrected_moment"] / data["Magnetic Field (Oe)"] - eicosane_diamagnetism
+    ) / mol_sample - sample_molar_diamagnetism
+    data["chi_err"] = (
+        data["uncorrected_moment_err"] / data["Magnetic Field (Oe)"]
+        - eicosane_diamagnetism
+    ) / mol_sample - sample_molar_diamagnetism
+    # chiT in units of cm3 K mol-1
+    data["chi_t"] = data["chi"] * data["Temperature (K)"]
+    data["chi_t_err"] = data["chi_err"] * data["Temperature (K)"]
+    # moment in units of Bohr magnetons
+    data["moment"] = data["chi"] * data["Field (Oe)"] / 5585
+    data["moment_err"] = data["chi_err"] * data["Field (Oe)"] / 5585
+
+
+def _scale_magnetic_data_mass(data: pd.DataFrame, mass: float) -> None:
+    # moment in units of emu/g
+    data["moment"] = data["uncorrected_moment"] / (mass / 1000)
+    data["moment_err"] = data["uncorrected_moment_err"] / (mass / 1000)
+    # chi in units of cm^3/g
+    data["chi"] = data["moment"] / data["Magnetic Field (Oe)"]
+    data["chi_err"] = data["moment_err"] / data["Magnetic Field (Oe)"]
+    # chiT in units of cm3 K g-1
+    data["chi_t"] = data["chi"] * data["Temperature (K)"]
+    data["chi_t_err"] = data["chi_err"] * data["Temperature (K)"]
