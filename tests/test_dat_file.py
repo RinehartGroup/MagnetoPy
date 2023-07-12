@@ -57,7 +57,7 @@ class TestDatFileBaseAttrs:
 
 
 @dataclass
-class Expected:
+class _Expected:
     experiment = "magnetometry"
     num_comments: int
     shape: tuple[int, int]
@@ -66,53 +66,53 @@ class Expected:
 
 
 parameterized = [
-    (mvsh1, Expected(0, (7305, 89), "2020-07-11T11:07:00", ["mvsh"])),
-    (mvsh2, Expected(0, (719, 89), "2022-03-25T14:11:00", ["mvsh"])),
-    (mvsh2a, Expected(0, (274, 89), "2022-03-25T14:11:00", ["mvsh"])),
-    (mvsh2b, Expected(0, (445, 89), "2022-03-25T14:11:00", ["mvsh"])),
-    (mvsh3, Expected(0, (141, 89), "2019-09-21T01:57:00", ["mvsh"])),
-    (mvsh4, Expected(1, (230, 89), "2022-05-03T22:44:00", ["mvsh"])),
-    (mvsh5, Expected(1, (230, 89), "2022-10-10T23:44:00", ["mvsh"])),
-    (mvsh5rw, Expected(458, (138316, 7), "2022-10-11T00:00:00", [])),
-    (mvsh6, Expected(0, (445, 89), "2021-10-02T21:00:00", ["mvsh"])),
-    (mvsh7, Expected(0, (445, 89), "2022-08-24T08:08:00", ["mvsh"])),
-    (mvsh8, Expected(0, (7872, 89), "2022-11-01T19:47:00", ["mvsh"])),
-    (zfcfc1, Expected(0, (504, 89), "2021-09-18T19:46:00", ["zfcfc"])),
-    (zfcfc2, Expected(0, (494, 89), "2021-09-06T23:20:00", ["zfcfc"])),
-    (zfcfc3, Expected(0, (513, 89), "2022-11-10T17:19:00", ["zfcfc"])),
+    (mvsh1, _Expected(0, (7305, 89), "2020-07-11T11:07:00", ["mvsh"])),
+    (mvsh2, _Expected(0, (719, 89), "2022-03-25T14:11:00", ["mvsh"])),
+    (mvsh2a, _Expected(0, (274, 89), "2022-03-25T14:11:00", ["mvsh"])),
+    (mvsh2b, _Expected(0, (445, 89), "2022-03-25T14:11:00", ["mvsh"])),
+    (mvsh3, _Expected(0, (141, 89), "2019-09-21T01:57:00", ["mvsh"])),
+    (mvsh4, _Expected(1, (230, 89), "2022-05-03T22:44:00", ["mvsh"])),
+    (mvsh5, _Expected(1, (230, 89), "2022-10-10T23:44:00", ["mvsh"])),
+    (mvsh5rw, _Expected(458, (138316, 7), "2022-10-11T00:00:00", [])),
+    (mvsh6, _Expected(0, (445, 89), "2021-10-02T21:00:00", ["mvsh"])),
+    (mvsh7, _Expected(0, (445, 89), "2022-08-24T08:08:00", ["mvsh"])),
+    (mvsh8, _Expected(0, (7872, 89), "2022-11-01T19:47:00", ["mvsh"])),
+    (zfcfc1, _Expected(0, (504, 89), "2021-09-18T19:46:00", ["zfcfc"])),
+    (zfcfc2, _Expected(0, (494, 89), "2021-09-06T23:20:00", ["zfcfc"])),
+    (zfcfc3, _Expected(0, (513, 89), "2022-11-10T17:19:00", ["zfcfc"])),
     (
         zfcfc4,
-        Expected(4, (7531, 89), "2022-05-03T15:22:00", ["zfc", "fc", "zfc", "fc"]),
+        _Expected(4, (7531, 89), "2022-05-03T15:22:00", ["zfc", "fc", "zfc", "fc"]),
     ),
-    (fc4a, Expected(1, (1872, 89), "2022-05-03T16:40:00", ["fc"])),
-    (fc4b, Expected(1, (1872, 89), "2022-05-03T18:50:00", ["fc"])),
-    (zfc4a, Expected(1, (1894, 89), "2022-05-03T15:22:00", ["zfc"])),
-    (zfc4b, Expected(1, (1893, 89), "2022-05-03T17:44:00", ["zfc"])),
+    (fc4a, _Expected(1, (1872, 89), "2022-05-03T16:40:00", ["fc"])),
+    (fc4b, _Expected(1, (1872, 89), "2022-05-03T18:50:00", ["fc"])),
+    (zfc4a, _Expected(1, (1894, 89), "2022-05-03T15:22:00", ["zfc"])),
+    (zfc4b, _Expected(1, (1893, 89), "2022-05-03T17:44:00", ["zfc"])),
     (
         dataset4,
-        Expected(
+        _Expected(
             5, (7761, 89), "2022-05-03T15:22:00", ["zfc", "fc", "zfc", "fc", "mvsh"]
         ),
     ),
-    (pd_std1, Expected(0, (445, 89), "2023-03-31T19:25:00", ["mvsh"])),
+    (pd_std1, _Expected(0, (445, 89), "2023-03-31T19:25:00", ["mvsh"])),
 ]
 
 
 @pytest.mark.parametrize("dat_file,expected", parameterized)
 class TestDatFile:
-    def test_experiment_type(self, dat_file: DatFile, expected: Expected):
+    def test_experiment_type(self, dat_file: DatFile, expected: _Expected):
         assert dat_file.experiment_type == expected.experiment
 
-    def test_num_comments(self, dat_file: DatFile, expected: Expected):
+    def test_num_comments(self, dat_file: DatFile, expected: _Expected):
         assert len(dat_file.comments) == expected.num_comments
 
-    def test_data_shape(self, dat_file: DatFile, expected: Expected):
+    def test_data_shape(self, dat_file: DatFile, expected: _Expected):
         assert dat_file.data.shape == expected.shape
 
-    def test_date_created(self, dat_file: DatFile, expected: Expected):
+    def test_date_created(self, dat_file: DatFile, expected: _Expected):
         assert dat_file.date_created.isoformat() == expected.date
 
-    def test_experiments(self, dat_file: DatFile, expected: Expected):
+    def test_experiments(self, dat_file: DatFile, expected: _Expected):
         assert dat_file.experiments_in_file == expected.exps
 
 
