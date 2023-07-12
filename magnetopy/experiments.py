@@ -1,4 +1,5 @@
 from __future__ import annotations
+import re
 from typing import Protocol
 import pandas as pd
 
@@ -27,14 +28,23 @@ class MvsH:
 
     def __init__(
         self,
-        file_data: pd.DataFrame,
+        dat_file: DatFile,
         temperature: int | float,
-        eps: float = 0.001,
-        min_samples: int = 10,
-        ndigits: int = 0,
+        **kwargs,
     ) -> None:
+        # optional arguments used for algorithmic separation of
+        # data at the requested temperature
+        n_digits = _num_digits_after_decimal(temperature)
+        options = {"eps": 0.001, "min_samples": 10, "ndigits": n_digits}
+        options.update(kwargs)
+
         self.temperature = temperature
-        self.data = self._set_data(file_data, eps, min_samples, ndigits)
+        if dat_file.comments:
+            self.data = self._set_data_from_comments(dat_file)
+        else:
+            self.data = self._set_data_auto(
+                dat_file, options["eps"], options["min_samples"], options["ndigits"]
+            )
         self.field_correction_file = ""
         self.scaling = []
 
@@ -44,7 +54,45 @@ class MvsH:
     def __repr__(self) -> str:
         return f"MvsH at {self.temperature} K"
 
-    def _set_data(
+    def _set_data_from_comments(self, dat_file: DatFile) -> pd.DataFrame:
+        start_idx: int | None = None
+        end_idx: int | None = None
+        for comment_idx, (data_idx, comment_list) in enumerate(
+            dat_file.comments.items()
+        ):
+            # ignore other experiments
+            if "mvsh" not in map(str.lower, comment_list):
+                continue
+            # one of the comments should be a number denoting the temperature
+            # may also include a unit, e.g. "300 K"
+            for comment in comment_list:
+                if match := re.search(r"\d+", comment):
+                    found_temp = float(match.group())
+                    # check to see if the unit is C otherwise assume K
+                    if "C" in comment:
+                        found_temp += 273
+                    if found_temp == self.temperature:
+                        start_idx = (
+                            data_idx + 1
+                        )  # +1 to skip the line containing the comment
+                        end_idx = (
+                            list(dat_file.comments.keys())[comment_idx + 1]
+                            if comment_idx + 1 < len(dat_file.comments)
+                            else (len(dat_file.data))
+                        )
+                        break
+            if start_idx is not None:
+                break
+        else:
+            raise self.TemperatureNotInDataError(
+                f"Temperature {self.temperature} not in data in {dat_file}. "
+                "Or the comments are not formatted correctly."
+            )
+        df = dat_file.data.iloc[start_idx:end_idx].reset_index(drop=True)
+        df = self._add_uncorrected_moment_columns(df)
+        return df
+
+    def _set_data_auto(
         self, dat_file: DatFile, eps: float, min_samples: int, ndigits: int
     ) -> pd.DataFrame:
         file_data = dat_file.data
@@ -54,7 +102,7 @@ class MvsH:
         temps = unique_values(file_data["Temperature (K)"], eps, min_samples, ndigits)
         if self.temperature not in temps:
             raise self.TemperatureNotInDataError(
-                f"Temperature {self.temperature} not in list of temperatures {temps}"
+                f"Temperature {self.temperature} not in data in {dat_file}."
             )
         temperature_index = temps.index(self.temperature)
         cluster = file_data["cluster"].unique()[temperature_index]
@@ -63,6 +111,10 @@ class MvsH:
             .drop(columns=["cluster"])
             .reset_index(drop=True)
         )
+        df = self._add_uncorrected_moment_columns(df)
+        return df
+
+    def _add_uncorrected_moment_columns(self, df):
         # set "uncorrected_moment" to be the moment directly from the dat file
         # whether the measurement was dc or vsm
         df["uncorrected_moment"] = df["Moment (emu)"].fillna(
@@ -81,10 +133,10 @@ class MvsH:
 
     def scale_moment(
         self,
-        mass: float = None,
-        eicosane_mass: float = None,
-        molecular_weight: float = None,
-        diamagnetic_correction: float = None,
+        mass: float = 0,
+        eicosane_mass: float = 0,
+        molecular_weight: float = 0,
+        diamagnetic_correction: float = 0,
     ) -> None:
         _scale_dc_data(
             self.data,
@@ -215,10 +267,10 @@ class ZFCFC:
 
     def scale_moment(
         self,
-        mass: float = None,
-        eicosane_mass: float = None,
-        molecular_weight: float = None,
-        diamagnetic_correction: float = None,
+        mass: float = 0,
+        eicosane_mass: float = 0,
+        molecular_weight: float = 0,
+        diamagnetic_correction: float = 0,
     ) -> None:
         _scale_dc_data(
             self.data,
@@ -253,6 +305,12 @@ class FC(ZFCFC):
             find_temp_turnaround_point(dat_file.data) if data_contents == "zfcfc" else 0
         )
         super().__init__(dat_file, turnaround, "fc")
+
+
+def _num_digits_after_decimal(number: int | float):
+    if isinstance(number, int):
+        return 0
+    return len(str(number).split(".")[1])
 
 
 def _scale_dc_data(
