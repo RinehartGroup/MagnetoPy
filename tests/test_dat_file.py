@@ -20,6 +20,7 @@ mvsh5 = DatFile(DATA_PATH / "mvsh5.dat")
 mvsh5rw = DatFile(DATA_PATH / "mvsh5.rw.dat")
 mvsh6 = DatFile(DATA_PATH / "mvsh6.dat")
 mvsh7 = DatFile(DATA_PATH / "mvsh7.dat")
+mvsh8 = DatFile(DATA_PATH / "mvsh8.dat")
 zfcfc1 = DatFile(DATA_PATH / "zfcfc1.dat")
 zfcfc2 = DatFile(DATA_PATH / "zfcfc2.dat")
 zfcfc3 = DatFile(DATA_PATH / "zfcfc3.dat")
@@ -75,6 +76,7 @@ parameterized = [
     (mvsh5rw, Expected(458, (138316, 7), "2022-10-11T00:00:00", [])),
     (mvsh6, Expected(0, (445, 89), "2021-10-02T21:00:00", ["mvsh"])),
     (mvsh7, Expected(0, (445, 89), "2022-08-24T08:08:00", ["mvsh"])),
+    (mvsh8, Expected(0, (7872, 89), "2022-11-01T19:47:00", ["mvsh"])),
     (zfcfc1, Expected(0, (504, 89), "2021-09-18T19:46:00", ["zfcfc"])),
     (zfcfc2, Expected(0, (494, 89), "2021-09-06T23:20:00", ["zfcfc"])),
     (zfcfc3, Expected(0, (513, 89), "2022-11-10T17:19:00", ["zfcfc"])),
