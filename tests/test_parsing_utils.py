@@ -7,7 +7,6 @@ import pytest
 from magnetopy import DatFile
 from magnetopy.parsing_utils import (
     find_outlier_indices,
-    find_sequence_starts,
     find_temp_turnaround_point,
     label_clusters,
     unique_values,
@@ -25,21 +24,12 @@ mvsh2 = DatFile(DATA_PATH / "mvsh2.dat")
 mvsh2a = DatFile(DATA_PATH / "mvsh2a.dat")
 mvsh2b = DatFile(DATA_PATH / "mvsh2b.dat")
 mvsh3 = DatFile(DATA_PATH / "mvsh3.dat")
-mvsh4 = DatFile(DATA_PATH / "mvsh4.dat")
-mvsh5 = DatFile(DATA_PATH / "mvsh5.dat")
-mvsh5rw = DatFile(DATA_PATH / "mvsh5.rw.dat")
 mvsh6 = DatFile(DATA_PATH / "mvsh6.dat")
 mvsh7 = DatFile(DATA_PATH / "mvsh7.dat")
+pd_std1 = DatFile(DATA_PATH / "Pd_std1.dat")
 zfcfc1 = DatFile(DATA_PATH / "zfcfc1.dat")
 zfcfc2 = DatFile(DATA_PATH / "zfcfc2.dat")
 zfcfc3 = DatFile(DATA_PATH / "zfcfc3.dat")
-zfcfc4 = DatFile(DATA_PATH / "zfcfc4.dat")
-fc4a = DatFile(DATA_PATH / "fc4a.dat")
-fc4b = DatFile(DATA_PATH / "fc4b.dat")
-zfc4a = DatFile(DATA_PATH / "zfc4a.dat")
-zfc4b = DatFile(DATA_PATH / "zfc4b.dat")
-dataset4 = DatFile(DATA_PATH / "dataset4.dat")
-pd_std1 = DatFile(DATA_PATH / "Pd_std1.dat")
 
 mvsh = [mvsh1, mvsh2, mvsh2a, mvsh2b, mvsh3, mvsh6, mvsh7, pd_std1]
 zfcfc = [zfcfc1, zfcfc2, zfcfc3]
