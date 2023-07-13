@@ -28,6 +28,8 @@ mvsh6 = DatFile(DATA_PATH / "mvsh6.dat")
 mvsh7 = DatFile(DATA_PATH / "mvsh7.dat")
 mvsh8 = DatFile(DATA_PATH / "mvsh8.dat")
 mvsh9 = DatFile(DATA_PATH / "mvsh9.dat")
+mvsh10 = DatFile(DATA_PATH / "mvsh10.dat")
+mvsh11 = DatFile(DATA_PATH / "mvsh11.dat")
 pd_std1 = DatFile(DATA_PATH / "Pd_std1.dat")
 zfcfc1 = DatFile(DATA_PATH / "zfcfc1.dat")
 zfcfc2 = DatFile(DATA_PATH / "zfcfc2.dat")
@@ -44,6 +46,8 @@ temp_clusters = [
     (mvsh7, np.array([0])),
     (mvsh8, np.array([0])),
     (mvsh9, np.array([0])),
+    (mvsh10, np.array([0])),
+    (mvsh11, np.array([0])),
     (zfcfc1, np.array([0])),
     (pd_std1, np.array([0])),
 ]
@@ -65,6 +69,8 @@ temperatures_n0 = [
     (mvsh7, [300]),
     (mvsh8, [2]),
     (mvsh9, [2]),
+    (mvsh10, [5]),
+    (mvsh11, [5]),
     (pd_std1, [300]),
 ]
 
@@ -85,6 +91,8 @@ temperatures_n1 = [
     (mvsh7, [300.1]),
     (mvsh8, [2.0]),
     (mvsh9, [2.0]),
+    (mvsh10, [5.0]),
+    (mvsh11, [5.0]),
     (pd_std1, [300.1]),
 ]
 

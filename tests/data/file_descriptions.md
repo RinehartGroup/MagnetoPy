@@ -14,8 +14,10 @@
 | mvsh5.rw.dat | n/a         | n/a                     | n/a                      | n/a       | Unprocessed data (voltage vs position) from mvsh5.dat                                            |
 | mvsh6.dat    | DC          | -70000 - 70000 (settle) | 300                      | No        | full loop (no virgin), field correction with Pd_std1 with no interpolation                       |
 | mvsh7.dat    | DC          | -70000 - 70000 (settle) | 300                      | No        | full loop (no virgin), field correction with Pd_std1 with interpolation                          |
-| mvsh8.dat    | VSM         | -70000 - 70000 (scan)   | 2                        | No        | virgin, reverse, foward                                                                          |
-| mvsh9.dat    | DC          | -70000 - 70000 (settle) | 2                        | No        | virgin, reverse, foward                                                                          |
+| mvsh8.dat    | VSM         | -70000 - 70000 (scan)   | 2                        | No        | virgin, reverse, forward                                                                         |
+| mvsh9.dat    | DC          | -70000 - 70000 (settle) | 2                        | No        | virgin, reverse, forward                                                                         |
+| mvsh10.dat   | DC          | -70000 - 70000 (settle) | 5                        | No        | full loop (no virgin)                                                                            |
+| mvsh11.dat   | VSM         | -70000 - 70000 (scan)   | 5                        | No        | virgin, reverse, forward                                                                         |
 | Pd_std1.dat  | DC          | -70000 - 70000 (settle) | 300                      | No        | full loop (no virgin)                                                                            |
 
 ### ZFCFC

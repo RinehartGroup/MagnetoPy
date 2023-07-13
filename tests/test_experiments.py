@@ -22,6 +22,8 @@ mvsh6_dat = DatFile(DATA_PATH / "mvsh6.dat")
 mvsh7_dat = DatFile(DATA_PATH / "mvsh7.dat")
 mvsh8_dat = DatFile(DATA_PATH / "mvsh8.dat")
 mvsh9_dat = DatFile(DATA_PATH / "mvsh9.dat")
+mvsh10_dat = DatFile(DATA_PATH / "mvsh10.dat")
+mvsh11_dat = DatFile(DATA_PATH / "mvsh11.dat")
 zfcfc1_dat = DatFile(DATA_PATH / "zfcfc1.dat")
 zfcfc2_dat = DatFile(DATA_PATH / "zfcfc2.dat")
 zfcfc3_dat = DatFile(DATA_PATH / "zfcfc3.dat")
@@ -66,8 +68,10 @@ uncommented_mvsh_expected = [
     ((mvsh7_dat, 300), _ExpectedMvsH(300, -70000, -70000)),
     ((mvsh7_dat, 300.1), _ExpectedMvsH(300.1, -70000, -70000)),
     ((mvsh8_dat, 2), _ExpectedMvsH(2, 0, 70000)),
-    ((mvsh9_dat, 2), _ExpectedMvsH(2, 0, 70000)),
     ((mvsh8_dat, 2.0), _ExpectedMvsH(2.0, 0, 70000)),
+    ((mvsh9_dat, 2), _ExpectedMvsH(2, 0, 70000)),
+    ((mvsh10_dat, 5), _ExpectedMvsH(5, -70000, -70000)),
+    ((mvsh11_dat, 5), _ExpectedMvsH(5, 0, 70000)),
     ((pd_std1_dat, 300), _ExpectedMvsH(300, -70000, -70000)),
     ((pd_std1_dat, 300.1), _ExpectedMvsH(300.1, -70000, -70000)),
 ]
@@ -146,6 +150,11 @@ mvsh_segments_expected = [
     ),
     (
         MvsH(mvsh9_dat, 2),
+        _ExpectedSegment((0, 70000), (70000, -70000), (-70000, 70000)),
+    ),
+    (MvsH(mvsh10_dat, 5), _ExpectedSegment(None, (70000, -70000), (-70000, 70000))),
+    (
+        MvsH(mvsh11_dat, 5),
         _ExpectedSegment((0, 70000), (70000, -70000), (-70000, 70000)),
     ),
     (MvsH(pd_std1_dat, 300), _ExpectedSegment(None, (70000, -70000), (-70000, 70000))),
