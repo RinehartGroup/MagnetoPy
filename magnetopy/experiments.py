@@ -90,7 +90,7 @@ class MvsH:
                 "Or the comments are not formatted correctly."
             )
         df = dat_file.data.iloc[start_idx:end_idx].reset_index(drop=True)
-        df = self._add_uncorrected_moment_columns(df)
+        df = _add_uncorrected_moment_columns(df)
         return df
 
     def _set_data_auto(
@@ -113,18 +113,7 @@ class MvsH:
             .reset_index(drop=True)
         )
         file_data.drop(columns=["cluster"], inplace=True)
-        df = self._add_uncorrected_moment_columns(df)
-        return df
-
-    def _add_uncorrected_moment_columns(self, df):
-        # set "uncorrected_moment" to be the moment directly from the dat file
-        # whether the measurement was dc or vsm
-        df["uncorrected_moment"] = df["Moment (emu)"].fillna(
-            df["DC Moment Free Ctr (emu)"]
-        )
-        df["uncorrected_moment_err"] = df["M. Std. Err. (emu)"].fillna(
-            df["DC Moment Err Free Ctr (emu)"]
-        )
+        df = _add_uncorrected_moment_columns(df)
         return df
 
     def simplified_data(self, sequence: str = "") -> pd.DataFrame:
@@ -315,6 +304,16 @@ def _num_digits_after_decimal(number: int | float):
     if isinstance(number, int):
         return 0
     return len(str(number).split(".")[1])
+
+
+def _add_uncorrected_moment_columns(df):
+    # set "uncorrected_moment" to be the moment directly from the dat file
+    # whether the measurement was dc or vsm
+    df["uncorrected_moment"] = df["Moment (emu)"].fillna(df["DC Moment Free Ctr (emu)"])
+    df["uncorrected_moment_err"] = df["M. Std. Err. (emu)"].fillna(
+        df["DC Moment Err Free Ctr (emu)"]
+    )
+    return df
 
 
 def _scale_dc_data(
