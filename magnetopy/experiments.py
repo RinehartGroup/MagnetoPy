@@ -47,6 +47,7 @@ class MvsH:
             )
         self.field_correction_file = ""
         self.scaling = []
+        self._field_fluctuation_tolerance = 1
 
     def __str__(self) -> str:
         return f"MvsH at {self.temperature} K"
@@ -169,7 +170,9 @@ class MvsH:
         return self._select_sequence("loop")
 
     def _select_sequence(self, sequence: str) -> pd.DataFrame:
-        sequence_starts = find_sequence_starts(self.data["Magnetic Field (Oe)"])
+        sequence_starts = find_sequence_starts(
+            self.data["Magnetic Field (Oe)"], self._field_fluctuation_tolerance
+        )
         df = self.data.copy()
         segment = None
         if len(sequence_starts) == 3:
