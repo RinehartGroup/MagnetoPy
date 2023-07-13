@@ -1,12 +1,14 @@
 import inspect
 from pathlib import Path
-import numpy as np
 
+import numpy as np
+import pandas as pd
 import pytest
 
 from magnetopy import DatFile
 from magnetopy.parsing_utils import (
     find_outlier_indices,
+    find_sequence_starts,
     find_temp_turnaround_point,
     label_clusters,
     unique_values,
@@ -133,11 +135,158 @@ def test_find_temp_turnaround_point(dat_file: DatFile, expected: int):
     assert find_temp_turnaround_point(dat_file.data) == expected
 
 
-def test_find_sequence_starts():
+expected_sequences = [
+    (([0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0, 1, 2, 3, 4], 0), [0, 6, 11]),
+    (([5, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 4, 3, 2, 1], 0), [0, 6, 11]),
+    (([0, 1, 2, 3, 4, 5, 4.5, 5.1, 4, 3, 2, 1], 0), [0, 6, 7]),
+    (([0, 1, 2, 3, 4, 5, 4.5, 5.1, 4, 3, 2, 1], 1), [0, 8]),
+    (([0, 1, 2, 3, 4, 0, 1, 2, 3, 4], 0), [0, 5]),
+    (([4, 3, 2, 1, 0, 4, 3, 2, 1, 0], 0), [0, 5]),
+    (
+        (
+            [
+                -70,
+                -50,
+                -30,
+                -10,
+                0,
+                10,
+                30,
+                50,
+                68,
+                70,
+                70.1,
+                70,
+                70.2,
+                68,
+                50,
+                30,
+                10,
+                0,
+                -10,
+                -30,
+                -50,
+                -70,
+            ],
+            0,
+        ),
+        [0, 11, 12],
+    ),
+    (
+        (
+            [
+                -70,
+                -50,
+                -30,
+                -10,
+                0,
+                10,
+                30,
+                50,
+                68,
+                70,
+                70.1,
+                70,
+                70.2,
+                68,
+                50,
+                30,
+                10,
+                0,
+                -10,
+                -30,
+                -50,
+                -70,
+            ],
+            1,
+        ),
+        [0, 13],
+    ),
+    (
+        (
+            [
+                0,
+                10,
+                20,
+                30,
+                40,
+                50,
+                60,
+                68,
+                70.1,
+                69.8,
+                68,
+                60,
+                50,
+                40,
+                30,
+                20,
+                10,
+                -50,
+                -60,
+                -69.7,
+                -70.2,
+                -69.5,
+                -60,
+                -40,
+                -10,
+                0.5,
+                10,
+                30,
+                50,
+                70,
+            ],
+            0,
+        ),
+        [0, 9, 21],
+    ),
+    (
+        (
+            [
+                0,
+                10,
+                20,
+                30,
+                40,
+                50,
+                69,
+                68.5,
+                70.1,
+                69.8,
+                68,
+                60,
+                50,
+                40,
+                30,
+                20,
+                10,
+                -50,
+                -69.9,
+                -69.7,
+                -70.2,
+                -69.5,
+                -60,
+                -40,
+                -10,
+                0.5,
+                10,
+                30,
+                50,
+                70,
+            ],
+            1,
+        ),
+        [0, 9, 21],
+    ),
+]
+
+
+@pytest.mark.parametrize("args,expected", expected_sequences)
+def test_find_sequence_starts(args: tuple[list[float], int], expected: list[int]):
     """
     This function is currently only used to read data from an M vs H experiment and
     find the indices of the start of the virgin (if present), reverse, and forward
     field scans.
     """
-    # TODO
-    pass
+    ser = pd.Series(args[0])
+    assert find_sequence_starts(ser, args[1]) == expected
