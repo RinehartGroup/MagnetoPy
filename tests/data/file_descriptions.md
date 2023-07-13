@@ -15,6 +15,7 @@
 | mvsh6.dat    | DC          | -70000 - 70000 (settle) | 300                      | No        | full loop (no virgin), field correction with Pd_std1 with no interpolation                       |
 | mvsh7.dat    | DC          | -70000 - 70000 (settle) | 300                      | No        | full loop (no virgin), field correction with Pd_std1 with interpolation                          |
 | mvsh8.dat    | VSM         | -70000 - 70000 (scan)   | 2                        | No        | virgin, reverse, foward                                                                          |
+| mvsh9.dat    | DC          | -70000 - 70000 (settle) | 2                        | No        | virgin, reverse, foward                                                                          |
 | Pd_std1.dat  | DC          | -70000 - 70000 (settle) | 300                      | No        | full loop (no virgin)                                                                            |
 
 ### ZFCFC
