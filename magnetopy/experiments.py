@@ -111,6 +111,7 @@ class MvsH:
             .drop(columns=["cluster"])
             .reset_index(drop=True)
         )
+        file_data.drop(columns=["cluster"], inplace=True)
         df = self._add_uncorrected_moment_columns(df)
         return df
 
