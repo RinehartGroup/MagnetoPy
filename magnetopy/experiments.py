@@ -20,6 +20,9 @@ class Experiment(Protocol):
 
 
 class MvsH:
+    class AutoReadError(Exception):
+        pass
+
     class TemperatureNotInDataError(Exception):
         pass
 
@@ -29,14 +32,19 @@ class MvsH:
     def __init__(
         self,
         dat_file: DatFile,
-        temperature: int | float,
+        temperature: int | float | None = None,
         **kwargs,
     ) -> None:
         # optional arguments used for algorithmic separation of
         # data at the requested temperature
-        n_digits = _num_digits_after_decimal(temperature)
+        n_digits = _num_digits_after_decimal(temperature) if temperature else 0
         options = {"eps": 0.001, "min_samples": 10, "ndigits": n_digits}
         options.update(kwargs)
+
+        if temperature is None:
+            temperature = self._auto_detect_temperature(
+                dat_file, options["eps"], options["min_samples"], options["ndigits"]
+            )
 
         self.temperature = temperature
         if dat_file.comments:
@@ -54,6 +62,48 @@ class MvsH:
 
     def __repr__(self) -> str:
         return f"MvsH at {self.temperature} K"
+
+    @staticmethod
+    def _auto_detect_temperature(
+        dat_file: DatFile, eps: float, min_samples: int, ndigits: int
+    ) -> float:
+        temperature: float | None = None
+        if dat_file.comments:
+            mvsh_comments = []
+            for comment_list in dat_file.comments.values():
+                if "mvsh" in map(str.lower, comment_list):
+                    mvsh_comments.append(comment_list)
+            if len(mvsh_comments) != 1:
+                raise MvsH.AutoReadError(
+                    "Auto-parsing of MvsH objects from DatFile objects requires that "
+                    f"there be only one comment containing 'MvsH'. Found "
+                    f"{len(mvsh_comments)} comments."
+                )
+            comments = mvsh_comments[0]
+            for comment in comments:
+                if match := re.search(r"\d+", comment):
+                    found_temp = float(match.group())
+                    # check to see if the unit is C otherwise assume K
+                    if "C" in comment:
+                        found_temp += 273
+                    temperature = found_temp
+        else:
+            temps = unique_values(
+                dat_file.data["Temperature (K)"], eps, min_samples, ndigits
+            )
+            if len(temps) != 1:
+                raise MvsH.AutoReadError(
+                    "Auto-parsing of MvsH objects from DatFile objects requires that "
+                    f"there be only one temperature in the data. Found {len(temps)} "
+                    "temperatures."
+                )
+            temperature = temps[0]
+        if temperature is None:
+            raise MvsH.AutoReadError(
+                "Auto-parsing of MvsH objects from DatFile objects failed. "
+                "No temperature found."
+            )
+        return temperature
 
     def _set_data_from_comments(self, dat_file: DatFile) -> pd.DataFrame:
         start_idx: int | None = None

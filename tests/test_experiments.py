@@ -120,6 +120,59 @@ class TestCommentedMvsh:
         assert found_end_field == expected.end_field
 
 
+autodetected_temperature_expected = [
+    ((mvsh2a_dat, None), 5),
+    ((mvsh2b_dat, None), 300),
+    ((mvsh3_dat, None), 5),
+    ((mvsh4_dat, None), 293),
+    ((dataset4_dat, None), 293),
+    ((mvsh5_dat, None), 293),
+    ((mvsh6_dat, None), 300),
+    ((mvsh7_dat, None), 300),
+    ((mvsh7_dat, 1), 300.1),
+    ((mvsh8_dat, None), 2),
+    ((mvsh9_dat, None), 2),
+    ((mvsh10_dat, None), 5),
+    ((mvsh11_dat, None), 5),
+    ((pd_std1_dat, None), 300),
+    ((pd_std1_dat, 1), 300.1),
+]
+
+
+@pytest.mark.parametrize("args,expected", autodetected_temperature_expected)
+def test_mvsh_auto_temperature_detection(
+    args: tuple[DatFile, int | None], expected: int | float
+):
+    eps = 0.001
+    min_samples = 10
+    if args[1] is None:
+        assert (
+            MvsH._auto_detect_temperature(  # pylint: disable=protected-access
+                args[0], eps, min_samples, 0
+            )
+            == expected
+        )
+    else:
+        assert (
+            MvsH._auto_detect_temperature(  # pylint: disable=protected-access
+                args[0], eps, min_samples, ndigits=args[1]
+            )
+            == expected
+        )
+
+
+files_w_multiple_temperatures = [
+    mvsh1_dat,
+    mvsh2_dat,
+]
+
+
+@pytest.mark.parametrize("dat_file", files_w_multiple_temperatures)
+def test_mvsh_multiple_temperatures(dat_file: DatFile):
+    with pytest.raises(MvsH.AutoReadError):
+        MvsH(dat_file)
+
+
 @dataclass
 class _ExpectedSegment:
     # each tuple is the rounded starting and ending field values
