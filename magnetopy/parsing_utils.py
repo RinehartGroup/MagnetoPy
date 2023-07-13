@@ -102,7 +102,9 @@ def find_outlier_indices(x: pd.Series, threshold: float = 3) -> list[int]:
     return list(outliers[outliers].index)
 
 
-def find_temp_turnaround_point(df: pd.DataFrame) -> int:
+def find_temp_turnaround_point(
+    df: pd.DataFrame, num_endpoints_ignored: int = 20
+) -> int:
     """Finds the index of the temperature turnaround point in a dataframe of
     a ZFCFC experiment which includes a column "Temperature (K)". Can handle two cases
     in which a single dataframe contains first a ZFC experiment, then a FC experiment:
@@ -115,6 +117,11 @@ def find_temp_turnaround_point(df: pd.DataFrame) -> int:
     ----------
     df : pd.DataFrame
         A dataframe of a ZFCFC experiment which includes a column "Temperature (K)".
+    num_endpoints_ignored : int, optional
+        The number of endpoints to ignore when finding the turnaround point, by default
+        20. This is useful when dealing with data collecting by scanning temperature,
+        as there are often 20 or so points at the end of the scane where the
+        temperature is very slowly settling.
 
     Returns
     -------
@@ -125,14 +132,21 @@ def find_temp_turnaround_point(df: pd.DataFrame) -> int:
     outlier_indices = find_outlier_indices(df["Temperature (K)"].diff())
     if len(outlier_indices) == 0:
         # zfc temp increases, fc temp decreases
-        zero_point = abs(df["Temperature (K)"].iloc[20:-20].diff()).idxmin()
+        zero_point = abs(
+            df["Temperature (K)"]
+            .iloc[num_endpoints_ignored:-num_endpoints_ignored]
+            .diff()
+        ).idxmin()
         return zero_point
     else:
         # zfc temp increases, reset temp, fc temp increases
         return outlier_indices[0]
 
 
-def find_sequence_starts(x: pd.Series, flucuation_tolerance: float = 0) -> list[int]:
+def find_sequence_starts(
+    x: pd.Series,
+    flucuation_tolerance: float = 0,
+) -> list[int]:
     """Find the indices of the start of each sequence in a series of data,
     where a sequences is defined as a series of numbers that constantly increase or decrease.
     Changes below `fluctuation_tolerance` are ignored.
