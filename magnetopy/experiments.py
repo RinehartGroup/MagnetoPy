@@ -1,4 +1,5 @@
 from __future__ import annotations
+from pathlib import Path
 import re
 from typing import Protocol
 import pandas as pd
@@ -31,10 +32,13 @@ class MvsH:
 
     def __init__(
         self,
-        dat_file: DatFile,
+        dat_file: str | Path | DatFile,
         temperature: int | float | None = None,
         **kwargs,
     ) -> None:
+        if not isinstance(dat_file, DatFile):
+            dat_file = DatFile(Path(dat_file))
+
         # optional arguments used for algorithmic separation of
         # data at the requested temperature
         n_digits = _num_digits_after_decimal(temperature) if temperature else 0
