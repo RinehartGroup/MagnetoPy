@@ -176,7 +176,8 @@ def find_sequence_starts(x: pd.Series, flucuation_tolerance: float = 0) -> list[
                 # this is a fluctuation and should be ignored
                 df.at[i, "direction"] = last1_dir
                 current_dir = last1_dir
-            sequence_starts.append(i)  # type: ignore
+            else:
+                sequence_starts.append(i)  # type: ignore
 
         # below handles, for example, zfc from 5 to 300 K, fc from 300 to 5 K
         # assumes there won't be any fluctuations at the beginning of a sequence

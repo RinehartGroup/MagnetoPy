@@ -182,13 +182,13 @@ class MvsH:
                     drop=True
                 )
             elif sequence == "reverse":
-                segment = df[sequence_starts[1] : sequence_starts[2]].reset_index(
+                segment = df[sequence_starts[1] - 1 : sequence_starts[2]].reset_index(
                     drop=True
                 )
             elif sequence == "forward":
-                segment = df[sequence_starts[2] :].reset_index(drop=True)
+                segment = df[sequence_starts[2] - 1 :].reset_index(drop=True)
             elif sequence == "loop":
-                segment = df[sequence_starts[1] :].reset_index(drop=True)
+                segment = df[sequence_starts[1] - 1 :].reset_index(drop=True)
         elif len(sequence_starts) == 2:
             if sequence == "loop":
                 segment = df
@@ -202,14 +202,14 @@ class MvsH:
                         drop=True
                     )
                 elif sequence == "forward":
-                    segment = df[sequence_starts[1] :].reset_index(drop=True)
+                    segment = df[sequence_starts[1] - 1 :].reset_index(drop=True)
             else:
                 if sequence == "forward":
                     segment = df[sequence_starts[0] : sequence_starts[1]].reset_index(
                         drop=True
                     )
                 elif sequence == "reverse":
-                    segment = df[sequence_starts[1] :].reset_index(drop=True)
+                    segment = df[sequence_starts[1] - 1 :].reset_index(drop=True)
         elif len(sequence_starts) == 1:
             if sequence == "loop":
                 raise self.SegmentError(
