@@ -22,16 +22,20 @@
 
 ### ZFCFC
 
-| File       | Measurement | Nominal Fields (Oe) | Nominal Temperatures (K) | Comments? | Description                                               |
-| ---------- | ----------- | ------------------- | ------------------------ | --------- | --------------------------------------------------------- |
-| zfcfc1.dat | DC          | 100                 | 5 - 300 (scan)           | No        | ZFC 5 to 300 K, then temperature drop, then FC 5 to 300 K |
-| zfcfc2.dat | DC          | 100                 | 5 - 340 (scan)           | No        | ZFC 5 to 340 K, then temperature drop, then FC 5 to 340 K |
-| zfcfc3.dat | DC          | 100                 | 5 - 300 (scan)           | No        | ZFC 5 to 300 K, then FC 300 to 5 K                        |
-| zfc4a.dat  | VSM         | 100                 | 5 - 310 (scan)           | Yes       | only ZFC at 100 Oe                                        |
-| zfc4b.dat  | VSM         | 1000                | 5 - 310 (scan)           | Yes       | only ZFC at 1000 Oe                                       |
-| fc4a.dat   | VSM         | 100                 | 310 - 5 (scan)           | Yes       | only FC at 100 Oe                                         |
-| fc4b.dat   | VSM         | 1000                | 310 - 5 (scan)           | Yes       | only FC at 1000 Oe                                        |
-| zfcfc4.dat | VSM         | 100, 1000           | 5 - 310 (scan)           | Yes       | combines zfc4a, fc4a, zfc4b, fc4b                         |
+| File        | Measurement | Nominal Fields (Oe) | Nominal Temperatures (K) | Comments? | Description                                               |
+| ----------- | ----------- | ------------------- | ------------------------ | --------- | --------------------------------------------------------- |
+| zfcfc1.dat  | DC          | 100                 | 5 - 300 (scan)           | No        | ZFC 5 to 300 K, then temperature drop, then FC 5 to 300 K |
+| zfcfc2.dat  | DC          | 100                 | 5 - 340 (scan)           | No        | ZFC 5 to 340 K, then temperature drop, then FC 5 to 340 K |
+| zfcfc3.dat  | DC          | 100                 | 5 - 300 (scan)           | No        | ZFC 5 to 300 K, then FC 300 to 5 K                        |
+| zfc4a.dat   | VSM         | 100                 | 5 - 310 (scan)           | Yes       | only ZFC at 100 Oe                                        |
+| zfc4b.dat   | VSM         | 1000                | 5 - 310 (scan)           | Yes       | only ZFC at 1000 Oe                                       |
+| fc4a.dat    | VSM         | 100                 | 310 - 5 (scan)           | Yes       | only FC at 100 Oe                                         |
+| fc4b.dat    | VSM         | 1000                | 310 - 5 (scan)           | Yes       | only FC at 1000 Oe                                        |
+| zfcfc4.dat  | VSM         | 100, 1000           | 5 - 310 (scan)           | Yes       | combines zfc4a, fc4a, zfc4b, fc4b                         |
+| zfc5.dat    | DC          | 200                 | 2 - 300 (settle)         | No        | only ZFC at 200 Oe                                        |
+| zfc5.rw.dat | n/a         | n/a                 | n/a                      | n/a       | Unprocessed data (voltage vs position) from zfc5.dat      |
+| fc5.dat     | DC          | 200                 | 2 - 300 (settle)         | No        | only FC at 200 Oe                                         |
+| fc5.rw.dat  | n/a         | n/a                 | n/a                      | n/a       | Unprocessed data (voltage vs position) from fc5.dat       |
 
 ### Mixed Files
 
