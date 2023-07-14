@@ -42,12 +42,12 @@ class MvsH:
         # optional arguments used for algorithmic separation of
         # data at the requested temperature
         n_digits = _num_digits_after_decimal(temperature) if temperature else 0
-        options = {"eps": 0.001, "min_samples": 10, "ndigits": n_digits}
+        options = {"eps": 0.001, "min_samples": 10, "n_digits": n_digits}
         options.update(kwargs)
 
         if temperature is None:
             temperature = self._auto_detect_temperature(
-                dat_file, options["eps"], options["min_samples"], options["ndigits"]
+                dat_file, options["eps"], options["min_samples"], options["n_digits"]
             )
 
         self.temperature = temperature
@@ -55,7 +55,7 @@ class MvsH:
             self.data = self._set_data_from_comments(dat_file)
         else:
             self.data = self._set_data_auto(
-                dat_file, options["eps"], options["min_samples"], options["ndigits"]
+                dat_file, options["eps"], options["min_samples"], options["n_digits"]
             )
         self.field_correction_file = ""
         self.scaling = []
