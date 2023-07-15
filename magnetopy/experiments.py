@@ -2,6 +2,8 @@ from __future__ import annotations
 from pathlib import Path
 import re
 from typing import Protocol
+import warnings
+import numpy as np
 import pandas as pd
 
 from magnetopy.data_files import DatFile
@@ -286,9 +288,49 @@ class MvsH:
 
 
 class ZFCFC:
-    def __init__(self, dat_file: DatFile, turnaround: int, experiment: str) -> None:
-        self.data = self._set_data(dat_file.data.copy(), turnaround, experiment)
-        self.field = dat_file.data["Magnetic Field (Oe)"].mean()
+    class AutoReadError(Exception):
+        pass
+
+    class FieldNotInDataError(Exception):
+        pass
+
+    class FileNameWarning(UserWarning):
+        pass
+
+    def __init__(
+        self,
+        dat_file: str | Path | DatFile,
+        experiment: str,
+        field: int | float | None = None,
+        **kwargs,
+    ) -> None:
+        if not isinstance(dat_file, DatFile):
+            dat_file = DatFile(Path(dat_file))
+
+        n_digits = _num_digits_after_decimal(field) if field else 0
+        options = {"n_digits": n_digits, "suppress_warnings": False}
+        options.update(kwargs)
+
+        filename_label = self._filename_label(
+            dat_file.local_path.name, experiment, options["suppress_warnings"]
+        )
+
+        if field is None:
+            field = self._autodetect_field(dat_file, experiment, options["n_digits"])
+        self.field = field
+
+        if dat_file.comments:
+            self.data = self._set_data_from_comments(dat_file, experiment)
+        else:
+            if filename_label in ["zfcfc", "unknown"]:
+                self.data = self._set_data_auto(dat_file, experiment)
+            elif filename_label in ["zfc", "fc"]:
+                self.data = self._set_single_sequence_data(
+                    dat_file, experiment, self.field, options["n_digits"]
+                )
+            else:
+                raise self.AutoReadError(f"Could not autodetect data for {dat_file}.")
+
         self.scaling = []
 
     def __str__(self) -> str:
@@ -297,19 +339,142 @@ class ZFCFC:
     def __repr__(self) -> str:
         return f"{self.__class__.__name__} at {self.field} Oe"
 
-    def _set_data(
-        self, data: pd.DataFrame, turnaround: int, experiment: str
-    ) -> pd.DataFrame:
-        if experiment == "zfc":
-            df = data.iloc[:turnaround].reset_index(drop=True)
+    @staticmethod
+    def _filename_label(filename: str, experiment: str, suppress_warnings: bool) -> str:
+        name = filename.lower()
+        label = "unknown"
+        if "zfcfc" in name:
+            label = "zfcfc"
+        elif "zfc" in name:
+            label = "zfc"
+        elif "fc" in name:
+            label = "fc"
+        if label in ["zfc", "fc"] and label != experiment and not suppress_warnings:
+            warnings.warn(
+                (
+                    f"You have initialized a {experiment.upper()} object but the "
+                    f"file name {filename} indicates that it is {label.upper()}. "
+                    "You can suppress this warning by passing `suppress_warnings=True` to "
+                    "the constructor."
+                ),
+                ZFCFC.FileNameWarning,
+            )
+        return label
+
+    @staticmethod
+    def _autodetect_field(
+        dat_file: DatFile, experiment: str, n_digits: int
+    ) -> int | float:
+        field: float | None = None
+        if dat_file.comments:
+            exp_comments = []
+            for comment_list in dat_file.comments.values():
+                if experiment in map(str.lower, comment_list):
+                    exp_comments.append(comment_list)
+            if len(exp_comments) != 1:
+                raise ZFCFC.AutoReadError(
+                    f"Could not autodetect field for {experiment}. When not specificying "
+                    "a field, the DatFile must contain exactly one field. Found "
+                    f"{len(exp_comments)} fields."
+                )
+            comments = exp_comments[0]
+            for comment in comments:
+                if match := re.search(r"\d+", comment):
+                    found_field = float(match.group())
+                    # check to see if the unit is T otherwise assume Oe
+                    if "T" in comment:
+                        found_field = found_field * 1e4
+                    field = found_field
         else:
-            df = data.iloc[turnaround:].reset_index(drop=True)
-        df["uncorrected_moment"] = df["Moment (emu)"].fillna(
-            df["DC Moment Free Ctr (emu)"]
-        )
-        df["uncorrected_moment_err"] = df["M. Std. Err. (emu)"].fillna(
-            df["DC Moment Err Free Ctr (emu)"]
-        )
+            fields = np.unique(dat_file.data["Magnetic Field (Oe)"])
+            if len(fields) != 1:
+                raise ZFCFC.AutoReadError(
+                    f"Could not autodetect field for {experiment}. When not specificying "
+                    "a field, the DatFile must contain exactly one field. Found "
+                    f"{len(fields)} fields."
+                )
+            field = round(fields[0], n_digits)
+        if field is None:
+            raise ZFCFC.AutoReadError(
+                f"Could not autodetect field for {experiment}. Please specify a field."
+            )
+        if n_digits == 0:
+            field = int(field)
+        return field
+
+    def _set_data_from_comments(
+        self, dat_file: DatFile, experiment: str
+    ) -> pd.DataFrame:
+        start_idx: int | None = None
+        end_idx: int | None = None
+        for comment_idx, (data_idx, comment_list) in enumerate(
+            dat_file.comments.items()
+        ):
+            # ignore other experiments
+            if experiment not in map(str.lower, comment_list):
+                continue
+            # one of the comments should be a number denoting the field
+            # may also include a unit, e.g. "1000 Oe"
+            for comment in comment_list:
+                if match := re.search(r"\d+", comment):
+                    found_field = float(match.group())
+                    # check to see if the unit is T otherwise assume Oe
+                    if "T" in comment:
+                        found_field = found_field * 1e4
+                    if found_field == self.field:
+                        start_idx = (
+                            data_idx + 1
+                        )  # +1 to skip the line containing the comment
+                        end_idx = (
+                            list(dat_file.comments.keys())[comment_idx + 1]
+                            if comment_idx + 1 < len(dat_file.comments)
+                            else (len(dat_file.data))
+                        )
+                        break
+            if start_idx is not None:
+                break
+        else:
+            raise self.FieldNotInDataError(
+                f"Temperature {self.field} not in data in {dat_file}. "
+                "Or the comments are not formatted correctly."
+            )
+        df = dat_file.data.iloc[start_idx:end_idx].reset_index(drop=True)
+        df = _add_uncorrected_moment_columns(df)
+        return df
+
+    def _set_data_auto(self, dat_file: DatFile, experiment: str) -> pd.DataFrame:
+        turnaround = find_temp_turnaround_point(dat_file.data)
+        # assume zfc, then fc
+        if experiment == "zfc":
+            df = dat_file.data.iloc[:turnaround].reset_index(drop=True)
+        else:
+            df = dat_file.data.iloc[turnaround:].reset_index(drop=True)
+        df = _add_uncorrected_moment_columns(df)
+        return df
+
+    @staticmethod
+    def _set_single_sequence_data(
+        dat_file: DatFile, experiment: str, field: int | float, n_digits: int
+    ) -> pd.DataFrame:
+        """
+        Used for when the file contains a single sequence of data, e.g. a single ZFC or FC
+        at a single field."""
+        df = dat_file.data.copy()
+        found_fields = np.unique(df["Magnetic Field (Oe)"])
+        if len(found_fields) != 1:
+            raise ZFCFC.AutoReadError(
+                f"Attempting to read in {experiment} data from {dat_file}, "
+                f"but found data from multiple fields ({found_fields}). "
+                "This method currently only supports files containing data from a single "
+                "field."
+            )
+        if round(found_fields[0], n_digits) != field:
+            raise ZFCFC.AutoReadError(
+                f"Attempting to read in {experiment} data from {dat_file}, "
+                f"but found data from a different field ({found_fields[0]}) "
+                f"than the one specified ({field})."
+            )
+        df = _add_uncorrected_moment_columns(df)
         return df
 
     def scale_moment(
@@ -333,25 +498,17 @@ class ZFCFC:
 
 
 class ZFC(ZFCFC):
-    def __init__(self, dat_file: DatFile, data_contents: str = "zfcfc") -> None:
-        # if data_contents is not "zfcfc" then the data is only the zfc data
-        # turnaround is the end of the zfc data
-        turnaround = (
-            find_temp_turnaround_point(dat_file.data)
-            if data_contents == "zfcfc"
-            else len(dat_file.data)
-        )
-        super().__init__(dat_file, turnaround, "zfc")
+    def __init__(
+        self, dat_file: str | Path | DatFile, field: int | float | None = None, **kwargs
+    ) -> None:
+        super().__init__(dat_file, "zfc", field, **kwargs)
 
 
 class FC(ZFCFC):
-    def __init__(self, dat_file: DatFile, data_contents: str = "zfcfc") -> None:
-        # if data_contents is not "zfcfc" then the data is only the fc data
-        # turnaround is the beginning of the fc data
-        turnaround = (
-            find_temp_turnaround_point(dat_file.data) if data_contents == "zfcfc" else 0
-        )
-        super().__init__(dat_file, turnaround, "fc")
+    def __init__(
+        self, dat_file: str | Path | DatFile, field: int | float | None = None, **kwargs
+    ) -> None:
+        super().__init__(dat_file, "fc", field, **kwargs)
 
 
 def _num_digits_after_decimal(number: int | float):
