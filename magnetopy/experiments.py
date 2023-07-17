@@ -68,6 +68,7 @@ class MvsH:
             self.data = self._set_data_auto(
                 dat_file, options["eps"], options["min_samples"], options["n_digits"]
             )
+        _add_uncorrected_moment_columns(self)
         self.field_correction_file = ""
         self.scaling = []
         self._field_fluctuation_tolerance = 1
@@ -113,7 +114,6 @@ class MvsH:
                 "Or the comments are not formatted correctly."
             )
         df = dat_file.data.iloc[start_idx:end_idx].reset_index(drop=True)
-        df = _add_uncorrected_moment_columns(df)
         return df
 
     def _set_data_auto(
@@ -136,7 +136,6 @@ class MvsH:
             .reset_index(drop=True)
         )
         file_data.drop(columns=["cluster"], inplace=True)
-        df = _add_uncorrected_moment_columns(df)
         return df
 
     def simplified_data(self, sequence: str = "") -> pd.DataFrame:
@@ -153,8 +152,7 @@ class MvsH:
         diamagnetic_correction: float = 0,
     ) -> None:
         _scale_dc_data(
-            self.data,
-            self.scaling,
+            self,
             mass,
             eicosane_mass,
             molecular_weight,
@@ -289,7 +287,7 @@ class ZFCFC:
                 self.data = self._set_single_sequence_data(
                     dat_file, experiment, options["n_digits"]
                 )
-
+        _add_uncorrected_moment_columns(self)
         self.scaling = []
 
     def __str__(self) -> str:
@@ -335,7 +333,6 @@ class ZFCFC:
                 "Or the comments are not formatted correctly."
             )
         df = dat_file.data.iloc[start_idx:end_idx].reset_index(drop=True)
-        df = _add_uncorrected_moment_columns(df)
         return df
 
     def _set_data_auto(self, dat_file: DatFile, experiment: str) -> pd.DataFrame:
@@ -345,7 +342,6 @@ class ZFCFC:
             df = dat_file.data.iloc[:turnaround].reset_index(drop=True)
         else:
             df = dat_file.data.iloc[turnaround:].reset_index(drop=True)
-        df = _add_uncorrected_moment_columns(df)
         return df
 
     def _set_single_sequence_data(
@@ -369,7 +365,6 @@ class ZFCFC:
                 f"but found data from a different field ({found_fields[0]}) "
                 f"than the one specified ({self.field})."
             )
-        df = _add_uncorrected_moment_columns(df)
         return df
 
     def scale_moment(
@@ -380,8 +375,7 @@ class ZFCFC:
         diamagnetic_correction: float = 0,
     ) -> None:
         _scale_dc_data(
-            self.data,
-            self.scaling,
+            self,
             mass,
             eicosane_mass,
             molecular_weight,
@@ -519,37 +513,42 @@ def _auto_detect_field(
     return field
 
 
-def _add_uncorrected_moment_columns(df):
+class _DcExperiment(Protocol):
+    data: pd.DataFrame
+    scaling: list[str]
+
+
+def _add_uncorrected_moment_columns(experiment: _DcExperiment) -> None:
     # set "uncorrected_moment" to be the moment directly from the dat file
     # whether the measurement was dc or vsm
-    df["uncorrected_moment"] = df["Moment (emu)"].fillna(df["DC Moment Free Ctr (emu)"])
-    df["uncorrected_moment_err"] = df["M. Std. Err. (emu)"].fillna(
-        df["DC Moment Err Free Ctr (emu)"]
+    experiment.data["uncorrected_moment"] = experiment.data["Moment (emu)"].fillna(
+        experiment.data["DC Moment Free Ctr (emu)"]
     )
-    return df
+    experiment.data["uncorrected_moment_err"] = experiment.data[
+        "M. Std. Err. (emu)"
+    ].fillna(experiment.data["DC Moment Err Free Ctr (emu)"])
 
 
 def _scale_dc_data(
-    data: pd.DataFrame,
-    scaling: list[str],
+    experiment: _DcExperiment,
     mass: float = 0,
     eicosane_mass: float = 0,
     molecular_weight: float = 0,
     diamagnetic_correction: float = 0,
 ) -> None:
     if mass and molecular_weight:
-        scaling.append("molar")
+        experiment.scaling.append("molar")
         if eicosane_mass:
-            scaling.append("eicosane")
+            experiment.scaling.append("eicosane")
         if diamagnetic_correction:
-            scaling.append("diamagnetic_correction")
+            experiment.scaling.append("diamagnetic_correction")
         mol = mass / molecular_weight
         _scale_magnetic_data_molar_w_eicosane_and_diamagnet(
-            data, mol, eicosane_mass, diamagnetic_correction
+            experiment.data, mol, eicosane_mass, diamagnetic_correction
         )
     elif mass:
-        scaling.append("mass")
-        _scale_magnetic_data_mass(data, mass)
+        experiment.scaling.append("mass")
+        _scale_magnetic_data_mass(experiment.data, mass)
 
 
 def _scale_magnetic_data_molar_w_eicosane_and_diamagnet(
@@ -577,8 +576,8 @@ def _scale_magnetic_data_molar_w_eicosane_and_diamagnet(
     data["chi_t"] = data["chi"] * data["Temperature (K)"]
     data["chi_t_err"] = data["chi_err"] * data["Temperature (K)"]
     # moment in units of Bohr magnetons
-    data["moment"] = data["chi"] * data["Field (Oe)"] / 5585
-    data["moment_err"] = data["chi_err"] * data["Field (Oe)"] / 5585
+    data["moment"] = data["chi"] * data["Magnetic Field (Oe)"] / 5585
+    data["moment_err"] = data["chi_err"] * data["Magnetic Field (Oe)"] / 5585
 
 
 def _scale_magnetic_data_mass(data: pd.DataFrame, mass: float) -> None:
