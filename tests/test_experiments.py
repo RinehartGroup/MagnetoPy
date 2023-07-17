@@ -4,8 +4,20 @@ from pathlib import Path
 
 import pytest
 
-from magnetopy import DatFile, MvsH
-from magnetopy.experiments import FC, ZFC, ZFCFC, _num_digits_after_decimal
+from magnetopy.data_files import DatFile
+from magnetopy.experiments import (
+    MvsH,
+    FC,
+    ZFC,
+    ZFCFC,
+    _num_digits_after_decimal,
+    _filename_label,
+    _auto_detect_temperature,
+    _auto_detect_field,
+    FileNameWarning,
+    FieldDetectionError,
+    TemperatureDetectionError,
+)
 
 TESTS_PATH = Path(inspect.getfile(inspect.currentframe())).parent
 DATA_PATH = TESTS_PATH / "data"
@@ -128,45 +140,34 @@ class TestCommentedMvsh:
         assert found_end_field == expected.end_field
 
 
-autodetected_temperature_expected = [
-    ((DatFile(mvsh2a_path), None), 5),
-    ((DatFile(mvsh2b_path), None), 300),
-    ((DatFile(mvsh3_path), None), 5),
-    ((DatFile(mvsh4_path), None), 293),
-    ((DatFile(dataset4_path), None), 293),
-    ((DatFile(mvsh5_path), None), 293),
-    ((DatFile(mvsh6_path), None), 300),
-    ((DatFile(mvsh7_path), None), 300),
+auto_detected_temperature_expected = [
+    ((DatFile(mvsh2a_path), 0), 5),
+    ((DatFile(mvsh2b_path), 0), 300),
+    ((DatFile(mvsh3_path), 0), 5),
+    ((DatFile(mvsh4_path), 0), 293),
+    ((DatFile(dataset4_path), 0), 293),
+    ((DatFile(mvsh5_path), 0), 293),
+    ((DatFile(mvsh6_path), 0), 300),
+    ((DatFile(mvsh7_path), 0), 300),
     ((DatFile(mvsh7_path), 1), 300.1),
-    ((DatFile(mvsh8_path), None), 2),
-    ((DatFile(mvsh9_path), None), 2),
-    ((DatFile(mvsh10_path), None), 5),
-    ((DatFile(mvsh11_path), None), 5),
-    ((DatFile(pd_std1_path), None), 300),
+    ((DatFile(mvsh8_path), 0), 2),
+    ((DatFile(mvsh9_path), 0), 2),
+    ((DatFile(mvsh10_path), 0), 5),
+    ((DatFile(mvsh11_path), 0), 5),
+    ((DatFile(pd_std1_path), 0), 300),
     ((DatFile(pd_std1_path), 1), 300.1),
 ]
 
 
-@pytest.mark.parametrize("args,expected", autodetected_temperature_expected)
+@pytest.mark.parametrize("args,expected", auto_detected_temperature_expected)
 def test_mvsh_auto_temperature_detection(
     args: tuple[DatFile, int | None], expected: int | float
 ):
+    dat_file = args[0]
     eps = 0.001
     min_samples = 10
-    if args[1] is None:
-        assert (
-            MvsH._auto_detect_temperature(  # pylint: disable=protected-access
-                args[0], eps, min_samples, 0
-            )
-            == expected
-        )
-    else:
-        assert (
-            MvsH._auto_detect_temperature(  # pylint: disable=protected-access
-                args[0], eps, min_samples, ndigits=args[1]
-            )
-            == expected
-        )
+    n_digits = args[1]
+    assert _auto_detect_temperature(dat_file, eps, min_samples, n_digits) == expected
 
 
 files_w_multiple_temperatures = [
@@ -177,7 +178,7 @@ files_w_multiple_temperatures = [
 
 @pytest.mark.parametrize("dat_file", files_w_multiple_temperatures)
 def test_mvsh_multiple_temperatures(dat_file: DatFile):
-    with pytest.raises(MvsH.AutoReadError):
+    with pytest.raises(TemperatureDetectionError):
         MvsH(dat_file)
 
 
@@ -270,13 +271,14 @@ filenames_expected = [
     (("fc1.dat", "fc", True), "fc"),
     (("zfcfc_zfc.dat", "zfc", False), "zfcfc"),
     (("zfcfc_zfc.dat", "fc", False), "zfcfc"),
+    (("mvsh1.dat", "", False), "mvsh"),
     (("filename.dat", "zfc", False), "unknown"),
 ]
 
 
 @pytest.mark.parametrize("args,expected", filenames_expected)
 def test_zfcfc_filename_label(args, expected):
-    assert ZFCFC._filename_label(*args) == expected
+    assert _filename_label(*args) == expected
 
 
 filenames_warnings_expected = [
@@ -287,8 +289,8 @@ filenames_warnings_expected = [
 
 @pytest.mark.parametrize("args,expected", filenames_warnings_expected)
 def test_zfcfc_filename_label_warnings(args, expected):
-    with pytest.warns(ZFCFC.FileNameWarning):
-        assert ZFCFC._filename_label(*args) == expected
+    with pytest.warns(FileNameWarning):
+        assert _filename_label(*args) == expected
 
 
 fields_uncommented_expected = [
@@ -310,8 +312,8 @@ fields_uncommented_expected = [
 
 
 @pytest.mark.parametrize("args,expected", fields_uncommented_expected)
-def test_zfcfc_autodetect_field_uncommented(args, expected):
-    assert ZFCFC._autodetect_field(*args) == expected
+def test_zfcfc_auto_detect_field_uncommented(args, expected):
+    assert _auto_detect_field(*args) == expected
 
 
 fields_commented_expected = [
@@ -323,13 +325,13 @@ fields_commented_expected = [
 
 
 @pytest.mark.parametrize("args,expected", fields_commented_expected)
-def test_zfcfc_autodetect_field_commented(args, expected):
-    assert ZFCFC._autodetect_field(*args) == expected
+def test_zfcfc_auto_detect_field_commented(args, expected):
+    assert _auto_detect_field(*args) == expected
 
 
 def test_zfcfc_autodetect_field_error():
-    with pytest.raises(ZFCFC.AutoReadError):
-        ZFCFC._autodetect_field(DatFile(zfcfc4_path), "zfc", 0)
+    with pytest.raises(FieldDetectionError):
+        _auto_detect_field(DatFile(zfcfc4_path), "zfc", 0)
 
 
 @dataclass
@@ -375,13 +377,13 @@ def test_fc(path: Path, expected: _ExpectedZFCFC):
     assert fc_end == expected.end_temp
 
 
-def test_zfc_autoread_error():
-    with pytest.raises(ZFC.AutoReadError):
+def test_zfc_field_detection_error():
+    with pytest.raises(FieldDetectionError):
         ZFC(DatFile(zfcfc4_path))
 
 
-def test_fc_autoread_error():
-    with pytest.raises(FC.AutoReadError):
+def test_fc_field_detection_error():
+    with pytest.raises(FieldDetectionError):
         FC(DatFile(zfcfc4_path))
 
 
@@ -426,5 +428,5 @@ expected_filename_warning = [(ZFC, fc5_path), (FC, zfc5_path)]
 
 @pytest.mark.parametrize("cls,path", expected_filename_warning)
 def test_zfcfc_filename_warning(cls: ZFCFC, path):
-    with pytest.warns(cls.FileNameWarning):
+    with pytest.warns(FileNameWarning):
         cls(path)
