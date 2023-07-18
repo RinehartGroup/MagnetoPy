@@ -19,6 +19,7 @@ dependencies = [
     "scipy",
     "matplotlib",
     "scikit-learn",
+    "GitPython",
 ]
 
 [project.optional-dependencies]
@@ -26,6 +27,9 @@ dev = [
     "black",
     "pytest",
 ]
+
+[project.scripts]
+mp-calibration = "magnetopy.cli.calibration_install:main"
 
 [tool.setuptools]
 packages = ["magnetopy"]
