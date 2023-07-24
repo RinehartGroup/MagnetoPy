@@ -141,10 +141,29 @@ class MvsH:
         return df
 
     def simplified_data(self, sequence: str = "") -> pd.DataFrame:
-        # returns a dataframe with only the columns
-        # time, temperature, field, moment, moment_err
-        # sequence is one of: "", "virgin", "forward", "reverse", or "loop"
-        pass
+        full_df = self._select_sequence(sequence) if sequence else self.data.copy()
+        df = pd.DataFrame()
+        df["time"] = full_df["Time Stamp (sec)"]
+        df["temperature"] = full_df["Temperature (K)"]
+        if self.field_correction_file:
+            df["field"] = full_df["true_field"]
+        else:
+            df["field"] = full_df["Magnetic Field (Oe)"]
+        if self.scaling:
+            df["moment"] = full_df["moment"]
+            df["moment_err"] = full_df["moment_err"]
+            df["chi"] = full_df["chi"]
+            df["chi_err"] = full_df["chi_err"]
+            df["chi_t"] = full_df["chi_t"]
+            df["chi_t_err"] = full_df["chi_t_err"]
+        else:
+            df["moment"] = full_df["uncorrected_moment"]
+            df["moment_err"] = full_df["uncorrected_moment_err"]
+            df["chi"] = df["moment"] / df["field"]
+            df["chi_err"] = df["moment_err"] / df["field"]
+            df["chi_t"] = df["chi"] * df["temperature"]
+            df["chi_t_err"] = df["chi_err"] * df["temperature"]
+        return df
 
     def scale_moment(
         self,
@@ -436,7 +455,26 @@ class ZFCFC:
         )
 
     def simplified_data(self) -> pd.DataFrame:
-        pass
+        full_df = self.data.copy()
+        df = pd.DataFrame()
+        df["time"] = full_df["Time Stamp (sec)"]
+        df["temperature"] = full_df["Temperature (K)"]
+        df["field"] = full_df["Magnetic Field (Oe)"]
+        if self.scaling:
+            df["moment"] = full_df["moment"]
+            df["moment_err"] = full_df["moment_err"]
+            df["chi"] = full_df["chi"]
+            df["chi_err"] = full_df["chi_err"]
+            df["chi_t"] = full_df["chi_t"]
+            df["chi_t_err"] = full_df["chi_t_err"]
+        else:
+            df["moment"] = full_df["uncorrected_moment"]
+            df["moment_err"] = full_df["uncorrected_moment_err"]
+            df["chi"] = df["moment"] / df["field"]
+            df["chi_err"] = df["moment_err"] / df["field"]
+            df["chi_t"] = df["chi"] * df["temperature"]
+            df["chi_t_err"] = df["chi_err"] * df["temperature"]
+        return df
 
 
 class ZFC(ZFCFC):
