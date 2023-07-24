@@ -4,7 +4,7 @@ from magnetopy.bkg_analysis import (
 )
 from magnetopy.calibration import Calibration
 from magnetopy.data_files import DatFile, GenericFile
-from magnetopy.experiments import FC, ZFC, ZFCFC, MvsH
+from magnetopy.experiments import FC, ZFC, ZFCFC, MvsH, TrueFieldCorrection
 from magnetopy.fits import arctan_fit, determine_blocking_temp
 from magnetopy.parse_qd import (
     AnalyzedSingleRawDCScan,

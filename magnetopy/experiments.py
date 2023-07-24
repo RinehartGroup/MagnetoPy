@@ -1,4 +1,5 @@
 from __future__ import annotations
+import json
 from pathlib import Path
 import re
 from typing import Protocol
@@ -49,6 +50,7 @@ class MvsH:
     ) -> None:
         if not isinstance(dat_file, DatFile):
             dat_file = DatFile(Path(dat_file))
+        self.origin_file = dat_file.local_path.name
 
         # optional arguments used for algorithmic separation of
         # data at the requested temperature
@@ -160,8 +162,9 @@ class MvsH:
         )
 
     def correct_field(self, field_correction_file: str) -> None:
-        self.field_correction_file = field_correction_file
-        # add "true_field" to the dataframe
+        pd_mvsh = TrueFieldCorrection(field_correction_file)
+        self.field_correction_file = pd_mvsh.origin_file
+        self.data["true_field"] = pd_mvsh.data["true_field"]
 
     @property
     def virgin(self) -> pd.DataFrame:
@@ -250,6 +253,56 @@ class MvsH:
         if segment is None:
             raise self.SegmentError(f"Sequence {sequence} not found in data")
         return segment
+
+
+class TrueFieldCorrection(MvsH):
+    """
+    Corrects magnetic field for flux trapping according to
+    https://qdusa.com/siteDocs/appNotes/1500-021.pdf
+    """
+
+    def __init__(self, sequence: str | Path):
+        dat_file = self._get_dat_file(sequence)
+        super().__init__(dat_file)
+        self.pd_mass = self._get_mass(dat_file)  # mass of the Pd standard in mg
+        self._add_true_field()
+
+    def _get_dat_file(self, sequence: str) -> DatFile:
+        if Path(sequence).is_file():
+            return DatFile(sequence)
+        mp_cal = Path().home() / ".magnetopy/calibration"
+        if (Path(sequence).suffix == ".dat") and (
+            mp_cal / "calibration_files" / sequence
+        ).is_file():
+            return DatFile(mp_cal / "calibration_files" / sequence)
+        with open(mp_cal / "calibration.json", "r", encoding="utf-8") as f:
+            cal_json = json.load(f)
+        if sequence in cal_json["mvsh"]:
+            seq_dat = cal_json["mvsh"][sequence]
+            return DatFile(mp_cal / "calibration_files" / seq_dat)
+        raise FileNotFoundError(
+            f"Could not find the requested sequence: {sequence}. "
+            "TrueFieldCorrection requires either the name of a sequence listed in "
+            f"{mp_cal / 'calibration.json'}, the name of a .dat file in "
+            f"{mp_cal / 'calibration_files'}, or the path to a .dat file."
+        )
+
+    @staticmethod
+    def _get_mass(dat_file: DatFile) -> float:
+        for line in dat_file.header:
+            category = line[0]
+            if category != "INFO":
+                continue
+            info = line[2]
+            if info == "SAMPLE_MASS":
+                return float(line[1])
+        raise ValueError("Could not find the sample mass in the .dat file header.")
+
+    def _add_true_field(self):
+        chi_g = 5.25e-6  # emu Oe / g
+        self.data["true_field"] = self.data["uncorrected_moment"] / (
+            chi_g * self.pd_mass * 1e-3
+        )
 
 
 class ZFCFC:
