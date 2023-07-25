@@ -23,3 +23,4 @@ from magnetopy.plot import (
     plot_zfcfc_w_blocking,
 )
 from magnetopy.plot_helpers import force_aspect, linear_color_gradient
+from magnetopy.dataset import SampleInfo
