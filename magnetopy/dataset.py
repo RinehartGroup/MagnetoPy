@@ -135,6 +135,8 @@ class Dataset:
         self.zfc = self.extract_zfc()
         self.fc = self.extract_fc()
         self.scale_dc_data()
+        if true_field_correction:
+            self.correct_field(true_field_correction)
 
     def __str__(self) -> str:
         return f"Dataset({self.sample_id})"
@@ -209,3 +211,7 @@ class Dataset:
             experiment.scale_moment(
                 mass, eicosane_mass, mol_weight, diamagnetic_correction
             )
+
+    def correct_field(self, field_correction_file: str | Path) -> None:
+        for experiment in self.mvsh:
+            experiment.correct_field(field_correction_file)

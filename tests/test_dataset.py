@@ -5,6 +5,7 @@ from dataclasses import dataclass
 import pytest
 
 from magnetopy.dataset import Dataset, SampleInfo
+from magnetopy.experiments import MvsH
 
 TESTS_PATH = Path(inspect.getfile(inspect.currentframe())).parent
 DATA_PATH = TESTS_PATH / "data"
@@ -123,7 +124,7 @@ def test_sample_info_no_field_hack(path: str, expected: _ExpectedSampleInfo):
         assert getattr(sample_info, item) == getattr(expected, item)
 
 
-### Dataset tests ###
+### Dataset creation tests ###
 
 expected_experiment_lengths = [
     ("dataset1", (7, 1, 1)),
@@ -150,6 +151,8 @@ def test_dataset_id_custom():
     dataset = Dataset(DATA_PATH / "dataset1", "custom_id")
     assert dataset.sample_id == "custom_id"
 
+
+### Dataset Scaling Tests ###
 
 expected_auto_scaling = [
     ("dataset1", ["molar", "eicosane"]),
@@ -189,3 +192,16 @@ def test_diamagnetic_correction_scaling():
         magnetic_data_scaling=["molar", "diamagnetic_correction"],
     )
     assert dataset.mvsh[0].scaling == ["molar", "diamagnetic_correction"]
+
+
+### Dataset Field Correction Tests ###
+
+
+def test_true_field_correction():
+    dataset = Dataset(DATA_PATH / "dataset3", true_field_correction="sequence_1")
+    assert dataset.mvsh[0].field_correction_file == "mvsh_seq1.dat"
+
+
+def test_field_correction_error():
+    with pytest.raises(MvsH.FieldCorrectionError):
+        Dataset(DATA_PATH / "dataset1", true_field_correction="sequence_1")
