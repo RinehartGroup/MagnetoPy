@@ -11,12 +11,15 @@ install the calibration files in the user's home directory.
 import inspect
 from pathlib import Path
 
+import pytest
+
 from magnetopy.experiments import MvsH, TrueFieldCorrection
 
 TESTS_PATH = Path(inspect.getfile(inspect.currentframe())).parent
 DATA_PATH = TESTS_PATH / "data"
 
 pd_std1_path = DATA_PATH / "Pd_std1.dat"
+mvsh3_path = DATA_PATH / "mvsh3.dat"
 mvsh6_path = DATA_PATH / "mvsh6.dat"
 
 
@@ -48,3 +51,9 @@ def test_field_correction_file():
     mvsh = MvsH(mvsh6_path)
     mvsh.correct_field("sequence_1")
     assert mvsh.field_correction_file == "mvsh_seq1.dat"
+
+
+def test_field_correction_error():
+    mvsh = MvsH(mvsh3_path)
+    with pytest.raises(MvsH.FieldCorrectionError):
+        mvsh.correct_field("sequence_1")

@@ -52,6 +52,9 @@ class MvsH:
     class SegmentError(Exception):
         pass
 
+    class FieldCorrectionError(Exception):
+        pass
+
     def __init__(
         self,
         dat_file: str | Path | DatFile,
@@ -192,6 +195,11 @@ class MvsH:
 
     def correct_field(self, field_correction_file: str | Path) -> None:
         pd_mvsh = TrueFieldCorrection(field_correction_file)
+        if len(pd_mvsh.data) != len(self.data):
+            raise self.FieldCorrectionError(
+                "The given Pd standard sequence does not have the same number of data "
+                "points as the MvsH sequence."
+            )
         self.field_correction_file = pd_mvsh.origin_file
         self.data["true_field"] = pd_mvsh.data["true_field"]
 
