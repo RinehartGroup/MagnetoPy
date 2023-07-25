@@ -5,7 +5,7 @@ from dataclasses import dataclass
 import pytest
 
 from magnetopy.dataset import Dataset, SampleInfo
-from magnetopy.experiments import MvsH
+from magnetopy.experiments import FC, ZFC, MvsH
 
 TESTS_PATH = Path(inspect.getfile(inspect.currentframe())).parent
 DATA_PATH = TESTS_PATH / "data"
@@ -205,3 +205,51 @@ def test_true_field_correction():
 def test_field_correction_error():
     with pytest.raises(MvsH.FieldCorrectionError):
         Dataset(DATA_PATH / "dataset1", true_field_correction="sequence_1")
+
+
+### Test Get Experiments ###
+
+
+def test_get_mvsh():
+    dataset = Dataset(DATA_PATH / "dataset1")
+    assert (
+        dataset.get_mvsh(2)
+        .data["uncorrected_moment"]
+        .equals(MvsH(DATA_PATH / "dataset1/mvsh1.dat", 2).data["uncorrected_moment"])
+    )
+
+
+def test_get_mvsh_error():
+    dataset = Dataset(DATA_PATH / "dataset1")
+    with pytest.raises(Dataset.ExperimentNotFoundError):
+        dataset.get_mvsh(500)
+
+
+def test_get_zfc():
+    dataset = Dataset(DATA_PATH / "dataset3")
+    assert (
+        dataset.get_zfc(100)
+        .data["uncorrected_moment"]
+        .equals(ZFC(DATA_PATH / "dataset3/zfcfc4.dat", 100).data["uncorrected_moment"])
+    )
+
+
+def test_get_zfc_error():
+    dataset = Dataset(DATA_PATH / "dataset3")
+    with pytest.raises(Dataset.ExperimentNotFoundError):
+        dataset.get_zfc(10000)
+
+
+def test_get_fc():
+    dataset = Dataset(DATA_PATH / "dataset3")
+    assert (
+        dataset.get_fc(1000)
+        .data["uncorrected_moment"]
+        .equals(FC(DATA_PATH / "dataset3/zfcfc4.dat", 1000).data["uncorrected_moment"])
+    )
+
+
+def test_get_fc_error():
+    dataset = Dataset(DATA_PATH / "dataset3")
+    with pytest.raises(Dataset.ExperimentNotFoundError):
+        dataset.get_fc(10000)

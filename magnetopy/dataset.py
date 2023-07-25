@@ -1,4 +1,5 @@
 from __future__ import annotations
+from abc import ABC
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -113,6 +114,9 @@ class SampleInfo:
 
 
 class Dataset:
+    class ExperimentNotFoundError(Exception):
+        pass
+
     def __init__(
         self,
         path: str | Path,
@@ -215,3 +219,27 @@ class Dataset:
     def correct_field(self, field_correction_file: str | Path) -> None:
         for experiment in self.mvsh:
             experiment.correct_field(field_correction_file)
+
+    def get_mvsh(self, temperature: float) -> MvsH:
+        for mvsh in self.mvsh:
+            if mvsh.temperature == temperature:
+                return mvsh
+        raise self.ExperimentNotFoundError(
+            f"No MvsH experiment found at temperature {temperature} K"
+        )
+
+    def get_zfc(self, field: float) -> ZFC:
+        for zfc in self.zfc:
+            if zfc.field == field:
+                return zfc
+        raise self.ExperimentNotFoundError(
+            f"No ZFC experiment found at field {field} Oe"
+        )
+
+    def get_fc(self, field: float) -> FC:
+        for fc in self.fc:
+            if fc.field == field:
+                return fc
+        raise self.ExperimentNotFoundError(
+            f"No FC experiment found at field {field} Oe"
+        )
