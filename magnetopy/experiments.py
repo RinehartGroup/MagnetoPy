@@ -574,7 +574,14 @@ class ZFCFC:
                     # check to see if the unit is T otherwise assume Oe
                     if "T" in comment:
                         field = field * 1e4
-                    zfcfc_objs.append(cls(dat_file, experiment, field))
+                    # the following type guard allows for the `get_all` method to be
+                    # called from the parent (ZFCFC) or child classes (ZFC, FC)
+                    if cls.__base__ == ZFCFC:
+                        # we're calling from ZFC or FC
+                        zfcfc_objs.append(cls(dat_file, field))
+                    else:
+                        # we're calling from ZFCFC
+                        zfcfc_objs.append(cls(dat_file, experiment, field))
         return zfcfc_objs
 
     @classmethod
@@ -585,7 +592,16 @@ class ZFCFC:
         n_digits: int,
     ) -> list[ZFCFC]:
         """This method currently only supports an uncommented file with a single experiment"""
-        return [ZFCFC(dat_file, experiment, n_digits=n_digits)]
+        # the following type guard allows for the `get_all` method to be
+        # called from the parent (ZFCFC) or child classes (ZFC, FC)
+        zfcfc_objs = []
+        if cls.__base__ == ZFCFC:
+            # we're calling from ZFC or FC
+            zfcfc_objs.append(cls(dat_file, n_digits=n_digits))  # pylint: disable=E1120
+        else:
+            # we're calling from ZFCFC
+            zfcfc_objs.append(cls(dat_file, experiment, n_digits=n_digits))
+        return zfcfc_objs
 
 
 class ZFC(ZFCFC):
@@ -600,7 +616,13 @@ class ZFC(ZFCFC):
         dat_file: str | Path | DatFile,
         n_digits: int = 0,
     ) -> list[ZFC]:
-        return ZFCFC.get_all_zfcfc_in_file(dat_file, "zfc", n_digits)
+        return super().get_all_zfcfc_in_file(dat_file, "zfc", n_digits)
+
+    def __str__(self):
+        return f"ZFC at {self.field} Oe"
+
+    def __repr__(self):
+        return f"ZFC at {self.field} Oe"
 
 
 class FC(ZFCFC):
@@ -615,7 +637,13 @@ class FC(ZFCFC):
         dat_file: str | Path | DatFile,
         n_digits: int = 0,
     ) -> list[FC]:
-        return ZFCFC.get_all_zfcfc_in_file(dat_file, "fc", n_digits)
+        return super().get_all_zfcfc_in_file(dat_file, "fc", n_digits)
+
+    def __str__(self):
+        return f"FC at {self.field} Oe"
+
+    def __repr__(self):
+        return f"FC at {self.field} Oe"
 
 
 def _num_digits_after_decimal(number: int | float):
