@@ -202,3 +202,60 @@ expected_filename_warning = [(ZFC, fc5_path), (FC, zfc5_path)]
 def test_zfcfc_filename_warning(cls: ZFCFC, path):
     with pytest.warns(FileNameWarning):
         cls(path)
+
+
+class TestGetAllZFCFCInFile:
+    def test_single_zfcfc_in_file(self):
+        zfc_objs = ZFC.get_all_in_file(zfcfc1_path)
+        fc_objs = FC.get_all_in_file(zfcfc1_path)
+        assert len(zfc_objs) == len(fc_objs) == 1
+        assert zfc_objs[0].field == fc_objs[0].field == 100
+
+    def test_single_zfcfc_in_file_equivalency(self):
+        zfc_objs = ZFC.get_all_in_file(zfcfc1_path)
+        fc_objs = FC.get_all_in_file(zfcfc1_path)
+        zfc = ZFC(zfcfc1_path)
+        fc = FC(zfcfc1_path)
+        assert (
+            zfc_objs[0]
+            .data["uncorrected_moment"]
+            .equals(zfc.data["uncorrected_moment"])
+        )
+        assert (
+            fc_objs[0].data["uncorrected_moment"].equals(fc.data["uncorrected_moment"])
+        )
+
+    def test_multiple_zfcfc_in_file(self):
+        zfc_objs = ZFC.get_all_in_file(zfcfc4_path)
+        fc_objs = FC.get_all_in_file(zfcfc4_path)
+        assert len(zfc_objs) == len(fc_objs) == 2
+        assert zfc_objs[0].field == fc_objs[0].field == 100
+        assert zfc_objs[1].field == fc_objs[1].field == 1000
+
+    def test_multiple_zfcfc_in_file_equivalency(self):
+        zfc_objs = ZFC.get_all_in_file(zfcfc4_path)
+        fc_objs = FC.get_all_in_file(zfcfc4_path)
+        zfc_100 = ZFC(zfcfc4_path, 100)
+        fc_100 = FC(zfcfc4_path, 100)
+        zfc_1000 = ZFC(zfcfc4_path, 1000)
+        fc_1000 = FC(zfcfc4_path, 1000)
+        assert (
+            zfc_objs[0]
+            .data["uncorrected_moment"]
+            .equals(zfc_100.data["uncorrected_moment"])
+        )
+        assert (
+            fc_objs[0]
+            .data["uncorrected_moment"]
+            .equals(fc_100.data["uncorrected_moment"])
+        )
+        assert (
+            zfc_objs[1]
+            .data["uncorrected_moment"]
+            .equals(zfc_1000.data["uncorrected_moment"])
+        )
+        assert (
+            fc_objs[1]
+            .data["uncorrected_moment"]
+            .equals(fc_1000.data["uncorrected_moment"])
+        )

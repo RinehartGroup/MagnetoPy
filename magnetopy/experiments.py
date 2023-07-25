@@ -534,6 +534,59 @@ class ZFCFC:
             df["chi_t_err"] = df["chi_err"] * df["temperature"]
         return df
 
+    @classmethod
+    def get_all_zfcfc_in_file(
+        cls,
+        dat_file: str | Path | DatFile,
+        experiment: str,
+        n_digits: int = 0,
+    ) -> list[ZFCFC]:
+        if not isinstance(dat_file, DatFile):
+            dat_file = DatFile(Path(dat_file))
+        if dat_file.comments:
+            zfcfc_objs = cls._get_all_zfcfc_in_commented_file(dat_file, experiment)
+
+        else:
+            zfcfc_objs = cls._get_all_zfcfc_in_uncommented_file(
+                dat_file,
+                experiment,
+                n_digits,
+            )
+        zfcfc_objs.sort(key=lambda x: x.field)
+        return zfcfc_objs
+
+    @classmethod
+    def _get_all_zfcfc_in_commented_file(
+        cls,
+        dat_file: DatFile,
+        experiment: str,
+    ) -> list[ZFCFC]:
+        zfcfc_objs = []
+        for comment_list in dat_file.comments.values():
+            # ignore other experiments
+            if experiment not in map(str.lower, comment_list):
+                continue
+            # one of the comments should be a number denoting the field
+            # may also include a unit, e.g. "1000 Oe"
+            for comment in comment_list:
+                if match := re.search(r"\d+", comment):
+                    field = float(match.group())
+                    # check to see if the unit is T otherwise assume Oe
+                    if "T" in comment:
+                        field = field * 1e4
+                    zfcfc_objs.append(cls(dat_file, experiment, field))
+        return zfcfc_objs
+
+    @classmethod
+    def _get_all_zfcfc_in_uncommented_file(
+        cls,
+        dat_file: DatFile,
+        experiment: str,
+        n_digits: int,
+    ) -> list[ZFCFC]:
+        """This method currently only supports an uncommented file with a single experiment"""
+        return [ZFCFC(dat_file, experiment, n_digits=n_digits)]
+
 
 class ZFC(ZFCFC):
     def __init__(
@@ -541,12 +594,28 @@ class ZFC(ZFCFC):
     ) -> None:
         super().__init__(dat_file, "zfc", field, **kwargs)
 
+    @classmethod
+    def get_all_in_file(
+        cls,
+        dat_file: str | Path | DatFile,
+        n_digits: int = 0,
+    ) -> list[ZFC]:
+        return ZFCFC.get_all_zfcfc_in_file(dat_file, "zfc", n_digits)
+
 
 class FC(ZFCFC):
     def __init__(
         self, dat_file: str | Path | DatFile, field: int | float | None = None, **kwargs
     ) -> None:
         super().__init__(dat_file, "fc", field, **kwargs)
+
+    @classmethod
+    def get_all_in_file(
+        cls,
+        dat_file: str | Path | DatFile,
+        n_digits: int = 0,
+    ) -> list[FC]:
+        return ZFCFC.get_all_zfcfc_in_file(dat_file, "fc", n_digits)
 
 
 def _num_digits_after_decimal(number: int | float):
