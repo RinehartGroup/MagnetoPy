@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from magnetopy.data_files import DatFile
-from magnetopy.experiments import FC, ZFC, MvsH
+from magnetopy.experiments import FC, ZFC, MvsH, DcExperiment
 
 
 @dataclass
@@ -125,11 +125,16 @@ class Dataset:
         self.dat_files = [
             DatFile(file) for file in path.rglob("*.dat") if file.is_file()
         ]
-        self.magnetic_data_scaling = magnetic_data_scaling
+        self.magnetic_data_scaling = (
+            [magnetic_data_scaling]
+            if isinstance(magnetic_data_scaling, str)
+            else magnetic_data_scaling
+        )
         self.sample_info = SampleInfo.from_dat_file(self.dat_files[0])
         self.mvsh = self.extract_mvsh()
         self.zfc = self.extract_zfc()
         self.fc = self.extract_fc()
+        self.scale_dc_data()
 
     def __str__(self) -> str:
         return f"Dataset({self.sample_id})"
@@ -172,3 +177,35 @@ class Dataset:
             fc_objs.extend(FC.get_all_in_file(file, n_digits))
         fc_objs.sort(key=lambda x: x.field)
         return fc_objs
+
+    def scale_dc_data(self) -> None:
+        experiments: list[DcExperiment] = []
+        experiments.extend(self.mvsh)
+        experiments.extend(self.zfc)
+        experiments.extend(self.fc)
+        mass = (
+            self.sample_info.mass
+            if set(self.magnetic_data_scaling).intersection(["mass", "molar", "auto"])
+            else 0
+        )
+        eicosane_mass = (
+            self.sample_info.eicosane_mass
+            if set(self.magnetic_data_scaling).intersection(["eicosane", "auto"])
+            else 0
+        )
+        mol_weight = (
+            self.sample_info.molecular_weight
+            if set(self.magnetic_data_scaling).intersection(["molar", "auto"])
+            else 0
+        )
+        diamagnetic_correction = (
+            self.sample_info.diamagnetic_correction
+            if set(self.magnetic_data_scaling).intersection(
+                ["diamagnetic_correction", "auto"]
+            )
+            else 0
+        )
+        for experiment in experiments:
+            experiment.scale_moment(
+                mass, eicosane_mass, mol_weight, diamagnetic_correction
+            )

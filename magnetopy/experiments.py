@@ -28,8 +28,18 @@ class FileNameWarning(UserWarning):
     pass
 
 
-class Experiment(Protocol):
+class DcExperiment(Protocol):
     data: pd.DataFrame
+    scaling: list[str]
+
+    def scale_moment(
+        self,
+        mass: float = 0,
+        eicosane_mass: float = 0,
+        molecular_weight: float = 0,
+        diamagnetic_correction: float = 0,
+    ) -> None:
+        ...
 
     def simplified_data(self, *args, **kwargs) -> pd.DataFrame:
         ...
@@ -759,12 +769,7 @@ def _auto_detect_field(
     return field
 
 
-class _DcExperiment(Protocol):
-    data: pd.DataFrame
-    scaling: list[str]
-
-
-def _add_uncorrected_moment_columns(experiment: _DcExperiment) -> None:
+def _add_uncorrected_moment_columns(experiment: DcExperiment) -> None:
     # set "uncorrected_moment" to be the moment directly from the dat file
     # whether the measurement was dc or vsm
     experiment.data["uncorrected_moment"] = experiment.data["Moment (emu)"].fillna(
@@ -776,7 +781,7 @@ def _add_uncorrected_moment_columns(experiment: _DcExperiment) -> None:
 
 
 def _scale_dc_data(
-    experiment: _DcExperiment,
+    experiment: DcExperiment,
     mass: float = 0,
     eicosane_mass: float = 0,
     molecular_weight: float = 0,

@@ -12,6 +12,8 @@ DATA_PATH = TESTS_PATH / "data"
 mvsh2_path = DATA_PATH / "mvsh2.dat"
 mvsh9_path = DATA_PATH / "mvsh9.dat"
 
+datasets = ["dataset1", "dataset2", "dataset3", "dataset4"]
+
 ### SampleInfo tests ###
 
 
@@ -127,6 +129,7 @@ expected_experiment_lengths = [
     ("dataset1", (7, 1, 1)),
     ("dataset2", (1, 1, 1)),
     ("dataset3", (1, 2, 2)),
+    ("dataset4", (1, 0, 0)),
 ]
 
 
@@ -146,3 +149,43 @@ def test_dataset_id_default():
 def test_dataset_id_custom():
     dataset = Dataset(DATA_PATH / "dataset1", "custom_id")
     assert dataset.sample_id == "custom_id"
+
+
+expected_auto_scaling = [
+    ("dataset1", ["molar", "eicosane"]),
+    ("dataset2", ["mass"]),
+    ("dataset3", ["mass"]),
+    ("dataset4", ["molar", "eicosane", "diamagnetic_correction"]),
+]
+
+
+@pytest.mark.parametrize("dataset_name,expected", expected_auto_scaling)
+def test_auto_scaling(dataset_name: str, expected: list[str]):
+    dataset = Dataset(DATA_PATH / dataset_name)
+    assert dataset.mvsh[0].scaling == expected
+
+
+@pytest.mark.parametrize("dataset_name", datasets)
+def test_mass_scaling(dataset_name: str):
+    dataset = Dataset(DATA_PATH / dataset_name, magnetic_data_scaling="mass")
+    assert dataset.mvsh[0].scaling == ["mass"]
+
+
+def test_molar_scaling():
+    dataset = Dataset(DATA_PATH / "dataset4", magnetic_data_scaling="molar")
+    assert dataset.mvsh[0].scaling == ["molar"]
+
+
+def test_eicosane_scaling():
+    dataset = Dataset(
+        DATA_PATH / "dataset4", magnetic_data_scaling=["molar", "eicosane"]
+    )
+    assert dataset.mvsh[0].scaling == ["molar", "eicosane"]
+
+
+def test_diamagnetic_correction_scaling():
+    dataset = Dataset(
+        DATA_PATH / "dataset4",
+        magnetic_data_scaling=["molar", "diamagnetic_correction"],
+    )
+    assert dataset.mvsh[0].scaling == ["molar", "diamagnetic_correction"]
