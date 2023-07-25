@@ -8,6 +8,7 @@
 | mvsh2.dat    | DC          | -70000 - 70000 (settle) | 5, 300                   | No        | all temperatures contain full loops (no virgin)                                                  |
 | mvsh2a.dat   | DC          | -70000 - 70000 (settle) | 5                        | No        | 5 K data from mvsh2.dat                                                                          |
 | mvsh2b.dat   | DC          | -70000 - 70000 (settle) | 300                      | No        | 300 K data from mvsh2.dat                                                                        |
+| mvsh2c.dat   | DC          | -70000 - 70000 (settle) | 5, 300                   | Yes       | Same as mvsh2.dat but with comments in the data section                                          |
 | mvsh3.dat    | DC          | -70000 - 70000 (settle) | 5                        | No        | full loop (no virgin); uncommon header length                                                    |
 | mvsh4.dat    | DC          | -70000 - 70000 (settle) | 293                      | Yes       | full loop (no virgin)                                                                            |
 | mvsh5.dat    | DC          | -70000 - 70000 (settle) | 293                      | Yes       | full loop (no virgin)                                                                            |
