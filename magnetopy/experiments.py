@@ -121,7 +121,7 @@ class MvsH:
     def _set_data_auto(
         self, dat_file: DatFile, eps: float, min_samples: int, ndigits: int
     ) -> pd.DataFrame:
-        file_data = dat_file.data
+        file_data = dat_file.data.copy()
         file_data["cluster"] = label_clusters(
             file_data["Temperature (K)"], eps, min_samples
         )
@@ -180,7 +180,7 @@ class MvsH:
             diamagnetic_correction,
         )
 
-    def correct_field(self, field_correction_file: str) -> None:
+    def correct_field(self, field_correction_file: str | Path) -> None:
         pd_mvsh = TrueFieldCorrection(field_correction_file)
         self.field_correction_file = pd_mvsh.origin_file
         self.data["true_field"] = pd_mvsh.data["true_field"]
@@ -272,6 +272,64 @@ class MvsH:
         if segment is None:
             raise self.SegmentError(f"Sequence {sequence} not found in data")
         return segment
+
+    @classmethod
+    def get_all_in_file(
+        cls,
+        dat_file: str | Path | DatFile,
+        eps: float = 0.001,
+        min_samples: int = 10,
+        ndigits: int = 0,
+    ) -> list[MvsH]:
+        if not isinstance(dat_file, DatFile):
+            dat_file = DatFile(Path(dat_file))
+        if dat_file.comments:
+            mvsh_objs = cls._get_all_mvsh_in_commented_file(dat_file)
+        else:
+            mvsh_objs = cls._get_all_mvsh_in_uncommented_file(
+                dat_file,
+                eps,
+                min_samples,
+                ndigits,
+            )
+        mvsh_objs.sort(key=lambda x: x.temperature)
+        return mvsh_objs
+
+    @classmethod
+    def _get_all_mvsh_in_commented_file(cls, dat_file: DatFile) -> list[MvsH]:
+        mvsh_objs = []
+        for comment_list in dat_file.comments.values():
+            # ignore other experiments
+            if "mvsh" not in map(str.lower, comment_list):
+                continue
+            # one of the comments should be a number denoting the temperature
+            # may also include a unit, e.g. "300 K"
+            for comment in comment_list:
+                if match := re.search(r"\d+", comment):
+                    temp = float(match.group())
+                    # check to see if the unit is C otherwise assume K
+                    if "C" in comment:
+                        temp += 273
+                    mvsh_objs.append(cls(dat_file, temp))
+        return mvsh_objs
+
+    @classmethod
+    def _get_all_mvsh_in_uncommented_file(
+        cls,
+        dat_file: DatFile,
+        eps: float,
+        min_samples: int,
+        ndigits: int,
+    ) -> list[MvsH]:
+        file_data = dat_file.data
+        file_data["cluster"] = label_clusters(
+            file_data["Temperature (K)"], eps, min_samples
+        )
+        temps = unique_values(file_data["Temperature (K)"], eps, min_samples, ndigits)
+        mvsh_objs = []
+        for temp in temps:
+            mvsh_objs.append(cls(dat_file, temp, eps=eps, min_samples=min_samples))
+        return mvsh_objs
 
 
 class TrueFieldCorrection(MvsH):

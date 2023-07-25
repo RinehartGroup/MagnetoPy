@@ -19,6 +19,7 @@ mvsh1_path = DATA_PATH / "mvsh1.dat"
 mvsh2_path = DATA_PATH / "mvsh2.dat"
 mvsh2a_path = DATA_PATH / "mvsh2a.dat"
 mvsh2b_path = DATA_PATH / "mvsh2b.dat"
+mvsh2c_path = DATA_PATH / "mvsh2c.dat"
 mvsh3_path = DATA_PATH / "mvsh3.dat"
 mvsh4_path = DATA_PATH / "mvsh4.dat"
 mvsh5_path = DATA_PATH / "mvsh5.dat"
@@ -234,3 +235,41 @@ class TestMvsHSegments:
             found_end_field = round(args.forward["Magnetic Field (Oe)"].iloc[-1])
             assert found_start_field == expected.forward[0]
             assert found_end_field == expected.forward[1]
+
+
+class TestGetAllMvsHInFile:
+    def test_uncommented_file(self):
+        mvsh2_objs = MvsH.get_all_in_file(mvsh2_path)
+        mvsh2_5 = MvsH(mvsh2_path, 5)
+        mvsh2_300 = MvsH(mvsh2_path, 300)
+        assert len(mvsh2_objs) == 2
+        assert mvsh2_objs[0].temperature == 5
+        assert mvsh2_objs[1].temperature == 300
+        assert (
+            mvsh2_objs[0]
+            .data["uncorrected_moment"]
+            .equals(mvsh2_5.data["uncorrected_moment"])
+        )
+        assert (
+            mvsh2_objs[1]
+            .data["uncorrected_moment"]
+            .equals(mvsh2_300.data["uncorrected_moment"])
+        )
+
+    def test_commented_file(self):
+        mvsh2_objs = MvsH.get_all_in_file(mvsh2c_path)
+        mvsh2_5 = MvsH(mvsh2c_path, 5)
+        mvsh2_300 = MvsH(mvsh2c_path, 300)
+        assert len(mvsh2_objs) == 2
+        assert mvsh2_objs[0].temperature == 5
+        assert mvsh2_objs[1].temperature == 300
+        assert (
+            mvsh2_objs[0]
+            .data["uncorrected_moment"]
+            .equals(mvsh2_5.data["uncorrected_moment"])
+        )
+        assert (
+            mvsh2_objs[1]
+            .data["uncorrected_moment"]
+            .equals(mvsh2_300.data["uncorrected_moment"])
+        )
