@@ -1,7 +1,9 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from pathlib import Path
 
 from magnetopy.data_files import DatFile
+from magnetopy.experiments import FC, ZFC, MvsH
 
 
 @dataclass
@@ -108,3 +110,65 @@ class SampleInfo:
             sample.diamagnetic_correction = sample.size
             sample.size, sample.volume = None, None
         return sample
+
+
+class Dataset:
+    def __init__(
+        self,
+        path: str | Path,
+        sample_id: str = "auto",
+        magnetic_data_scaling: str | list[str] = "auto",
+        true_field_correction: str | Path = "",
+    ) -> None:
+        path = Path(path)
+        self.sample_id = path.name if sample_id == "auto" else sample_id
+        self.dat_files = [
+            DatFile(file) for file in path.rglob("*.dat") if file.is_file()
+        ]
+        self.magnetic_data_scaling = magnetic_data_scaling
+        self.sample_info = SampleInfo.from_dat_file(self.dat_files[0])
+        self.mvsh = self.extract_mvsh()
+        self.zfc = self.extract_zfc()
+        self.fc = self.extract_fc()
+
+    def __str__(self) -> str:
+        return f"Dataset({self.sample_id})"
+
+    def __repr__(self) -> str:
+        return f"Dataset({self.sample_id})"
+
+    def extract_mvsh(
+        self, eps: float = 0.001, min_samples: int = 10, ndigits: int = 0
+    ) -> list[MvsH]:
+        mvsh_files = [
+            file for file in self.dat_files if "mvsh" in file.experiments_in_file
+        ]
+        mvsh_objs: list[MvsH] = []
+        for file in mvsh_files:
+            mvsh_objs.extend(MvsH.get_all_in_file(file, eps, min_samples, ndigits))
+        mvsh_objs.sort(key=lambda x: x.temperature)
+        return mvsh_objs
+
+    def extract_zfc(self, n_digits: int = 0) -> list[ZFC]:
+        zfc_files = [
+            file
+            for file in self.dat_files
+            if set(["zfc", "zfcfc"]).intersection(file.experiments_in_file)
+        ]
+        zfc_objs: list[ZFC] = []
+        for file in zfc_files:
+            zfc_objs.extend(ZFC.get_all_in_file(file, n_digits))
+        zfc_objs.sort(key=lambda x: x.field)
+        return zfc_objs
+
+    def extract_fc(self, n_digits: int = 0) -> list[FC]:
+        fc_files = [
+            file
+            for file in self.dat_files
+            if set(["fc", "zfcfc"]).intersection(file.experiments_in_file)
+        ]
+        fc_objs: list[FC] = []
+        for file in fc_files:
+            fc_objs.extend(FC.get_all_in_file(file, n_digits))
+        fc_objs.sort(key=lambda x: x.field)
+        return fc_objs

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from magnetopy.dataset import SampleInfo
+from magnetopy.dataset import Dataset, SampleInfo
 
 TESTS_PATH = Path(inspect.getfile(inspect.currentframe())).parent
 DATA_PATH = TESTS_PATH / "data"
@@ -119,3 +119,30 @@ def test_sample_info_no_field_hack(path: str, expected: _ExpectedSampleInfo):
     sample_info = SampleInfo.from_dat_file(path, False)
     for item in expected.__dict__:
         assert getattr(sample_info, item) == getattr(expected, item)
+
+
+### Dataset tests ###
+
+expected_experiment_lengths = [
+    ("dataset1", (7, 1, 1)),
+    ("dataset2", (1, 1, 1)),
+    ("dataset3", (1, 2, 2)),
+]
+
+
+@pytest.mark.parametrize("dataset_name,expected", expected_experiment_lengths)
+def test_dataset_experiment_lengths(dataset_name: str, expected: tuple[int, int, int]):
+    dataset = Dataset(DATA_PATH / dataset_name)
+    assert len(dataset.mvsh) == expected[0]
+    assert len(dataset.zfc) == expected[1]
+    assert len(dataset.fc) == expected[2]
+
+
+def test_dataset_id_default():
+    dataset = Dataset(DATA_PATH / "dataset1")
+    assert dataset.sample_id == "dataset1"
+
+
+def test_dataset_id_custom():
+    dataset = Dataset(DATA_PATH / "dataset1", "custom_id")
+    assert dataset.sample_id == "custom_id"
