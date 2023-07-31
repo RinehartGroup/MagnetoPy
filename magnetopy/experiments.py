@@ -3,11 +3,10 @@ import json
 from pathlib import Path
 import re
 from typing import Protocol
-import warnings
 import numpy as np
 import pandas as pd
 
-from magnetopy.data_files import DatFile
+from magnetopy.data_files import DatFile, filename_label
 from magnetopy.parsing_utils import (
     label_clusters,
     unique_values,
@@ -21,10 +20,6 @@ class TemperatureDetectionError(Exception):
 
 
 class FieldDetectionError(Exception):
-    pass
-
-
-class FileNameWarning(UserWarning):
     pass
 
 
@@ -413,12 +408,13 @@ class ZFCFC:
     ) -> None:
         if not isinstance(dat_file, DatFile):
             dat_file = DatFile(Path(dat_file))
+        self.origin_file = dat_file.local_path.name
 
         n_digits = _num_digits_after_decimal(field) if field else 0
         options = {"n_digits": n_digits, "suppress_warnings": False}
         options.update(kwargs)
 
-        filename_label = _filename_label(
+        found_filename_label = filename_label(
             dat_file.local_path.name, experiment, options["suppress_warnings"]
         )
 
@@ -429,7 +425,7 @@ class ZFCFC:
         if dat_file.comments:
             self.data = self._set_data_from_comments(dat_file, experiment)
         else:
-            if filename_label in ["zfcfc", "unknown"]:
+            if found_filename_label in ["zfcfc", "unknown"]:
                 self.data = self._set_data_auto(dat_file, experiment)
             else:
                 self.data = self._set_single_sequence_data(
@@ -668,30 +664,6 @@ def _num_digits_after_decimal(number: int | float):
     if isinstance(number, int):
         return 0
     return len(str(number).split(".")[1])
-
-
-def _filename_label(filename: str, experiment: str, suppress_warnings: bool) -> str:
-    name = filename.lower()
-    label = "unknown"
-    if "zfcfc" in name:
-        label = "zfcfc"
-    elif "zfc" in name:
-        label = "zfc"
-    elif "fc" in name:
-        label = "fc"
-    elif "mvsh" in name:
-        label = "mvsh"
-    if label in ["zfc", "fc"] and label != experiment and not suppress_warnings:
-        warnings.warn(
-            (
-                f"You have initialized a {experiment.upper()} object but the "
-                f"file name {filename} indicates that it is {label.upper()}. "
-                "You can suppress this warning by passing `suppress_warnings=True` to "
-                "the constructor."
-            ),
-            FileNameWarning,
-        )
-    return label
 
 
 def _auto_detect_temperature(

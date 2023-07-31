@@ -130,7 +130,7 @@ expected_experiment_lengths = [
     ("dataset1", (7, 1, 1)),
     ("dataset2", (1, 1, 1)),
     ("dataset3", (1, 2, 2)),
-    ("dataset4", (1, 0, 0)),
+    ("dataset4", (1, 1, 1)),
 ]
 
 

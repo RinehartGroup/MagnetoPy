@@ -4,14 +4,13 @@ from pathlib import Path
 
 import pytest
 
-from magnetopy.data_files import DatFile
+from magnetopy.data_files import DatFile, FileNameWarning
 from magnetopy.experiments import (
     FC,
     ZFC,
     ZFCFC,
-    _filename_label,
+    filename_label,
     _auto_detect_field,
-    FileNameWarning,
     FieldDetectionError,
 )
 
@@ -50,7 +49,7 @@ filenames_expected = [
 
 @pytest.mark.parametrize("args,expected", filenames_expected)
 def test_zfcfc_filename_label(args, expected):
-    assert _filename_label(*args) == expected
+    assert filename_label(*args) == expected
 
 
 filenames_warnings_expected = [
@@ -62,7 +61,7 @@ filenames_warnings_expected = [
 @pytest.mark.parametrize("args,expected", filenames_warnings_expected)
 def test_zfcfc_filename_label_warnings(args, expected):
     with pytest.warns(FileNameWarning):
-        assert _filename_label(*args) == expected
+        assert filename_label(*args) == expected
 
 
 fields_uncommented_expected = [

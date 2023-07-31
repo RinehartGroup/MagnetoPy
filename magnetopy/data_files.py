@@ -4,8 +4,13 @@ from pathlib import Path
 from typing import Any
 from collections import OrderedDict
 from datetime import datetime
+import warnings
 
 import pandas as pd
+
+
+class FileNameWarning(UserWarning):
+    pass
 
 
 class GenericFile:
@@ -123,7 +128,7 @@ class DatFile(GenericFile):
 
     def _read_header(self, delimiter: str = "\t") -> list[list[str]]:
         header: list[list[str]] = []
-        with self.local_path.open() as f:
+        with self.local_path.open(encoding="utf-8") as f:
             reader = csv.reader(f, delimiter=delimiter)
             for row in reader:
                 header.append(row)
@@ -169,6 +174,8 @@ class DatFile(GenericFile):
                 for comment in comments:
                     if comment.lower() in ["mvsh", "zfc", "fc", "zfcfc"]:
                         experiments.append(comment.lower())
+        elif (filename := filename_label(self.local_path.name, "", True)) != "unknown":
+            experiments.append(filename)
         else:
             if len(self.data["Magnetic Field (Oe)"].unique()) == 1:
                 experiments.append("zfcfc")
@@ -193,3 +200,32 @@ class DatFile(GenericFile):
             "sha512": self.sha512,
             "experiments_in_file": self.experiments_in_file,
         }
+
+
+def filename_label(filename: str, experiment: str, suppress_warnings: bool) -> str:
+    name = filename.lower()
+    label = "unknown"
+    if "zfcfc" in name:
+        label = "zfcfc"
+    elif "zfc" in name:
+        label = "zfc"
+    elif "fc" in name:
+        label = "fc"
+    elif "mvsh" in name:
+        label = "mvsh"
+    if (
+        experiment
+        and label in ["zfc", "fc"]
+        and label != experiment
+        and not suppress_warnings
+    ):
+        warnings.warn(
+            (
+                f"You have initialized a {experiment.upper()} object but the "
+                f"file name {filename} indicates that it is {label.upper()}. "
+                "You can suppress this warning by passing `suppress_warnings=True` to "
+                "the constructor."
+            ),
+            FileNameWarning,
+        )
+    return label
