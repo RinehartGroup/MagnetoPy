@@ -2,38 +2,67 @@ import inspect
 from collections import OrderedDict
 from dataclasses import dataclass
 from pathlib import Path
+import shutil
 
 import pytest
 
 from magnetopy import DatFile
+from magnetopy.data_files import filename_label, FileNameWarning
+
+filename_expected = [
+    ("mvsh1.dat", "", "mvsh"),
+    ("zfcfc1.dat", "", "zfcfc"),
+    ("zfc1.dat", "", "zfc"),
+    ("fc1.dat", "", "fc"),
+    ("zfcfc_zfc.dat", "", "zfcfc"),
+    ("dataset", "", "unknown"),
+]
+
+
+@pytest.mark.parametrize("filename,experiment,expected", filename_expected)
+def test_filename_label(filename: str, experiment: str, expected: str):
+    assert filename_label(filename, experiment, False) == expected
+
+
+filename_expected_warnings = [
+    ("zfc1.dat", "fc", "zfc"),
+    ("fc1.dat", "zfc", "fc"),
+]
+
+
+@pytest.mark.parametrize("filename,experiment,expected", filename_expected_warnings)
+def test_filename_label_warning(filename: str, experiment: str, expected: str):
+    with pytest.warns(FileNameWarning):
+        assert filename_label(filename, experiment, False) == expected
+
 
 TESTS_PATH = Path(inspect.getfile(inspect.currentframe())).parent
 DATA_PATH = TESTS_PATH / "data"
 
-mvsh1 = DatFile(DATA_PATH / "mvsh1.dat")
-mvsh2 = DatFile(DATA_PATH / "mvsh2.dat")
-mvsh2a = DatFile(DATA_PATH / "mvsh2a.dat")
-mvsh2b = DatFile(DATA_PATH / "mvsh2b.dat")
-mvsh3 = DatFile(DATA_PATH / "mvsh3.dat")
-mvsh4 = DatFile(DATA_PATH / "mvsh4.dat")
-mvsh5 = DatFile(DATA_PATH / "mvsh5.dat")
-mvsh5rw = DatFile(DATA_PATH / "mvsh5.rw.dat")
-mvsh6 = DatFile(DATA_PATH / "mvsh6.dat")
-mvsh7 = DatFile(DATA_PATH / "mvsh7.dat")
-mvsh8 = DatFile(DATA_PATH / "mvsh8.dat")
-mvsh9 = DatFile(DATA_PATH / "mvsh9.dat")
-mvsh10 = DatFile(DATA_PATH / "mvsh10.dat")
-mvsh11 = DatFile(DATA_PATH / "mvsh11.dat")
-zfcfc1 = DatFile(DATA_PATH / "zfcfc1.dat")
-zfcfc2 = DatFile(DATA_PATH / "zfcfc2.dat")
-zfcfc3 = DatFile(DATA_PATH / "zfcfc3.dat")
-zfcfc4 = DatFile(DATA_PATH / "zfcfc4.dat")
-fc4a = DatFile(DATA_PATH / "fc4a.dat")
-fc4b = DatFile(DATA_PATH / "fc4b.dat")
-zfc4a = DatFile(DATA_PATH / "zfc4a.dat")
-zfc4b = DatFile(DATA_PATH / "zfc4b.dat")
-dataset4 = DatFile(DATA_PATH / "dataset4.dat")
-pd_std1 = DatFile(DATA_PATH / "Pd_std1.dat")
+mvsh1 = DATA_PATH / "mvsh1.dat"
+mvsh2 = DATA_PATH / "mvsh2.dat"
+mvsh2a = DATA_PATH / "mvsh2a.dat"
+mvsh2b = DATA_PATH / "mvsh2b.dat"
+mvsh3 = DATA_PATH / "mvsh3.dat"
+mvsh4 = DATA_PATH / "mvsh4.dat"
+mvsh5 = DATA_PATH / "mvsh5.dat"
+mvsh5rw = DATA_PATH / "mvsh5.rw.dat"
+mvsh6 = DATA_PATH / "mvsh6.dat"
+mvsh7 = DATA_PATH / "mvsh7.dat"
+mvsh8 = DATA_PATH / "mvsh8.dat"
+mvsh9 = DATA_PATH / "mvsh9.dat"
+mvsh10 = DATA_PATH / "mvsh10.dat"
+mvsh11 = DATA_PATH / "mvsh11.dat"
+zfcfc1 = DATA_PATH / "zfcfc1.dat"
+zfcfc2 = DATA_PATH / "zfcfc2.dat"
+zfcfc3 = DATA_PATH / "zfcfc3.dat"
+zfcfc4 = DATA_PATH / "zfcfc4.dat"
+fc4a = DATA_PATH / "fc4a.dat"
+fc4b = DATA_PATH / "fc4b.dat"
+zfc4a = DATA_PATH / "zfc4a.dat"
+zfc4b = DATA_PATH / "zfc4b.dat"
+dataset4 = DATA_PATH / "dataset4.dat"
+pd_std1 = DATA_PATH / "Pd_std1.dat"
 
 
 class TestDatFileBaseAttrs:
@@ -42,20 +71,24 @@ class TestDatFileBaseAttrs:
     overwrites the date_created attribute, it won't be included in this test.
     """
 
-    def test_dat_file_repr(self):
-        assert repr(mvsh1) == "DatFile(mvsh1.dat)"
+    @pytest.fixture(scope="class")
+    def mvsh1_dat_file(self):
+        return DatFile(mvsh1)
 
-    def test_dat_file_str(self):
-        assert str(mvsh1) == "DatFile(mvsh1.dat)"
+    def test_dat_file_repr(self, mvsh1_dat_file: DatFile):
+        assert repr(mvsh1_dat_file) == "DatFile(mvsh1.dat)"
 
-    def test_dat_file_exp_type(self):
-        assert mvsh1.experiment_type == "magnetometry"
+    def test_dat_file_str(self, mvsh1_dat_file: DatFile):
+        assert str(mvsh1_dat_file) == "DatFile(mvsh1.dat)"
 
-    def test_dat_file_local_path(self):
-        assert mvsh1.local_path == Path(DATA_PATH / "mvsh1.dat")
+    def test_dat_file_exp_type(self, mvsh1_dat_file: DatFile):
+        assert mvsh1_dat_file.experiment_type == "magnetometry"
 
-    def test_dat_file_as_dict(self):
-        serialized = mvsh1.as_dict()
+    def test_dat_file_local_path(self, mvsh1_dat_file: DatFile):
+        assert mvsh1_dat_file.local_path == Path(DATA_PATH / "mvsh1.dat")
+
+    def test_dat_file_as_dict(self, mvsh1_dat_file: DatFile):
+        serialized = mvsh1_dat_file.as_dict()
         assert serialized["local_path"] == str(Path(DATA_PATH / "mvsh1.dat"))
 
 
@@ -104,22 +137,29 @@ parameterized = [
 ]
 
 
-@pytest.mark.parametrize("dat_file,expected", parameterized)
+@pytest.mark.parametrize("dat_file_path,expected", parameterized)
 class TestDatFile:
-    def test_experiment_type(self, dat_file: DatFile, expected: _Expected):
-        assert dat_file.experiment_type == expected.experiment
+    def test_experiment_type(self, dat_file_path: Path, expected: _Expected):
+        assert DatFile(dat_file_path).experiment_type == expected.experiment
 
-    def test_num_comments(self, dat_file: DatFile, expected: _Expected):
-        assert len(dat_file.comments) == expected.num_comments
+    def test_num_comments(self, dat_file_path: Path, expected: _Expected):
+        assert len(DatFile(dat_file_path).comments) == expected.num_comments
 
-    def test_data_shape(self, dat_file: DatFile, expected: _Expected):
-        assert dat_file.data.shape == expected.shape
+    def test_data_shape(self, dat_file_path: Path, expected: _Expected):
+        assert DatFile(dat_file_path).data.shape == expected.shape
 
-    def test_date_created(self, dat_file: DatFile, expected: _Expected):
-        assert dat_file.date_created.isoformat() == expected.date
+    def test_date_created(self, dat_file_path: Path, expected: _Expected):
+        assert DatFile(dat_file_path).date_created.isoformat() == expected.date
 
-    def test_experiments(self, dat_file: DatFile, expected: _Expected):
-        assert dat_file.experiments_in_file == expected.exps
+    def test_experiments(self, dat_file_path: Path, expected: _Expected):
+        assert DatFile(dat_file_path).experiments_in_file == expected.exps
+
+    def test_experiments_from_ambiguosly_named_files(
+        self, tmp_path, dat_file_path: Path, expected: _Expected
+    ):
+        temp_file = tmp_path / "temp.dat"
+        shutil.copy(dat_file_path, temp_file)
+        assert DatFile(temp_file).experiments_in_file == expected.exps
 
 
 expected_comments = [
@@ -155,6 +195,6 @@ expected_comments = [
 ]
 
 
-@pytest.mark.parametrize("dat_file,expected", expected_comments)
-def test_expected_comments(dat_file: DatFile, expected: OrderedDict[int, list[str]]):
-    assert dat_file.comments == expected
+@pytest.mark.parametrize("dat_file_path,expected", expected_comments)
+def test_expected_comments(dat_file_path: Path, expected: OrderedDict[int, list[str]]):
+    assert DatFile(dat_file_path).comments == expected
