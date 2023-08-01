@@ -54,10 +54,11 @@ class MvsH:
         self,
         dat_file: str | Path | DatFile,
         temperature: int | float | None = None,
+        parse_raw: bool = False,
         **kwargs,
     ) -> None:
         if not isinstance(dat_file, DatFile):
-            dat_file = DatFile(Path(dat_file))
+            dat_file = DatFile(Path(dat_file), parse_raw)
         self.origin_file = dat_file.local_path.name
 
         # optional arguments used for algorithmic separation of
@@ -293,9 +294,10 @@ class MvsH:
         eps: float = 0.001,
         min_samples: int = 10,
         ndigits: int = 0,
+        parse_raw: bool = False,
     ) -> list[MvsH]:
         if not isinstance(dat_file, DatFile):
-            dat_file = DatFile(Path(dat_file))
+            dat_file = DatFile(Path(dat_file), parse_raw)
         if dat_file.comments:
             mvsh_objs = cls._get_all_mvsh_in_commented_file(dat_file)
         else:
@@ -404,10 +406,11 @@ class ZFCFC:
         dat_file: str | Path | DatFile,
         experiment: str,
         field: int | float | None = None,
+        parse_raw: bool = False,
         **kwargs,
     ) -> None:
         if not isinstance(dat_file, DatFile):
-            dat_file = DatFile(Path(dat_file))
+            dat_file = DatFile(Path(dat_file), parse_raw)
         self.origin_file = dat_file.local_path.name
 
         n_digits = _num_digits_after_decimal(field) if field else 0
@@ -554,17 +557,16 @@ class ZFCFC:
         dat_file: str | Path | DatFile,
         experiment: str,
         n_digits: int = 0,
+        parse_raw: bool = False,
     ) -> list[ZFCFC]:
         if not isinstance(dat_file, DatFile):
-            dat_file = DatFile(Path(dat_file))
+            dat_file = DatFile(Path(dat_file), parse_raw)
         if dat_file.comments:
             zfcfc_objs = cls._get_all_zfcfc_in_commented_file(dat_file, experiment)
 
         else:
             zfcfc_objs = cls._get_all_zfcfc_in_uncommented_file(
-                dat_file,
-                experiment,
-                n_digits,
+                dat_file, experiment, n_digits
             )
         zfcfc_objs.sort(key=lambda x: x.field)
         return zfcfc_objs
@@ -611,7 +613,12 @@ class ZFCFC:
         zfcfc_objs = []
         if cls.__base__ == ZFCFC:
             # we're calling from ZFC or FC
-            zfcfc_objs.append(cls(dat_file, n_digits=n_digits))  # pylint: disable=E1120
+            zfcfc_objs.append(
+                cls(  # pylint: disable=E1120
+                    dat_file,
+                    n_digits=n_digits,
+                )
+            )
         else:
             # we're calling from ZFCFC
             zfcfc_objs.append(cls(dat_file, experiment, n_digits=n_digits))
@@ -620,17 +627,22 @@ class ZFCFC:
 
 class ZFC(ZFCFC):
     def __init__(
-        self, dat_file: str | Path | DatFile, field: int | float | None = None, **kwargs
+        self,
+        dat_file: str | Path | DatFile,
+        field: int | float | None = None,
+        parse_raw: bool = False,
+        **kwargs,
     ) -> None:
-        super().__init__(dat_file, "zfc", field, **kwargs)
+        super().__init__(dat_file, "zfc", field, parse_raw, **kwargs)
 
     @classmethod
     def get_all_in_file(
         cls,
         dat_file: str | Path | DatFile,
         n_digits: int = 0,
+        parse_raw: bool = False,
     ) -> list[ZFC]:
-        return super().get_all_zfcfc_in_file(dat_file, "zfc", n_digits)
+        return super().get_all_zfcfc_in_file(dat_file, "zfc", n_digits, parse_raw)
 
     def __str__(self):
         return f"ZFC at {self.field} Oe"
@@ -641,17 +653,22 @@ class ZFC(ZFCFC):
 
 class FC(ZFCFC):
     def __init__(
-        self, dat_file: str | Path | DatFile, field: int | float | None = None, **kwargs
+        self,
+        dat_file: str | Path | DatFile,
+        field: int | float | None = None,
+        parse_raw: bool = False,
+        **kwargs,
     ) -> None:
-        super().__init__(dat_file, "fc", field, **kwargs)
+        super().__init__(dat_file, "fc", field, parse_raw, **kwargs)
 
     @classmethod
     def get_all_in_file(
         cls,
         dat_file: str | Path | DatFile,
         n_digits: int = 0,
+        parse_raw: bool = False,
     ) -> list[FC]:
-        return super().get_all_zfcfc_in_file(dat_file, "fc", n_digits)
+        return super().get_all_zfcfc_in_file(dat_file, "fc", n_digits, parse_raw)
 
     def __str__(self):
         return f"FC at {self.field} Oe"

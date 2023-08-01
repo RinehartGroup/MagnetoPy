@@ -273,3 +273,16 @@ class TestGetAllMvsHInFile:
             .data["uncorrected_moment"]
             .equals(mvsh2_300.data["uncorrected_moment"])
         )
+
+
+### Test parse_raw ###
+
+
+class TestParseRaw:
+    def test_init(self):
+        mvsh = MvsH(mvsh5_path, parse_raw=True)
+        assert "raw_scan" in mvsh.data.columns
+
+    def test_get_all_in_file(self):
+        mvsh = MvsH.get_all_in_file(mvsh5_path, parse_raw=True)[0]
+        assert "raw_scan" in mvsh.data.columns

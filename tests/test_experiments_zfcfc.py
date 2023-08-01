@@ -258,3 +258,24 @@ class TestGetAllZFCFCInFile:
             .data["uncorrected_moment"]
             .equals(fc_1000.data["uncorrected_moment"])
         )
+
+
+### Test parse_raw ###
+
+
+class TestParseRaw:
+    def test_zfc_init(self):
+        zfc = ZFC(zfc5_path, parse_raw=True)
+        assert "raw_scan" in zfc.data.columns
+
+    def test_fc_init(self):
+        fc = FC(fc5_path, parse_raw=True)
+        assert "raw_scan" in fc.data.columns
+
+    def test_zfc_get_all_in_file(self):
+        zfc = ZFC.get_all_in_file(zfc5_path, parse_raw=True)[0]
+        assert "raw_scan" in zfc.data.columns
+
+    def test_fc_get_all_in_file(self):
+        fc = FC.get_all_in_file(fc5_path, parse_raw=True)[0]
+        assert "raw_scan" in fc.data.columns
