@@ -3,11 +3,12 @@ from collections import OrderedDict
 from dataclasses import dataclass
 from pathlib import Path
 import shutil
+import numpy as np
 
 import pytest
 
 from magnetopy import DatFile
-from magnetopy.data_files import filename_label, FileNameWarning
+from magnetopy.data_files import DcMeasurement, filename_label, FileNameWarning
 
 filename_expected = [
     ("mvsh1.dat", "", "mvsh"),
@@ -59,8 +60,12 @@ zfcfc3 = DATA_PATH / "zfcfc3.dat"
 zfcfc4 = DATA_PATH / "zfcfc4.dat"
 fc4a = DATA_PATH / "fc4a.dat"
 fc4b = DATA_PATH / "fc4b.dat"
+fc5 = DATA_PATH / "fc5.dat"
+fc5rw = DATA_PATH / "fc5.rw.dat"
 zfc4a = DATA_PATH / "zfc4a.dat"
 zfc4b = DATA_PATH / "zfc4b.dat"
+zfc5 = DATA_PATH / "zfc5.dat"
+zfcrw = DATA_PATH / "zfc5.rw.dat"
 dataset4 = DATA_PATH / "dataset4.dat"
 pd_std1 = DATA_PATH / "Pd_std1.dat"
 
@@ -198,3 +203,118 @@ expected_comments = [
 @pytest.mark.parametrize("dat_file_path,expected", expected_comments)
 def test_expected_comments(dat_file_path: Path, expected: OrderedDict[int, list[str]]):
     assert DatFile(dat_file_path).comments == expected
+
+
+### Test .rw.dat functionality ###
+
+
+def test_empty_comment_row():
+    """Rows with comments should have empty 'raw_scan' rows."""
+    mvsh5raw = DatFile(mvsh5, True)
+    assert np.isnan(mvsh5raw.data["raw_scan"].iloc[0])
+
+
+@dataclass
+class _ExpectedTimes:
+    up_start: float
+    up_end: float
+    down_start: float
+    down_end: float
+    processed_start: float
+    processed_end: float
+
+
+expected_times = [
+    (
+        mvsh5,
+        1,
+        _ExpectedTimes(
+            3874607983.80602,
+            3874607987.80602,
+            3874607988.52663,
+            3874607992.52663,
+            3874607993.10447,
+            3874607997.08447,
+        ),
+    ),
+    (
+        mvsh5,
+        -1,
+        _ExpectedTimes(
+            3874613954.71453,
+            3874613958.71453,
+            3874613959.41793,
+            3874613963.41793,
+            3874613964.07055,
+            3874613968.05055,
+        ),
+    ),
+    (
+        zfc5,
+        0,
+        _ExpectedTimes(
+            3876038306.03405,
+            3876038310.03405,
+            3876038310.75794,
+            3876038314.75794,
+            3876038315.32042,
+            3876038319.30042,
+        ),
+    ),
+    (
+        zfc5,
+        -1,
+        _ExpectedTimes(
+            3876059006.14798,
+            3876059010.14798,
+            3876059010.92101,
+            3876059014.92101,
+            3876059015.52881,
+            3876059019.50881,
+        ),
+    ),
+    (
+        fc5,
+        0,
+        _ExpectedTimes(
+            3876059853.86451,
+            3876059857.86451,
+            3876059858.57388,
+            3876059862.57388,
+            3876059863.15624,
+            3876059867.13624,
+        ),
+    ),
+    (
+        fc5,
+        -1,
+        _ExpectedTimes(
+            3876080563.16431,
+            3876080567.16431,
+            3876080567.89845,
+            3876080571.89845,
+            3876080572.48217,
+            3876080576.46217,
+        ),
+    ),
+]
+
+
+@pytest.mark.parametrize("dat_file_path,idx,expected", expected_times)
+def test_expected_times(dat_file_path: Path, idx: int, expected: _ExpectedTimes):
+    """
+    This test just checks that recorded times in the .rw.dat file in the the first and
+    last data points in an experiment are correct.
+    """
+    dat_file = DatFile(dat_file_path, True)
+    meas: DcMeasurement = dat_file.data["raw_scan"].iloc[idx]
+    assert meas.up_scan.data["Time Stamp (sec)"].iloc[0] == expected.up_start
+    assert meas.up_scan.data["Time Stamp (sec)"].iloc[-1] == expected.up_end
+    assert meas.down_scan.data["Time Stamp (sec)"].iloc[0] == expected.down_start
+    assert meas.down_scan.data["Time Stamp (sec)"].iloc[-1] == expected.down_end
+    assert (
+        meas.processed_scan.data["Time Stamp (sec)"].iloc[0] == expected.processed_start
+    )
+    assert (
+        meas.processed_scan.data["Time Stamp (sec)"].iloc[-1] == expected.processed_end
+    )

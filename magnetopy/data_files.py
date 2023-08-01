@@ -1,12 +1,15 @@
+from __future__ import annotations
 import csv
 import hashlib
 from pathlib import Path
+import re
 from typing import Any
 from collections import OrderedDict
 from datetime import datetime
 import warnings
 
 import pandas as pd
+import numpy as np
 
 
 class FileNameWarning(UserWarning):
@@ -112,13 +115,17 @@ class DatFile(GenericFile):
         Serializes the DatFile object to a dictionary.
     """
 
-    def __init__(self, file_path: str | Path) -> None:
+    def __init__(self, file_path: str | Path, parse_raw: bool = False) -> None:
         super().__init__(file_path, "magnetometry")
         self.header = self._read_header()
         self.data = self._read_data()
         self.comments = self._get_comments()
         self.date_created = self._get_date_created()
         self.experiments_in_file = self._get_experiments_in_file()
+        if parse_raw:
+            rw_dat_file = self.local_path.parent / (self.local_path.stem + ".rw.dat")
+            if rw_dat_file.exists():
+                self.append_raw_data(rw_dat_file)
 
     def __str__(self) -> str:
         return f"DatFile({self.local_path.name})"
@@ -183,6 +190,29 @@ class DatFile(GenericFile):
                 experiments.append("mvsh")
         return experiments
 
+    def append_raw_data(self, rw_dat_file: str | Path) -> None:
+        raw_dat = DatFile(rw_dat_file)
+        raw_scans = create_raw_scans(raw_dat)
+        self.combine_dat_and_raw_dfs(raw_scans)
+
+    def combine_dat_and_raw_dfs(self, raw: list[DcMeasurement]) -> None:
+        # the .rw.dat file does not account for comments in the .dat file
+        if len(self.data) == len(raw):
+            # there are no comments in the .dat file
+            self.data["raw_scan"] = raw
+        else:
+            # we need to skip rows that have comments
+            has_comment = self.data["Comment"].notna()
+            new_raw = []
+            j = 0
+            for i in range(len(self.data)):
+                if has_comment[i]:
+                    new_raw.append(np.nan)
+                else:
+                    new_raw.append(raw[j])
+                    j += 1
+            self.data["raw_scan"] = new_raw
+
     def as_dict(self) -> dict[str, Any]:
         """Serializes the DatFile object to a dictionary.
 
@@ -229,3 +259,113 @@ def filename_label(filename: str, experiment: str, suppress_warnings: bool) -> s
             FileNameWarning,
         )
     return label
+
+
+class ScanHeader:
+    def __init__(self, direction: str, up_header: pd.Series) -> None:
+        self.text: str = up_header["Comment"]
+        self.direction = direction
+        self.low_temp = self._get_value(r"low temp = (\d+\.\d+) K")
+        self.high_temp = self._get_value(r"high temp = (\d+\.\d+) K")
+        self.avg_temp = self._get_value(r"avg. temp = (\d+\.\d+) K")
+        self.low_field = self._get_value(r"low field = (-?\d+\.\d+) Oe")
+        self.high_field = self._get_value(r"high field = (-?\d+\.\d+) Oe")
+        self.drift = self._get_value(r"drift = (-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?) V/s")
+        self.slope = self._get_value(r"slope = (-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?) V/mm")
+        self.squid_range = self._get_value(r"squid range = (\d+)")
+        self.given_center = self._get_value(r"given center = (\d+\.\d+) mm")
+        self.calculated_center = self._get_value(r"calculated center = (\d+\.\d+) mm")
+        self.amp_fixed = self._get_value(r"amp fixed = (-?\d+\.\d+) V")
+        self.amp_free = self._get_value(r"amp free =(-?\d+\.\d+) V")
+
+    def _get_value(self, regex: str) -> float:
+        return float(re.search(regex, self.text).group(1))
+
+    @property
+    def avg_field(self):
+        return (self.low_field + self.high_field) / 2
+
+    def __repr__(self):
+        return f"ScanHeader({self.direction}, {self.avg_field:.2f} Oe, {self.avg_temp:.2f} K)"
+
+    def __str__(self):
+        return f"{self.direction} scan at {self.avg_field:.2f} Oe, {self.avg_temp:2f} K"
+
+
+class RawScan:
+    def __init__(self, direction: str, scan: pd.DataFrame) -> None:
+        self.direction = direction
+        self.data = scan.copy()
+        self.data.drop(
+            columns=["Comment", "Fixed C Fitted (V)", "Free C Fitted (V)"], inplace=True
+        )
+        self.data.reset_index(drop=True, inplace=True)
+        self.start_time = self.data["Time Stamp (sec)"].iloc[0]
+
+    def __repr__(self):
+        return f"RawScan({self.direction} at {self.start_time} sec)"
+
+    def __str__(self):
+        return f"RawScan({self.direction} at {self.start_time} sec)"
+
+
+class ProcessedScan:
+    def __init__(self, scan: pd.DataFrame) -> None:
+        self.data = scan.copy()
+        self.data.drop(
+            columns=["Comment", "Raw Voltage (V)", "Processed Voltage (V)"],
+            inplace=True,
+        )
+        self.data.reset_index(drop=True, inplace=True)
+        self.start_time = self.data["Time Stamp (sec)"].iloc[0]
+
+    def __repr__(self):
+        return f"ProcessedScan({self.start_time} sec)"
+
+    def __str__(self):
+        return f"ProcessedScan({self.start_time} sec)"
+
+
+class DcMeasurement:
+    def __init__(
+        self,
+        up_header: pd.Series,
+        up_scan: pd.DataFrame,
+        down_header: pd.Series,
+        down_scan: pd.DataFrame,
+        processed_scan: pd.DataFrame,
+    ) -> None:
+        self.up_header = ScanHeader("up", up_header)
+        self.up_scan = RawScan("up", up_scan)
+        self.down_header = ScanHeader("down", down_header)
+        self.down_scan = RawScan("down", down_scan)
+        self.processed_scan = ProcessedScan(processed_scan)
+
+    def __repr__(self):
+        return f"DcMeasurement({self.up_header.avg_field:.2f} Oe, {self.up_header.avg_temp:.2f} K)"
+
+    def __str__(self):
+        return f"DcMeasurement({self.up_header.avg_field:.2f} Oe, {self.up_header.avg_temp:.2f} K)"
+
+
+def create_raw_scans(raw_dat: DatFile) -> list[DcMeasurement]:
+    df = raw_dat.data
+    raw_idx = list(raw_dat.comments.keys())
+    scans = []
+    for i in range(0, len(raw_idx), 2):
+        up_header = df.iloc[raw_idx[i]]
+        up_scan = df.iloc[raw_idx[i] + 1 : raw_idx[i + 1]]
+        down_header = df.iloc[raw_idx[i + 1]]
+        down_scan = df.iloc[
+            raw_idx[i + 1] + 1 : raw_idx[i + 1] + (raw_idx[i + 1] - raw_idx[i])
+        ]
+        try:
+            processed_scan = df.iloc[
+                raw_idx[i + 1] + (raw_idx[i + 1] - raw_idx[i]) : raw_idx[i + 2]
+            ]
+        except IndexError:
+            processed_scan = df.iloc[raw_idx[i + 1] + (raw_idx[i + 1] - raw_idx[i]) :]
+        scans.append(
+            DcMeasurement(up_header, up_scan, down_header, down_scan, processed_scan)
+        )
+    return scans
