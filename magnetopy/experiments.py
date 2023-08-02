@@ -784,6 +784,7 @@ def _scale_dc_data(
     molecular_weight: float = 0,
     diamagnetic_correction: float = 0,
 ) -> None:
+    mass = mass / 1000  # convert to g
     if mass and molecular_weight:
         experiment.scaling.append("molar")
         if eicosane_mass:
@@ -805,7 +806,7 @@ def _scale_magnetic_data_molar_w_eicosane_and_diamagnet(
     eicosane_mass: float,
     diamagnetic_correction: float,
 ) -> None:
-    mol_eicosane = eicosane_mass / 282.55 if eicosane_mass else 0
+    mol_eicosane = (eicosane_mass / 1000) / 282.55 if eicosane_mass else 0
     eicosane_diamagnetism = (
         -0.00024306 * mol_eicosane
     )  # eicosane chi_D = -0.00024306 emu/mol
@@ -816,25 +817,29 @@ def _scale_magnetic_data_molar_w_eicosane_and_diamagnet(
     data["chi"] = (
         data["uncorrected_moment"] / data["Magnetic Field (Oe)"] - eicosane_diamagnetism
     ) / mol_sample - sample_molar_diamagnetism
-    data["chi_err"] = (
-        data["uncorrected_moment_err"] / data["Magnetic Field (Oe)"]
-        - eicosane_diamagnetism
-    ) / mol_sample - sample_molar_diamagnetism
+    data["chi_err"] = abs(
+        (
+            data["uncorrected_moment_err"] / data["Magnetic Field (Oe)"]
+            - eicosane_diamagnetism
+        )
+        / mol_sample
+        - sample_molar_diamagnetism
+    )
     # chiT in units of cm3 K mol-1
     data["chi_t"] = data["chi"] * data["Temperature (K)"]
     data["chi_t_err"] = data["chi_err"] * data["Temperature (K)"]
     # moment in units of Bohr magnetons
     data["moment"] = data["chi"] * data["Magnetic Field (Oe)"] / 5585
-    data["moment_err"] = data["chi_err"] * data["Magnetic Field (Oe)"] / 5585
+    data["moment_err"] = abs(data["chi_err"] * data["Magnetic Field (Oe)"] / 5585)
 
 
 def _scale_magnetic_data_mass(data: pd.DataFrame, mass: float) -> None:
     # moment in units of emu/g
-    data["moment"] = data["uncorrected_moment"] / (mass / 1000)
-    data["moment_err"] = data["uncorrected_moment_err"] / (mass / 1000)
+    data["moment"] = data["uncorrected_moment"] / mass
+    data["moment_err"] = data["uncorrected_moment_err"] / mass
     # chi in units of cm^3/g
     data["chi"] = data["moment"] / data["Magnetic Field (Oe)"]
-    data["chi_err"] = data["moment_err"] / data["Magnetic Field (Oe)"]
+    data["chi_err"] = abs(data["moment_err"] / data["Magnetic Field (Oe)"])
     # chiT in units of cm3 K g-1
     data["chi_t"] = data["chi"] * data["Temperature (K)"]
     data["chi_t_err"] = data["chi_err"] * data["Temperature (K)"]

@@ -24,3 +24,8 @@ from magnetopy.plot import (
 )
 from magnetopy.plot_helpers import force_aspect, linear_color_gradient
 from magnetopy.dataset import SampleInfo, Dataset
+from magnetopy.analyses.simple_mvsh import (
+    SimpleMvsHAnalysis,
+    SimpleMvsHAnalysisResults,
+    SimpleMvsHAnalysisParsingArgs,
+)

@@ -2,6 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
+
 from magnetopy.data_files import DatFile
 from magnetopy.experiments import FC, ZFC, MvsH, DcExperiment
 
