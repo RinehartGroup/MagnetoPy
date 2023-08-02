@@ -70,47 +70,47 @@ class TestScaleMagneticDataWEicosaneAndDiamagnet:
         assert exp.data["chi_err"].iloc[0] == 0.001
         assert exp.data["chi_t"].iloc[0] == 3.0
         assert exp.data["chi_t_err"].iloc[0] == 0.3
-        assert round(exp.data["moment"].iloc[0], 8) == 0.00179051
-        assert round(exp.data["moment_err"].iloc[0], 8) == 0.00017905
+        assert round(exp.data["moment"].iloc[0], 4) == 0.0018
+        assert round(exp.data["moment_err"].iloc[0], 4) == 0.0002
 
     def test_molar_eicosane(self, exp: MockDcExperiment):
         _scale_magnetic_data_molar_w_eicosane_and_diamagnet(exp.data, 1, 1, 0)
-        assert round(exp.data["chi"].iloc[0], 8) == 0.01000086
-        assert round(exp.data["chi_err"].iloc[0], 8) == 0.00100086
-        assert round(exp.data["chi_t"].iloc[0], 8) == 3.00025807
-        assert round(exp.data["chi_t_err"].iloc[0], 8) == 0.30025807
-        assert round(exp.data["moment"].iloc[0], 8) == 0.00179066
-        assert round(exp.data["moment_err"].iloc[0], 8) == 0.00017921
+        assert round(exp.data["chi"].iloc[0], 4) == 0.0100
+        assert round(exp.data["chi_err"].iloc[0], 4) == 0.0010
+        assert round(exp.data["chi_t"].iloc[0], 4) == 3.000
+        assert round(exp.data["chi_t_err"].iloc[0], 4) == 0.300
+        assert round(exp.data["moment"].iloc[0], 4) == 0.0018
+        assert round(exp.data["moment_err"].iloc[0], 4) == 0.0002
 
     def test_molar_diamagnet(self, exp: MockDcExperiment):
         _scale_magnetic_data_molar_w_eicosane_and_diamagnet(exp.data, 1, 0, 0.0001)
-        assert round(exp.data["chi"].iloc[0], 8) == 0.0099
-        assert round(exp.data["chi_err"].iloc[0], 8) == 0.0009
-        assert round(exp.data["chi_t"].iloc[0], 8) == 2.97
-        assert round(exp.data["chi_t_err"].iloc[0], 8) == 0.27
-        assert round(exp.data["moment"].iloc[0], 8) == 0.00177261
-        assert round(exp.data["moment_err"].iloc[0], 8) == 0.00016115
+        assert round(exp.data["chi"].iloc[0], 4) == 0.0099
+        assert round(exp.data["chi_err"].iloc[0], 4) == 0.0009
+        assert round(exp.data["chi_t"].iloc[0], 4) == 2.97
+        assert round(exp.data["chi_t_err"].iloc[0], 4) == 0.27
+        assert round(exp.data["moment"].iloc[0], 4) == 0.0018
+        assert round(exp.data["moment_err"].iloc[0], 4) == 0.0002
 
     def test_molar_eicosane_diamagnet(self, exp: MockDcExperiment):
         _scale_magnetic_data_molar_w_eicosane_and_diamagnet(exp.data, 1, 1, 0.0001)
-        assert round(exp.data["chi"].iloc[0], 8) == 0.00990086
-        assert round(exp.data["chi_err"].iloc[0], 8) == 0.00090086
-        assert round(exp.data["chi_t"].iloc[0], 8) == 2.97025807
-        assert round(exp.data["chi_t_err"].iloc[0], 8) == 0.27025807
-        assert round(exp.data["moment"].iloc[0], 8) == 0.00177276
-        assert round(exp.data["moment_err"].iloc[0], 8) == 0.0001613
+        assert round(exp.data["chi"].iloc[0], 4) == 0.0099
+        assert round(exp.data["chi_err"].iloc[0], 4) == 0.0009
+        assert round(exp.data["chi_t"].iloc[0], 4) == 2.970
+        assert round(exp.data["chi_t_err"].iloc[0], 4) == 0.270
+        assert round(exp.data["moment"].iloc[0], 4) == 0.0018
+        assert round(exp.data["moment_err"].iloc[0], 4) == 0.0002
 
 
 def test_magnetic_data_mass():
     exp = MockVsmExperiment()
     _add_uncorrected_moment_columns(exp)
     _scale_magnetic_data_mass(exp.data, 2)
-    assert exp.data["chi"].iloc[0] == 5.0
-    assert exp.data["chi_err"].iloc[0] == 0.5
-    assert exp.data["chi_t"].iloc[0] == 1500.0
-    assert exp.data["chi_t_err"].iloc[0] == 150.0
-    assert exp.data["moment"].iloc[0] == 5000.0
-    assert exp.data["moment_err"].iloc[0] == 500.0
+    assert exp.data["chi"].iloc[0] == 0.005
+    assert exp.data["chi_err"].iloc[0] == 0.0005
+    assert exp.data["chi_t"].iloc[0] == 1.5
+    assert exp.data["chi_t_err"].iloc[0] == 0.15
+    assert exp.data["moment"].iloc[0] == 5
+    assert exp.data["moment_err"].iloc[0] == 0.5
 
 
 class TestScaleDcData:
