@@ -10,13 +10,20 @@ import warnings
 
 import pandas as pd
 import numpy as np
+from pydantic import BaseModel
 
 
 class FileNameWarning(UserWarning):
     pass
 
 
-class GenericFile:
+class GenericFile(BaseModel):
+    local_path: Path
+    length: int
+    date_created: datetime
+    sha512: str
+    experiment_type: str
+
     """A class containing basic metadata about a file.
 
     Attributes
@@ -38,7 +45,8 @@ class GenericFile:
         Serializes the GenericFile object to a dictionary.
     """
 
-    def __init__(self, file_path: str | Path, experiment_type: str = "") -> None:
+    @classmethod
+    def from_path(cls, file_path: str | Path, experiment_type: str = "") -> GenericFile:
         """A class containing basic metadata about a file.
 
         Parameters
@@ -48,11 +56,17 @@ class GenericFile:
         experiment_type : str, optional
             The type of experiment the file is associated with, by default "".
         """
-        self.local_path = Path(file_path)
-        self.length = self.local_path.stat().st_size
-        self.date_created = datetime.fromtimestamp(self.local_path.stat().st_ctime)
-        self.sha512 = self._determine_sha512()
-        self.experiment_type = experiment_type
+        local_path = Path(file_path)
+        length = local_path.stat().st_size
+        date_created = datetime.fromtimestamp(local_path.stat().st_ctime)
+        sha512 = _determine_sha512(local_path)
+        return cls(
+            local_path=local_path,
+            length=length,
+            date_created=date_created,
+            sha512=sha512,
+            experiment_type=experiment_type,
+        )
 
     def __str__(self) -> str:
         return f"GenericFile({self.local_path.name})"
@@ -60,29 +74,14 @@ class GenericFile:
     def __repr__(self) -> str:
         return f"GenericFile({self.local_path.name})"
 
-    def _determine_sha512(self) -> str:
-        buf_size = 4 * 1024 * 1024  # 4MB chunks
-        hasher = hashlib.sha512()
-        with self.local_path.open("rb") as f:
-            while data := f.read(buf_size):
-                hasher.update(data)
-        return hasher.hexdigest()
 
-    def as_dict(self) -> dict[str, Any]:
-        """Serializes the GenericFile object to a dictionary.
-
-        Returns
-        -------
-        dict[str, Any]
-            Contains the following keys: local_path, length, date_created, sha512
-        """
-        return {
-            "experiment_type": self.experiment_type,
-            "local_path": str(self.local_path),
-            "length": self.length,
-            "date_created": self.date_created.isoformat(),
-            "sha512": self.sha512,
-        }
+def _determine_sha512(path: Path) -> str:
+    buf_size = 4 * 1024 * 1024  # 4MB chunks
+    hasher = hashlib.sha512()
+    with path.open("rb") as f:
+        while data := f.read(buf_size):
+            hasher.update(data)
+    return hasher.hexdigest()
 
 
 class DatFile(GenericFile):
@@ -115,13 +114,14 @@ class DatFile(GenericFile):
         Serializes the DatFile object to a dictionary.
     """
 
-    def __init__(self, file_path: str | Path, parse_raw: bool = False) -> None:
-        super().__init__(file_path, "magnetometry")
-        self.header = self._read_header()
-        self.data = self._read_data()
-        self.comments = self._get_comments()
-        self.date_created = self._get_date_created()
-        self.experiments_in_file = self._get_experiments_in_file()
+    @classmethod
+    def from_path(cls, file_path: str | Path, parse_raw: bool = False) -> DatFile:
+        super().from_path(file_path, "magnetometry")
+        header = cls._read_header()
+        data = cls._read_data()
+        comments = cls._get_comments()
+        date_created = cls._get_date_created()
+        experiments_in_file = cls._get_experiments_in_file()
         if parse_raw:
             rw_dat_file = self.local_path.parent / (self.local_path.stem + ".rw.dat")
             if rw_dat_file.exists():
