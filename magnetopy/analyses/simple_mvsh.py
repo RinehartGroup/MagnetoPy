@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
+from typing import Any
 
 import pandas as pd
 
@@ -11,13 +12,21 @@ class SimpleMvsHAnalysisParsingArgs:
     temperature: float
     segments: str = "auto"  # auto, loop, forward, reverse
 
+    def as_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
 
 @dataclass
 class SimpleMvsHAnalysisResults:
     m_s: float
     h_c: float
     m_r: float
+    moment_units: str
+    field_units: str
     segments: list[str]
+
+    def as_dict(self) -> dict[str, Any]:
+        return asdict(self)
 
 
 class SimpleMvsHAnalysis:
@@ -28,12 +37,14 @@ class SimpleMvsHAnalysis:
     ) -> None:
         self.parsing_args = parsing_args
         self.mvsh = dataset.get_mvsh(self.parsing_args.temperature)
-        self.segments = self._get_segments()
-        m_s = self._determine_m_s()
-        h_c = self._determine_h_c()
-        m_r = self._determine_m_r()
+        segments = self._get_segments()
+        m_s = self._determine_m_s(segments)
+        h_c = self._determine_h_c(segments)
+        m_r = self._determine_m_r(segments)
+        moment_units = self._determine_moment_units()
+        field_units = "Oe"
         self.results = SimpleMvsHAnalysisResults(
-            m_s, h_c, m_r, list(self.segments.keys())
+            m_s, h_c, m_r, moment_units, field_units, list(segments.keys())
         )
 
     def _get_segments(self) -> dict[str, pd.DataFrame]:
@@ -54,20 +65,36 @@ class SimpleMvsHAnalysis:
                 segments["reverse"] = self.mvsh.simplified_data("reverse")
         return segments
 
-    def _determine_m_s(self) -> float:
+    def _determine_m_s(self, segments: dict[str, pd.DataFrame]) -> float:
         m_s = 0
-        for segment in self.segments.values():
+        for segment in segments.values():
             m_s += (segment["moment"].max() + abs(segment["moment"].min())) / 2
-        return m_s / len(self.segments)
+        return m_s / len(segments)
 
-    def _determine_h_c(self) -> float:
+    def _determine_h_c(self, segments: dict[str, pd.DataFrame]) -> float:
         h_c = 0
-        for segment in self.segments.values():
+        for segment in segments.values():
             h_c += abs(segment["field"].iloc[segment["moment"].abs().idxmin()])
-        return h_c / len(self.segments)
+        return h_c / len(segments)
 
-    def _determine_m_r(self) -> float:
+    def _determine_m_r(self, segments: dict[str, pd.DataFrame]) -> float:
         m_r = 0
-        for segment in self.segments.values():
+        for segment in segments.values():
             m_r += abs(segment["moment"].iloc[segment["field"].abs().idxmin()])
-        return m_r / len(self.segments)
+        return m_r / len(segments)
+
+    def _determine_moment_units(self) -> str:
+        scaling = self.mvsh.scaling
+        if not scaling:
+            return "emu"
+        elif "mass" in scaling:
+            return "emu/g"
+        elif "molar" in scaling:
+            return "bohr magnetons/mol"
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "mvsh": self.mvsh,
+            "parsing_args": self.parsing_args,
+            "results": self.results,
+        }

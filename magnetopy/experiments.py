@@ -2,7 +2,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import re
-from typing import Protocol
+from typing import Any, Protocol
 import numpy as np
 import pandas as pd
 
@@ -81,7 +81,8 @@ class MvsH:
             )
         _add_uncorrected_moment_columns(self)
         self.field_correction_file = ""
-        self.scaling = []
+        self.scaling: list[str] = []
+        self.field_range = self._determine_field_range()
         self._field_fluctuation_tolerance = 1
 
     def __str__(self) -> str:
@@ -198,6 +199,11 @@ class MvsH:
             )
         self.field_correction_file = pd_mvsh.origin_file
         self.data["true_field"] = pd_mvsh.data["true_field"]
+        self.field_range = self._determine_field_range()
+
+    def _determine_field_range(self) -> tuple[float, float]:
+        simplified_data = self.simplified_data()
+        return simplified_data["field"].min(), simplified_data["field"].max()
 
     @property
     def virgin(self) -> pd.DataFrame:
@@ -286,6 +292,15 @@ class MvsH:
         if segment is None:
             raise self.SegmentError(f"Sequence {sequence} not found in data")
         return segment
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "origin_file": self.origin_file,
+            "temperature": self.temperature,
+            "field_range": self.field_range,
+            "field_correction_file": self.field_correction_file,
+            "scaling": self.scaling,
+        }
 
     @classmethod
     def get_all_in_file(
@@ -436,6 +451,7 @@ class ZFCFC:
                 )
         _add_uncorrected_moment_columns(self)
         self.scaling = []
+        self.temperature_range = self._determine_temperature_range()
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__} at {self.field} Oe"
@@ -550,6 +566,21 @@ class ZFCFC:
             df["chi_t"] = df["chi"] * df["temperature"]
             df["chi_t_err"] = df["chi_err"] * df["temperature"]
         return df
+
+    def _determine_temperature_range(self) -> tuple[float, float]:
+        simplified_data = self.simplified_data()
+        return (
+            simplified_data["temperature"].min(),
+            simplified_data["temperature"].max(),
+        )
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "origin_file": self.origin_file,
+            "field": self.field,
+            "temperature_range": self.temperature_range,
+            "scaling": self.scaling,
+        }
 
     @classmethod
     def get_all_zfcfc_in_file(

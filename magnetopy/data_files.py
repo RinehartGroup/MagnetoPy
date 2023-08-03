@@ -222,14 +222,9 @@ class DatFile(GenericFile):
             Contains the following keys: local_path, length, date_created, sha512,
             experiments_in_file.
         """
-        return {
-            "experiment_type": self.experiment_type,
-            "local_path": str(self.local_path),
-            "length": self.length,
-            "date_created": self.date_created.isoformat(),
-            "sha512": self.sha512,
-            "experiments_in_file": self.experiments_in_file,
-        }
+        output = super().as_dict()
+        output["experiments_in_file"] = self.experiments_in_file
+        return output
 
 
 def filename_label(filename: str, experiment: str, suppress_warnings: bool) -> str:

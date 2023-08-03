@@ -1,6 +1,8 @@
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
+import json
 from pathlib import Path
+from typing import Any, Protocol
 
 
 from magnetopy.data_files import DatFile
@@ -112,6 +114,14 @@ class SampleInfo:
             sample.size, sample.volume = None, None
         return sample
 
+    def as_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+class Analysis(Protocol):
+    def as_dict(self) -> dict[str, Any]:
+        ...
+
 
 class Dataset:
     class ExperimentNotFoundError(Exception):
@@ -142,6 +152,7 @@ class Dataset:
         self.scale_dc_data()
         if true_field_correction:
             self.correct_field(true_field_correction)
+        self.analyses: list[Analysis] = []
 
     def __str__(self) -> str:
         return f"Dataset({self.sample_id})"
@@ -246,3 +257,36 @@ class Dataset:
         raise self.ExperimentNotFoundError(
             f"No FC experiment found at field {field} Oe"
         )
+
+    def add_analysis(self, analysis: Analysis) -> None:
+        self.analyses.append(analysis)
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "sample_id": self.sample_id,
+            "sample_info": self.sample_info,
+            "mvsh": self.mvsh,
+            "zfc": self.zfc,
+            "fc": self.fc,
+            "analyses": self.analyses,
+        }
+
+    def as_json(self, indent: int = 0) -> str:
+        return json.dumps(self, default=lambda x: x.as_dict(), indent=indent)
+
+    def create_report(
+        self, directory: str | Path | None = None, overwrite: bool = False
+    ) -> None:
+        if directory:
+            directory = Path(directory)
+        else:
+            directory = self.dat_files[0].local_path.parent
+        path = directory / f"{self.sample_id}.json"
+        if path.exists() and overwrite is False:
+            reponse = input(f"File {path} already exists. Overwrite? [y/N] ")
+            if reponse.lower() != "y":
+                print("Aborting report creation.")
+                return
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(self.as_json(indent=4))
+        print(f"Report written to {path}")
