@@ -1,6 +1,7 @@
 from typing import Union
 import numpy as np
 import pandas as pd
+from itertools import cycle
 
 
 def linear_color_gradient(
@@ -11,21 +12,22 @@ def linear_color_gradient(
     """
     Modified from https://bsouthga.dev/posts/color-gradients-with-python
     returns a gradient list of (n) colors between two hex colors.
-    start_hex and finish_hex should be the full six-digit color string, inlcuding the '#' sign ("#FFFFFF")
+    start_hex and finish_hex should be the full six-digit color string,
+    inlcuding the '#' sign ("#FFFFFF")
     """
 
-    def hex_to_RGB(hex: str) -> list:
+    def hex_to_rgb(hex_color: str) -> list:
         # Pass 16 to the integer function for change of base
-        return [int(hex[i : i + 2], 16) for i in range(1, 6, 2)]
+        return [int(hex_color[i : i + 2], 16) for i in range(1, 6, 2)]
 
-    def RGB_to_hex(RGB: str) -> str:
+    def rgb_to_hex(rgb: str) -> str:
         # Components need to be integers for hex to make sense
-        RGB = [int(x) for x in RGB]
+        rgb = [int(x) for x in rgb]
         return "#" + "".join(
-            ["0{0:x}".format(v) if v < 16 else "{0:x}".format(v) for v in RGB]
+            ["0{0:x}".format(v) if v < 16 else "{0:x}".format(v) for v in rgb]
         )
 
-    default_colors = {
+    basic_colors = {
         "red": "#FF0000",
         "orange": "#E36D12",
         "yellow": "#FFFF00",
@@ -35,30 +37,31 @@ def linear_color_gradient(
         "black": "#000000",
         "white": "#FFFFFF",
     }
-    start_hex = default_colors.get(start_hex, start_hex)
-    finish_hex = default_colors.get(finish_hex, finish_hex)
+    start_hex = basic_colors.get(start_hex, start_hex)
+    finish_hex = basic_colors.get(finish_hex, finish_hex)
 
-    s = hex_to_RGB(start_hex)
-    f = hex_to_RGB(finish_hex)
+    start = hex_to_rgb(start_hex)
+    finish = hex_to_rgb(finish_hex)
     # Initilize a list of the output colors with the starting color
-    RGB_list = [s]
+    rgb_list = [start]
     # Calcuate a color at each evenly spaced value of t from 1 to n
     if isinstance(n, int):
         for t in range(1, n):
             # Interpolate RGB vector for color at the current value of t
             curr_vector = [
-                int(s[j] + (float(t) / (n - 1)) * (f[j] - s[j])) for j in range(3)
+                int(start[j] + (float(t) / (n - 1)) * (finish[j] - start[j]))
+                for j in range(3)
             ]
             # Add it to our list of output colors
-            RGB_list.append(curr_vector)
+            rgb_list.append(curr_vector)
     elif isinstance(n, pd.core.series.Series):
-        full_vector = [f[i] - s[i] for i in range(3)]
+        full_vector = [finish[i] - start[i] for i in range(3)]
         full_vector_length = np.sqrt(
             full_vector[0] ** 2 + full_vector[1] ** 2 + full_vector[2] ** 2
         )
         unit_vector = [full_vector[i] / full_vector_length for i in range(3)]
         index_range = n.max() - n.min()
-        previous_color = s
+        previous_color = start
         n = n.to_list()
         previous_index = n[0]
         for current_index in n[1:]:
@@ -71,13 +74,31 @@ def linear_color_gradient(
             ]
             previous_index = current_index
             previous_color = curr_vector
-            RGB_list.append(curr_vector)
+            rgb_list.append(curr_vector)
 
     hex_list = []
-    for RGB in RGB_list:
-        hex_list.append(RGB_to_hex(RGB))
+    for rgb in rgb_list:
+        hex_list.append(rgb_to_hex(rgb))
 
     return hex_list
+
+
+def default_colors(n: int) -> list[str]:
+    default = cycle(
+        [
+            "#1f77b4",
+            "#ff7f0e",
+            "#2ca02c",
+            "#d62728",
+            "#9467bd",
+            "#8c564b",
+            "#e377c2",
+            "#7f7f7f",
+            "#bcbd22",
+            "#17becf",
+        ]
+    )
+    return [next(default) for _ in range(n)]
 
 
 def force_aspect(ax, aspect=1):

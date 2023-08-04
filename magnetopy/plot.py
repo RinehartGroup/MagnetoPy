@@ -1,13 +1,211 @@
-# import pathlib
-# from typing import Tuple
+import matplotlib.pyplot as plt
 
-# import matplotlib as mpl
-# import matplotlib.pyplot as plt
+from magnetopy.experiments import MvsH, ZFCFC, ZFC, FC
+from magnetopy.plot_helpers import force_aspect, linear_color_gradient, default_colors
 
-# from magnetopy.fits import arctan_fit, determine_blocking_temp
-# from magnetopy.parse_qd import AnalyzedSingleRawDCScan, QDFile, SingleRawDCScan
-# from magnetopy.plot_helpers import force_aspect, linear_color_gradient
 
+def plot_mvsh(
+    mvsh: MvsH | list[MvsH],
+    normalized: bool = False,
+    sequence: str = "",
+    colors: str | list[str] = "auto",
+    labels: str | list[str] | None = "auto",
+    title: str = "",
+    **kwargs,
+):
+    if isinstance(mvsh, MvsH):
+        if isinstance(colors, list) or isinstance(labels, list):
+            raise ValueError(
+                "If plotting a single MvsH, `colors` and `labels` must be a single value"
+            )
+        return plot_single_mvsh(
+            mvsh=mvsh,
+            normalized=normalized,
+            sequence=sequence,
+            color=colors,
+            label=labels,
+            title=title,
+            **kwargs,
+        )
+    if colors != "auto" and not isinstance(colors, list):
+        raise ValueError(
+            "If plotting multiple MvsH, `colors` must be a list or 'auto'."
+        )
+    if labels is not None and labels != "auto" and not isinstance(labels, list):
+        raise ValueError(
+            "If plotting multiple MvsH, `labels` must be a list or 'auto' or `None`."
+        )
+    return plot_multiple_mvsh(
+        mvsh,
+        normalized=normalized,
+        sequence=sequence,
+        colors=colors,
+        labels=labels,
+        title=title,
+        **kwargs,
+    )
+
+
+def plot_single_mvsh(
+    mvsh: MvsH,
+    normalized: bool = False,
+    sequence: str = "",
+    color: str = "black",
+    label: str | None = "",
+    title: str = "",
+    **kwargs,
+):
+    options = _handle_kwargs(**kwargs)
+
+    fig, ax = plt.subplots()
+    x = mvsh.simplified_data(sequence)["field"] / 10000
+    y = mvsh.simplified_data(sequence)["moment"]
+    y = y / y.max() if normalized else y
+    if label is None:
+        ax.plot(x, y, c=color)
+    else:
+        if label == "auto":
+            label = f"{mvsh.temperature} K"
+        ax.plot(x, y, c=color, label=label)
+
+    ax.set_xlabel("Field (T)")
+    if normalized:
+        ax.set_ylabel("Normalized Magnetization")
+    else:
+        ylabel = _get_magnetization_w_units(mvsh.scaling)
+        ax.set_ylabel(ylabel)
+
+    _handle_options(ax, label, title, options)
+
+    force_aspect(ax)
+    if options["save"]:
+        plt.savefig(
+            options["save"], dpi=300, bbox_inches="tight", facecolor="w", edgecolor="w"
+        )
+    return fig, ax
+
+
+def plot_multiple_mvsh(
+    mvsh: list[MvsH],
+    normalized: bool = False,
+    sequence: str = "",
+    colors: str | list[str] = "auto",
+    labels: list[str] | None = None,
+    title: str = "",
+    **kwargs,
+):
+    options = _handle_kwargs(**kwargs)
+
+    if colors == "auto":
+        colors = default_colors(len(mvsh))
+    if _check_if_variable_temperature(mvsh):
+        mvsh.sort(key=lambda x: x.temperature)
+        colors = linear_color_gradient("blue", "red", len(mvsh))
+        labels = [f"{x.temperature} K" for x in mvsh]
+    labels = labels if labels is not None else [""] * len(mvsh)
+
+    fig, ax = plt.subplots()
+    for m, color, label in zip(mvsh, colors, labels):
+        x = m.simplified_data(sequence)["field"] / 10000
+        y = m.simplified_data(sequence)["moment"]
+        y = y / y.max() if normalized else y
+        ax.plot(x, y, c=color, label=label)
+
+    ax.set_xlabel("Field (T)")
+    if normalized:
+        ax.set_ylabel("Normalized Magnetization")
+    else:
+        ylabel = _get_magnetization_w_units(mvsh[0].scaling)
+        ax.set_ylabel(ylabel)
+
+    _handle_options(ax, labels[0], title, options)
+    force_aspect(ax)
+    if options["save"]:
+        plt.savefig(
+            options["save"], dpi=300, bbox_inches="tight", facecolor="w", edgecolor="w"
+        )
+    return fig, ax
+
+
+def _handle_kwargs(**kwargs):
+    options = {"xlim": None, "ylim": None, "loc": None, "save": None}
+    options.update(kwargs)
+    return options
+
+
+def _get_magnetization_w_units(scaling: list[str]):
+    units = ""
+    if not scaling:
+        units = "(emu)"
+    elif "mass" in scaling:
+        units = "(emu/g)"
+    elif "molar" in scaling:
+        units = r"$(N_A \cdot \mu_B)$"
+    return f"Magnetization {units}"
+
+
+def _handle_options(ax, label: str | None, title: str, options: dict[str, str]):
+    if label or title:
+        if options["loc"]:
+            ax.legend(frameon=False, loc=options["loc"], title=title)
+        else:
+            ax.legend(frameon=False, loc="upper left", title=title)
+    if options["xlim"]:
+        ax.set_xlim(options["xlim"])
+    if options["ylim"]:
+        ax.set_ylim(options["ylim"])
+
+
+def _check_if_variable_temperature(mvsh: list[MvsH]):
+    first_temp = mvsh[0].temperature
+    for mvsh_obj in mvsh:
+        if mvsh_obj.temperature != first_temp:
+            return True
+    return False
+
+
+# def plot_zfcfc(
+#     zfc: ZFC | list[ZFC],
+#     fc: FC | list[FC],
+#     normalized: bool = False,
+#     colors: str | list[str] = "",
+#     labels: str | list[str] | None = "auto",
+#     title: str = "",
+#     **kwargs,
+# ):
+#     if isinstance(zfc, ZFC) and isinstance(fc, FC):
+#         colors = [colors] if not isinstance(colors, list) else colors
+#         if labels != "auto" and labels is not None:
+#             label = labels[0] if isinstance(labels, list) else labels
+#         else:
+#             label = labels
+#         return plot_single_zfcfc(
+#             zfc=zfc,
+#             fc=fc,
+#             normalized=normalized,
+#             color=colors[0],
+#             label=label,
+#             title=title,
+#             **kwargs,
+#         )
+#     colors = [colors] if not isinstance(colors, list) else colors
+#     labels = [labels] if not isinstance(labels, list) and labels is not None else labels
+#     return plot_multiple_zfcfc(
+#         zfc,
+#         fc,
+#         normalized=normalized,
+#         colors=colors,
+#         labels=labels,
+#         title=title,
+#         **kwargs,
+#     )
+
+# def plot_single_zfcfc(
+#     zfc: ZFC,
+#     fc: FC,
+#     normalized: bool = False,
+
+# )
 
 # def plot_voltage_scan(
 #     scan_obj: SingleRawDCScan,
@@ -245,126 +443,3 @@
 #             options["save"], dpi=300, bbox_inches="tight", facecolor="w", edgecolor="w"
 #         )
 #     return fig, axs
-
-
-# def plot_mvsh(
-#     sweeps: QDFile | list[QDFile],
-#     y_val: str = "DC Moment Free Ctr (emu)",
-#     normalized=False,
-#     colors: list | str | None = None,
-#     labels: list | str | None = "",
-#     title=None,
-#     **kwargs,
-# ):
-#     """
-#     y_val options:
-#         'DC Moment Free Ctr (emu)'
-#         'Background Subtracted Moment (emu)'
-#     """
-#     options = {"xlim": None, "ylim": None, "loc": None, "save": None}
-#     options.update(kwargs)
-#     if isinstance(sweeps, list) and colors is None:
-#         colors = linear_color_gradient("purple", "orange", len(sweeps))
-#     show_label = True
-#     if isinstance(sweeps, QDFile):
-#         sweeps = [sweeps]
-#         colors = ["black"]
-#         labels = [labels]
-#         show_label = False
-#     fig, ax = plt.subplots()
-#     ax.set_xlabel("Field (T)")
-
-#     ylabel_dict = {
-#         "DC Moment Free Ctr (emu)": "Magnetization (emu)",
-#         "Moment_per_mass": "Magnetization (emu/g)",
-#     }
-#     ylabel = ylabel_dict[y_val]
-#     if normalized:
-#         ylabel = "Normalized Magnetization (emu)"
-#     ax.set_ylabel(ylabel)
-
-#     for sweep, color, label in zip(sweeps, colors, labels):
-#         x = sweep.parsed_data["Magnetic Field (Oe)"] / 10000
-#         y = sweep.parsed_data[y_val]
-#         y = y / y.max() if normalized else y
-#         ax.plot(x, y, c=color, label=label)
-#     if show_label or title is not None or labels is not None:
-#         if options["loc"]:
-#             ax.legend(loc=options["loc"], title=title)
-#         else:
-#             ax.legend(bbox_to_anchor=(1.04, 0.5), loc="center left", title=title)
-#     if options["xlim"]:
-#         ax.set_xlim(options["xlim"])
-#     if options["ylim"]:
-#         ax.set_ylim(options["ylim"])
-#     force_aspect(ax)
-#     if options["save"]:
-#         plt.savefig(
-#             options["save"], dpi=300, bbox_inches="tight", facecolor="w", edgecolor="w"
-#         )
-#     return fig, ax
-
-
-# def plot_mvsh_w_fits(
-#     sweeps: QDFile | list[QDFile],
-#     y_val: str = "DC Moment Free Ctr (emu)",
-#     normalized=False,
-#     colors: list | None = None,
-#     labels: list | None = None,
-#     title=None,
-#     **kwargs,
-# ):
-#     """
-#     y_val options:
-#         'DC Moment Free Ctr (emu)'
-#         'Background Subtracted Moment (emu)'
-#     """
-#     options = {"xlim": None, "ylim": None, "loc": None, "figsize": None, "save": None}
-#     options.update(kwargs)
-#     if isinstance(sweeps, list) and colors is None:
-#         colors = linear_color_gradient("purple", "orange", len(sweeps))
-#     show_label = True
-#     if isinstance(sweeps, QDFile):
-#         sweeps = [sweeps]
-#         colors = ["black"]
-#         labels = [labels]
-#         show_label = False
-#     fig, ax = plt.subplots()
-#     ax.set_xlabel("Field (T)")
-
-#     ylabel_dict = {
-#         "DC Moment Free Ctr (emu)": "Magnetization (emu)",
-#         "Moment_per_mass": "Magnetization (emu/g)",
-#     }
-#     ylabel = ylabel_dict[y_val]
-#     if normalized:
-#         ylabel = "Normalized Magnetization (emu)"
-#     moment_per_mass = True if y_val == "Moment_per_mass" else False
-#     ax.set_ylabel(ylabel)
-
-#     for sweep, color, label in zip(sweeps, colors, labels):
-#         x = sweep.parsed_data["Magnetic Field (Oe)"] / 10000
-#         y = sweep.parsed_data[y_val]
-#         y = y / y.max() if normalized else y
-#         ax.scatter(x, y, c=color, s=5, label=label)
-#         popt, fit_df = arctan_fit(
-#             sweep, normalized=normalized, moment_per_mass=moment_per_mass
-#         )
-#         x_fit = fit_df["field"] / 10000
-#         y_fit = fit_df["moment"]
-#         ax.plot(x_fit, y_fit, c=color)
-#     if show_label or title is not None or labels is not None:
-#         if options["loc"]:
-#             ax.legend(loc=options["loc"], title=title)
-#         else:
-#             ax.legend(bbox_to_anchor=(1.04, 0.5), loc="center left", title=title)
-#     if options["xlim"]:
-#         ax.set_xlim(options["xlim"])
-#     if options["ylim"]:
-#         ax.set_ylim(options["ylim"])
-#     force_aspect(ax)
-#     if options["save"]:
-#         plt.savefig(
-#             options["save"], dpi=300, bbox_inches="tight", facecolor="w", edgecolor="w"
-#         )
-#     return fig, ax
