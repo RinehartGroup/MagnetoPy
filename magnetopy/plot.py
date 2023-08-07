@@ -14,6 +14,8 @@ def plot_mvsh(
     title: str = "",
     **kwargs,
 ):
+    if isinstance(mvsh, list) and len(mvsh) == 1:
+        mvsh = mvsh[0]
     if isinstance(mvsh, MvsH):
         if isinstance(colors, list) or isinstance(labels, list):
             raise ValueError(
@@ -102,15 +104,20 @@ def plot_multiple_mvsh(
     if _check_if_variable_temperature(mvsh):
         mvsh.sort(key=lambda x: x.temperature)
         colors = linear_color_gradient("blue", "red", len(mvsh))
-        labels = [f"{x.temperature} K" for x in mvsh]
-    labels = labels if labels is not None else [""] * len(mvsh)
+        if labels == "auto":
+            labels = [f"{x.temperature} K" for x in mvsh]
+    if labels is None:
+        labels: list[None] = [None] * len(mvsh)
 
     fig, ax = plt.subplots()
     for m, color, label in zip(mvsh, colors, labels):
         x = m.simplified_data(sequence)["field"] / 10000
         y = m.simplified_data(sequence)["moment"]
         y = y / y.max() if normalized else y
-        ax.plot(x, y, c=color, label=label)
+        if label:
+            ax.plot(x, y, c=color, label=label)
+        else:
+            ax.plot(x, y, c=color)
 
     ax.set_xlabel("Field (T)")
     if normalized:
@@ -255,7 +262,8 @@ def plot_multiple_zfcfc(
     if _check_if_variable_field(zfc):
         zfc.sort(key=lambda x: x.field)
         colors = linear_color_gradient("purple", "green", len(zfc))
-        labels = [f"{x.field:.0f} Oe" for x in zfc]
+        if labels == "auto":
+            labels = [f"{x.field:.0f} Oe" for x in zfc]
     if labels is None:
         labels: list[None] = [None] * len(zfc)
 
