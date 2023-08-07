@@ -31,7 +31,7 @@ def linear_color_gradient(
         "red": "#FF0000",
         "orange": "#E36D12",
         "yellow": "#FFFF00",
-        "green": "#00FF00",
+        "green": "#0F7823",
         "blue": "#0000FF",
         "purple": "#6E12E6",
         "black": "#000000",

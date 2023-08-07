@@ -7,7 +7,7 @@ from typing import Any, Protocol
 
 from magnetopy.data_files import DatFile
 from magnetopy.experiments import FC, ZFC, MvsH, DcExperiment
-from magnetopy.plot import plot_mvsh
+from magnetopy.plot import plot_mvsh, plot_zfcfc
 
 
 @dataclass
@@ -284,6 +284,13 @@ class Dataset:
         )
         mvsh = [self.get_mvsh(temperature) for temperature in temperatures]
         return plot_mvsh(mvsh, **kwargs)
+
+    def plot_zfcfc(self, fields: float | list[float] | None = None, **kwargs):
+        if fields is None:
+            return plot_zfcfc(self.zfc, self.fc, **kwargs)
+        zfc = [self.get_zfc(field) for field in fields]
+        fc = [self.get_fc(field) for field in fields]
+        return plot_zfcfc(zfc, fc, **kwargs)
 
     def as_json(self, indent: int = 0) -> str:
         return json.dumps(self, default=lambda x: x.as_dict(), indent=indent)
