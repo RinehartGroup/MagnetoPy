@@ -1,7 +1,7 @@
 from typing import Literal
 import matplotlib.pyplot as plt
 
-from magnetopy.experiments import MvsH, ZFCFC, ZFC, FC
+from magnetopy.experiments import MvsH, ZFC, FC
 from magnetopy.plot_helpers import force_aspect, linear_color_gradient, default_colors
 
 
