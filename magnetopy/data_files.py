@@ -3,16 +3,23 @@ import csv
 import hashlib
 from pathlib import Path
 import re
-from typing import Any
+from typing import Any, Literal
 from collections import OrderedDict
 from datetime import datetime
 import warnings
 
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+
+from magnetopy.plot_helpers import linear_color_gradient, force_aspect
 
 
 class FileNameWarning(UserWarning):
+    pass
+
+
+class NoRawDataError(Exception):
     pass
 
 
@@ -213,6 +220,12 @@ class DatFile(GenericFile):
                     j += 1
             self.data["raw_scan"] = new_raw
 
+    def plot_raw(self, *args, **kwargs):
+        return plot_raw(self, *args, **kwargs)
+
+    def plot_raw_residual(self, *args, **kwargs):
+        return plot_raw_residual(self, *args, **kwargs)
+
     def as_dict(self) -> dict[str, Any]:
         """Serializes the DatFile object to a dictionary.
 
@@ -322,6 +335,10 @@ class ProcessedScan:
 
 
 class DcMeasurement:
+    """
+    [Quantum Design app note](https://www.qdusa.com/siteDocs/appNotes/1500-022.pdf)
+    """
+
     def __init__(
         self,
         up_header: pd.Series,
@@ -364,3 +381,158 @@ def create_raw_scans(raw_dat: DatFile) -> list[DcMeasurement]:
             DcMeasurement(up_header, up_scan, down_header, down_scan, processed_scan)
         )
     return scans
+
+
+def plot_raw(
+    dat_file: DatFile,
+    data_slice: tuple[int, int] | None = None,
+    scan: Literal[
+        "up",
+        "up_raw",
+        "down",
+        "down_raw",
+        "processed",
+    ] = "up",
+    center: Literal[
+        "free",
+        "fixed",
+    ] = "free",
+    colors: tuple[str, str] | None = None,
+    label: bool = True,
+    title: str = "",
+):
+    if "raw_scan" not in dat_file.data.columns:
+        raise NoRawDataError("This DatFile object does not contain raw data.")
+    data = dat_file.data.drop(columns=["Comment"])
+    if data_slice is not None:
+        data = data.iloc[slice(*data_slice)]
+    start_label, end_label = _get_voltage_scan_labels(data)
+
+    scan_objs: list[DcMeasurement] = data["raw_scan"]
+    scans_w_squid_range = _get_selected_scans(scan, scan_objs)
+
+    if colors is None:
+        colors = ("purple", "orange")
+    colors = linear_color_gradient(colors[0], colors[1], len(scans_w_squid_range))
+
+    fig, ax = plt.subplots()
+    for i, ((scan_df, squid_range), color) in enumerate(
+        zip(scans_w_squid_range, colors)
+    ):
+        row_label = None
+        if label and i == 0:
+            row_label = start_label
+        elif label and i == len(scans_w_squid_range) - 1:
+            row_label = end_label
+
+        x = scan_df["Raw Position (mm)"]
+        if scan in ["up", "down"]:
+            y = scan_df["Processed Voltage (V)"] * squid_range
+        elif scan in ["up_raw", "down_raw"]:
+            y = scan_df["Raw Voltage (V)"] * squid_range
+        else:
+            if center == "free":
+                y = scan_df["Free C Fitted (V)"] * squid_range
+            else:
+                y = scan_df["Fixed C Fitted (V)"] * squid_range
+        if row_label:
+            ax.plot(x, y, color=color, label=row_label)
+        else:
+            ax.plot(x, y, color=color)
+
+    ax.set_xlabel("Position (mm)")
+    ax.set_ylabel("Scaled Voltage (V)")
+    if label:
+        ax.legend()
+    if title:
+        ax.set_title(title)
+    force_aspect(ax)
+    return fig, ax
+
+
+def plot_raw_residual(
+    dat_file: DatFile,
+    data_slice: tuple[int, int] | None = None,
+    scan: Literal["up", "down"] = "up",
+    center: Literal["free", "fixed"] = "free",
+    colors: tuple[str, str] | None = None,
+    label: bool = True,
+    title: str = "",
+):
+    if "raw_scan" not in dat_file.data.columns:
+        raise NoRawDataError("This DatFile object does not contain raw data.")
+    data = dat_file.data.drop(columns=["Comment"])
+    if data_slice is not None:
+        data = data.iloc[slice(*data_slice)]
+    start_label, end_label = _get_voltage_scan_labels(data)
+
+    scan_objs: list[DcMeasurement] = data["raw_scan"]
+    scans_w_squid_range = _get_selected_scans(scan, scan_objs)
+    processed_scans = [scan_obj.processed_scan.data for scan_obj in scan_objs]
+
+    if colors is None:
+        colors = ("purple", "orange")
+    colors = linear_color_gradient(colors[0], colors[1], len(scans_w_squid_range))
+
+    fig, ax = plt.subplots()
+    for i, ((scan_df, squid_range), processed_df, color) in enumerate(
+        zip(scans_w_squid_range, processed_scans, colors)
+    ):
+        row_label = None
+        if label and i == 0:
+            row_label = start_label
+        elif label and i == len(scans_w_squid_range) - 1:
+            row_label = end_label
+
+        x = scan_df["Raw Position (mm)"]
+        if center == "free":
+            y_processed = processed_df["Free C Fitted (V)"] * squid_range
+        else:
+            y_processed = processed_df["Fixed C Fitted (V)"] * squid_range
+        y_raw = scan_df["Processed Voltage (V)"] * squid_range
+        y = y_raw - y_processed
+
+        if row_label:
+            ax.plot(x, y, color=color, label=row_label)
+        else:
+            ax.plot(x, y, color=color)
+
+    ax.set_xlabel("Position (mm)")
+    ax.set_ylabel("Scaled Voltage (V)")
+    if label:
+        ax.legend(frameon=False)
+    if title:
+        ax.set_title(title)
+    force_aspect(ax)
+    return fig, ax
+
+
+def _get_voltage_scan_labels(data: pd.DataFrame) -> tuple[str, str]:
+    start_field = data["Magnetic Field (Oe)"].iloc[0]
+    end_field = data["Magnetic Field (Oe)"].iloc[-1]
+    start_temp = data["Temperature (K)"].iloc[0]
+    end_temp = data["Temperature (K)"].iloc[-1]
+    start_label = f"{start_field:.0f} Oe, {start_temp:.0f} K"
+    end_label = f"{end_field:.0f} Oe, {end_temp:.0f} K"
+    return start_label, end_label
+
+
+def _get_selected_scans(
+    scan: str, scan_objs: list[DcMeasurement]
+) -> tuple[pd.DataFrame, int]:
+    if scan in ["up", "up_raw"]:
+        selected_scans: tuple[pd.DataFrame, int] = [
+            (scan_obj.up_scan.data, scan_obj.up_header.squid_range)
+            for scan_obj in scan_objs
+        ]
+    elif scan in ["down", "down_raw"]:
+        selected_scans: tuple[pd.DataFrame, int] = [
+            (scan_obj.down_scan.data, scan_obj.down_header.squid_range)
+            for scan_obj in scan_objs
+        ]
+    else:
+        selected_scans: tuple[pd.DataFrame, int] = [
+            (scan_obj.processed_scan.data, scan_obj.up_header.squid_range)
+            for scan_obj in scan_objs
+        ]
+    return selected_scans
