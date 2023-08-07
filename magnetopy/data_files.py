@@ -12,7 +12,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-from magnetopy.plot_helpers import linear_color_gradient, force_aspect
+from magnetopy.plot_utils import linear_color_gradient, force_aspect
 
 
 class FileNameWarning(UserWarning):
