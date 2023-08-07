@@ -221,10 +221,10 @@ class DatFile(GenericFile):
             self.data["raw_scan"] = new_raw
 
     def plot_raw(self, *args, **kwargs):
-        return plot_raw(self, *args, **kwargs)
+        return plot_raw(self.data, *args, **kwargs)
 
     def plot_raw_residual(self, *args, **kwargs):
-        return plot_raw_residual(self, *args, **kwargs)
+        return plot_raw_residual(self.data, *args, **kwargs)
 
     def as_dict(self) -> dict[str, Any]:
         """Serializes the DatFile object to a dictionary.
@@ -384,7 +384,7 @@ def create_raw_scans(raw_dat: DatFile) -> list[DcMeasurement]:
 
 
 def plot_raw(
-    dat_file: DatFile,
+    data: pd.DataFrame,
     data_slice: tuple[int, int] | None = None,
     scan: Literal[
         "up",
@@ -401,11 +401,7 @@ def plot_raw(
     label: bool = True,
     title: str = "",
 ):
-    if "raw_scan" not in dat_file.data.columns:
-        raise NoRawDataError("This DatFile object does not contain raw data.")
-    data = dat_file.data.drop(columns=["Comment"])
-    if data_slice is not None:
-        data = data.iloc[slice(*data_slice)]
+    data = _prepare_data_for_plot(data, data_slice)
     start_label, end_label = _get_voltage_scan_labels(data)
 
     scan_objs: list[DcMeasurement] = data["raw_scan"]
@@ -451,7 +447,7 @@ def plot_raw(
 
 
 def plot_raw_residual(
-    dat_file: DatFile,
+    data: pd.DataFrame,
     data_slice: tuple[int, int] | None = None,
     scan: Literal["up", "down"] = "up",
     center: Literal["free", "fixed"] = "free",
@@ -459,11 +455,7 @@ def plot_raw_residual(
     label: bool = True,
     title: str = "",
 ):
-    if "raw_scan" not in dat_file.data.columns:
-        raise NoRawDataError("This DatFile object does not contain raw data.")
-    data = dat_file.data.drop(columns=["Comment"])
-    if data_slice is not None:
-        data = data.iloc[slice(*data_slice)]
+    data = _prepare_data_for_plot(data, data_slice)
     start_label, end_label = _get_voltage_scan_labels(data)
 
     scan_objs: list[DcMeasurement] = data["raw_scan"]
@@ -505,6 +497,17 @@ def plot_raw_residual(
         ax.set_title(title)
     force_aspect(ax)
     return fig, ax
+
+
+def _prepare_data_for_plot(
+    data: pd.DataFrame, data_slice: tuple[int, int] | None
+) -> pd.DataFrame:
+    data = data.copy().drop(columns=["Comment"])
+    if data_slice is not None:
+        data = data.iloc[slice(*data_slice)]
+    if "raw_scan" not in data.columns:
+        raise NoRawDataError("This DatFile object does not contain raw data.")
+    return data
 
 
 def _get_voltage_scan_labels(data: pd.DataFrame) -> tuple[str, str]:

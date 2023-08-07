@@ -2,11 +2,11 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import re
-from typing import Any, Protocol
+from typing import Any, Literal, Protocol
 import numpy as np
 import pandas as pd
 
-from magnetopy.data_files import DatFile, filename_label
+from magnetopy.data_files import DatFile, filename_label, plot_raw, plot_raw_residual
 from magnetopy.parsing_utils import (
     label_clusters,
     unique_values,
@@ -293,6 +293,20 @@ class MvsH:
             raise self.SegmentError(f"Sequence {sequence} not found in data")
         return segment
 
+    def plot_raw(
+        self,
+        segment: Literal["virgin", "forward", "reverse"] = "forward",
+        **kwargs,
+    ):
+        return plot_raw(self._select_sequence(segment), **kwargs)
+
+    def plot_raw_residual(
+        self,
+        segment: Literal["virgin", "forward", "reverse"] = "forward",
+        **kwargs,
+    ):
+        return plot_raw_residual(self._select_sequence(segment), **kwargs)
+
     def as_dict(self) -> dict[str, Any]:
         return {
             "origin_file": self.origin_file,
@@ -573,6 +587,12 @@ class ZFCFC:
             simplified_data["temperature"].min(),
             simplified_data["temperature"].max(),
         )
+
+    def plot_raw(self, *args, **kwargs):
+        return plot_raw(self.data, *args, **kwargs)
+
+    def plot_raw_residual(self, *args, **kwargs):
+        return plot_raw_residual(self.data, *args, **kwargs)
 
     def as_dict(self) -> dict[str, Any]:
         return {
