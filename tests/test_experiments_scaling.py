@@ -3,9 +3,9 @@ import pandas as pd
 
 import pytest
 
-from magnetopy.experiments import (
-    _add_uncorrected_moment_columns,
-    _scale_dc_data,
+from magnetopy.experiments.utils import (
+    add_uncorrected_moment_columns,
+    scale_dc_data,
     _scale_magnetic_data_mass,
     _scale_magnetic_data_molar_w_eicosane_and_diamagnet,
 )
@@ -44,14 +44,14 @@ class MockVsmExperiment:
 class TestAddUncorrectedMomentColumns:
     def test_dc(self):
         exp = MockDcExperiment()
-        _add_uncorrected_moment_columns(exp)
+        add_uncorrected_moment_columns(exp)
         assert set(["uncorrected_moment", "uncorrected_moment_err"]).issubset(
             set(exp.data.columns)
         )
 
     def test_vsm(self):
         exp = MockVsmExperiment()
-        _add_uncorrected_moment_columns(exp)
+        add_uncorrected_moment_columns(exp)
         assert set(["uncorrected_moment", "uncorrected_moment_err"]).issubset(
             set(exp.data.columns)
         )
@@ -61,7 +61,7 @@ class TestScaleMagneticDataWEicosaneAndDiamagnet:
     @pytest.fixture
     def exp(self):
         exp = MockDcExperiment()
-        _add_uncorrected_moment_columns(exp)
+        add_uncorrected_moment_columns(exp)
         return exp
 
     def test_molar(self, exp: MockDcExperiment):
@@ -103,7 +103,7 @@ class TestScaleMagneticDataWEicosaneAndDiamagnet:
 
 def test_magnetic_data_mass():
     exp = MockVsmExperiment()
-    _add_uncorrected_moment_columns(exp)
+    add_uncorrected_moment_columns(exp)
     _scale_magnetic_data_mass(exp.data, 2)
     assert exp.data["chi"].iloc[0] == 0.005
     assert exp.data["chi_err"].iloc[0] == 0.0005
@@ -117,31 +117,31 @@ class TestScaleDcData:
     @pytest.fixture
     def exp(self):
         exp = MockVsmExperiment()
-        _add_uncorrected_moment_columns(exp)
+        add_uncorrected_moment_columns(exp)
         return exp
 
     def test_none(self, exp: MockVsmExperiment):
-        _scale_dc_data(exp)
+        scale_dc_data(exp)
         assert exp.scaling == []
 
     def test_mass(self, exp: MockVsmExperiment):
-        _scale_dc_data(exp, mass=2)
+        scale_dc_data(exp, mass=2)
         assert exp.scaling == ["mass"]
 
     def test_molar(self, exp: MockVsmExperiment):
-        _scale_dc_data(exp, mass=2, molecular_weight=10)
+        scale_dc_data(exp, mass=2, molecular_weight=10)
         assert exp.scaling == ["molar"]
 
     def test_molar_eicosane(self, exp: MockDcExperiment):
-        _scale_dc_data(exp, mass=2, eicosane_mass=0.5, molecular_weight=10)
+        scale_dc_data(exp, mass=2, eicosane_mass=0.5, molecular_weight=10)
         assert exp.scaling == ["molar", "eicosane"]
 
     def test_molar_diamagnet(self, exp: MockDcExperiment):
-        _scale_dc_data(exp, mass=2, molecular_weight=10, diamagnetic_correction=0.0001)
+        scale_dc_data(exp, mass=2, molecular_weight=10, diamagnetic_correction=0.0001)
         assert exp.scaling == ["molar", "diamagnetic_correction"]
 
     def test_molar_eicosane_diamagnet(self, exp: MockDcExperiment):
-        _scale_dc_data(
+        scale_dc_data(
             exp,
             mass=2,
             eicosane_mass=0.5,

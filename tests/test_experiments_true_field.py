@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pytest
 
-from magnetopy.experiments import MvsH, TrueFieldCorrection
+from magnetopy.experiments.mvsh import MvsH, TrueFieldCorrection
 
 TESTS_PATH = Path(inspect.getfile(inspect.currentframe())).parent
 DATA_PATH = TESTS_PATH / "data"

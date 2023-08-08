@@ -4,15 +4,9 @@ from pathlib import Path
 
 import pytest
 
-from magnetopy.data_files import DatFile, FileNameWarning
-from magnetopy.experiments import (
-    FC,
-    ZFC,
-    ZFCFC,
-    filename_label,
-    _auto_detect_field,
-    FieldDetectionError,
-)
+from magnetopy import DatFile, FC, ZFC, ZFCFC
+from magnetopy.data_files import FileNameWarning, filename_label
+from magnetopy.experiments.zfcfc import FieldDetectionError, _auto_detect_field
 
 TESTS_PATH = Path(inspect.getfile(inspect.currentframe())).parent
 DATA_PATH = TESTS_PATH / "data"

@@ -4,7 +4,7 @@ from typing import Any
 import pandas as pd
 
 from magnetopy.dataset import Dataset
-from magnetopy.experiments import MvsH
+from magnetopy.experiments.mvsh import MvsH
 
 
 @dataclass

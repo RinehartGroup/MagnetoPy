@@ -6,8 +6,10 @@ from typing import Any, Protocol
 
 
 from magnetopy.data_files import DatFile
-from magnetopy.experiments import FC, ZFC, MvsH, DcExperiment
-from magnetopy.plot_experiments import plot_mvsh, plot_zfcfc
+
+from magnetopy.experiments.dc_experiment import DcExperiment
+from magnetopy.experiments.mvsh import MvsH, plot_mvsh
+from magnetopy.experiments.zfcfc import FC, ZFC, plot_zfcfc
 
 
 @dataclass

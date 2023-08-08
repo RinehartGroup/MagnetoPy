@@ -4,12 +4,14 @@ from pathlib import Path
 
 import pytest
 
-from magnetopy.data_files import DatFile
-from magnetopy.experiments import (
+from magnetopy import (
+    DatFile,
     MvsH,
-    _num_digits_after_decimal,
-    _auto_detect_temperature,
+)
+from magnetopy.experiments.utils import (
+    num_digits_after_decimal,
     TemperatureDetectionError,
+    auto_detect_temperature,
 )
 
 TESTS_PATH = Path(inspect.getfile(inspect.currentframe())).parent
@@ -40,7 +42,7 @@ mvsh1_dat = DatFile(mvsh1_path)
     "num,digits", [(0, 0), (0.5, 1), (1, 0), (1.25, 2), (2.123, 3), (-1, 0), (-1.2, 1)]
 )
 def test_num_digits_after_decimal(num, digits):
-    assert _num_digits_after_decimal(num) == digits
+    assert num_digits_after_decimal(num) == digits
 
 
 @dataclass
@@ -148,7 +150,7 @@ def test_mvsh_auto_temperature_detection(
     eps = 0.001
     min_samples = 10
     n_digits = args[1]
-    assert _auto_detect_temperature(dat_file, eps, min_samples, n_digits) == expected
+    assert auto_detect_temperature(dat_file, eps, min_samples, n_digits) == expected
 
 
 files_w_multiple_temperatures = [

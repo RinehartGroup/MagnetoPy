@@ -4,8 +4,14 @@ from dataclasses import dataclass
 
 import pytest
 
-from magnetopy.dataset import Dataset, SampleInfo
-from magnetopy.experiments import FC, ZFC, MvsH
+from magnetopy import (
+    Dataset,
+    SampleInfo,
+    MvsH,
+    ZFC,
+    FC,
+)
+
 
 TESTS_PATH = Path(inspect.getfile(inspect.currentframe())).parent
 DATA_PATH = TESTS_PATH / "data"
