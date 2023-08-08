@@ -65,7 +65,7 @@ class SampleInfo:
 
     @classmethod
     def from_dat_file(
-        cls, dat_file: str | DatFile, eicosane_field_hack: bool = True
+        cls, dat_file: str | Path | DatFile, eicosane_field_hack: bool = True
     ) -> SampleInfo:
         """
         Create a SampleInfo object from a .dat file (either a path to the file or a
