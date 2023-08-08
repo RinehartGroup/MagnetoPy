@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from typing import Any, Protocol
 
+import matplotlib.pyplot as plt
 
 from magnetopy.data_files import DatFile
 
@@ -42,12 +43,6 @@ class SampleInfo:
         The mass of the eicosane in milligrams.
     diamagnetic_correction : float | None
         The diamagnetic correction in emu/mol.
-
-    Methods
-    -------
-    from_dat_file(dat_file: str | DatFile, eicosane_field_hack: bool = True) -> SampleInfo
-        Create a SampleInfo object from a .dat file (either a path to the file or a
-        DatFile object).
     """
 
     material: str | None = None
@@ -69,16 +64,21 @@ class SampleInfo:
     ) -> SampleInfo:
         """
         Create a SampleInfo object from a .dat file (either a path to the file or a
-        DatFile object).
+        DatFile object). Sample information is extracted from the header of the .dat
+        file.
 
         Parameters
         ----------
-        dat_file : str | DatFile
+        dat_file : str | Path | DatFile
             The .dat file to read the sample information from.
         eicosane_field_hack : bool, optional
             For abuse of the Quantum Design sample info fields, where the "volume" and
             "size" fields are used to store the eicosane mass and diamagnetic
             correction, respectively. The default is True.
+
+        Returns
+        -------
+        SampleInfo
         """
         if not isinstance(dat_file, DatFile):
             dat_file = DatFile(dat_file)
@@ -117,16 +117,120 @@ class SampleInfo:
             sample.size, sample.volume = None, None
         return sample
 
-    def as_dict(self) -> dict[str, Any]:
+    def as_dict(self) -> dict[str, float | str | None]:
+        """Create a dictionary representation of the SampleInfo object.
+
+        Returns
+        -------
+        dict[str, foat | str | None]
+        """
         return asdict(self)
 
 
 class Analysis(Protocol):
+    """A protocol class representing an analysis of one or more magnetometry
+    experiments.
+
+    Attributes
+    ----------
+    results : Any
+        The results of the analysis. For results more complicated than a simple value,
+        it is recommended that a `dataclass` be used, and that the `dataclass` have an
+        `as_dict` method.
+
+    Methods
+    -------
+    as_dict() -> dict[str, Any]
+        Return a dictionary representation of the analysis.
+
+    Notes
+    -----
+    While not yet enforced, it is strongly recommended that any class that implements
+    this protocol have an `__init__` method which takes the following arguments:
+
+    - `dataset`: a `Magnetometry` object
+    - `parsing_args`: an object with attributes that specify how to parse the data;
+    these arguments may be used as arguments to be passed to various `Magnetometry`
+    methods. It is recommended that this object be a dataclass with an `as_dict`
+    method.
+    - `fitting_args`: an object with attributes that specify how to fit the data;
+    these arguments may include, e.g., starting values, bounds, constraints, etc.
+    It is recommended that this object be a dataclass with an `as_dict` method.
+
+    The `__init__` method should perform the analysis and store the results in the
+    `results` attribute.
+    """
+
     def as_dict(self) -> dict[str, Any]:
         ...
 
 
 class Magnetometry:
+    """
+    A class which contains magnetometry data for a single sample along with methods for
+    parsing, processing, and analyzing the data. Note that "single sample" means that
+    in situations in which a single _material_ is measured in multiple samples, each
+    sample should be treated as a separate `Magnetometry` object.
+
+    Parameters
+    ----------
+    path : str | Path
+        The path to the directory containing the .dat files for the sample.
+    sample_id : str, optional
+        The sample ID. If not provided, the name of the directory containing the .dat
+        files will be used.
+    magnetic_data_scaling : str | list[str], optional
+        Default `"auto"`. Instructions for scaling the magnetic moment. Options are
+        "mass", "molar", "eicosane", "diamagnetic_correction", and "auto". If "auto" is
+        specified, the scaling will be determined automatically based on the available
+        sample information.
+    true_field_correction : str | Path, optional
+        The path to a file containing the M vs. H data of a Pd standard sample and to
+        be used for correcting the field of all `MvsH` objects. Note that this is a
+        convenience method for situations in which all `MvsH` objects use the same
+        sequence and can be corrected by the same file. Individual corrections can be
+        performed by calling the `correct_field` method of the relevant `MvsH` object.
+    parse_raw : bool, optional
+        Default `False`. If `True`, any .rw.dat files in the directory will be parsed
+        and the raw data will be stored in the `"raw_scan"` column of the corresponding
+        `data` attribute of the relevant `DcExperiment` object.
+
+    Attributes
+    ----------
+    sample_id : str
+        The sample ID.
+    dat_files : list[DatFile]
+        A list of the `DatFile` objects in the directory. Note that this includes both
+        .dat and .rw.dat files.
+    magnetic_data_scaling : list[str]
+        A record of the scaling options used to scale the magnetic data. Options are
+        "mass", "molar", "eicosane", and "diamagnetic_correction". Currently supported
+        combinations are: `["mass"] | ["molar"] | ["molar", "eicosane"] | ["molar",
+        "diamagnetic_correction"] | ["molar", "eicosane", "diamagnetic_correction"]`.
+    sample_info : SampleInfo
+        Information specific to the particular sample used for magnetic measurements.
+        Note that this is determined by reading the first `DatFile` in `dat_files`, and
+        it is assumed that all `DatFile` objects in `dat_files` are for the same
+        sample.
+    mvsh : list[MvsH]
+        A list of the `MvsH` objects in the directory.
+    zfc : list[ZFC]
+        A list of the `ZFC` objects in the directory.
+    fc : list[FC]
+        A list of the `FC` objects in the directory.
+    analyses : list[Analysis]
+        A list of the analyses performed on the data.
+
+    Notes
+    -----
+    The user can overwrite the automatic scaling of the magnetic data first by
+    overwriting the relevant attributes of the `sample_info` attribute (e.g. `mass`,
+    `molecular_weight`, etc.), then overwriting the `magnetic_data_scaling` attribute
+    with a list of the desired scaling options (e.g. `[molar,
+    diamagnetic_correction]`), and then by calling the `scale_dc_data` method.
+
+    """
+
     class ExperimentNotFoundError(Exception):
         pass
 
@@ -166,6 +270,26 @@ class Magnetometry:
     def extract_mvsh(
         self, eps: float = 0.001, min_samples: int = 10, ndigits: int = 0
     ) -> list[MvsH]:
+        """Extracts all M vs. H experiments found within `dat_files`.
+
+        Parameters
+        ----------
+        eps : float, optional
+            Default 0.001
+        min_samples : int, optional
+            Default 10
+        ndigits : int, optional
+            Default 0
+
+        Returns
+        -------
+        list[MvsH]
+            The `MvsH` objects found in `dat_files`.
+
+        See Also
+        --------
+        magnetopy.experiments.mvsh.MvsH.get_all_in_file
+        """
         mvsh_files = [
             dat_file
             for dat_file in self.dat_files
@@ -178,6 +302,22 @@ class Magnetometry:
         return mvsh_objs
 
     def extract_zfc(self, n_digits: int = 0) -> list[ZFC]:
+        """Extracts all ZFC experiments found within `dat_files`.
+
+        Parameters
+        ----------
+        n_digits : int, optional
+            Default 0
+
+        Returns
+        -------
+        list[ZFC]
+            The `ZFC` objects found in `dat_files`.
+
+        See Also
+        --------
+        magnetopy.experiments.zfcfc.ZFC.get_all_in_file
+        """
         zfc_files = [
             dat_file
             for dat_file in self.dat_files
@@ -190,6 +330,22 @@ class Magnetometry:
         return zfc_objs
 
     def extract_fc(self, n_digits: int = 0) -> list[FC]:
+        """Extracts all FC experiments found within `dat_files`.
+
+        Parameters
+        ----------
+        n_digits : int, optional
+            Default 0
+
+        Returns
+        -------
+        list[FC]
+            The `FC` objects found in `dat_files`.
+
+        See Also
+        --------
+        magnetopy.experiments.zfcfc.FC.get_all_in_file
+        """
         fc_files = [
             dat_file
             for dat_file in self.dat_files
@@ -202,6 +358,15 @@ class Magnetometry:
         return fc_objs
 
     def scale_dc_data(self) -> None:
+        """Scales the magnetic moment of all `DcExperiment` objects (i.e., `MvsH`,
+        `ZFC`, and `FC` objects) in the `Magnetometry` object according to the scaling
+        options specified in `magnetic_data_scaling` and the sample information in
+        `sample_info`.
+
+        See Also
+        --------
+        magnetopy.experiments.utils.scale_dc_data
+        """
         experiments: list[DcExperiment] = []
         experiments.extend(self.mvsh)
         experiments.extend(self.zfc)
@@ -234,10 +399,39 @@ class Magnetometry:
             )
 
     def correct_field(self, field_correction_file: str | Path) -> None:
+        """A convenience method for correcting the field of all `MvsH` objects in the
+        `Magnetometry` object using the same field correction file.
+
+        Parameters
+        ----------
+        field_correction_file : str | Path
+            The path to the field correction file.
+
+        See Also
+        --------
+        magnetopy.experiments.mvsh.MvsH.correct_field
+        """
         for experiment in self.mvsh:
             experiment.correct_field(field_correction_file)
 
     def get_mvsh(self, temperature: float) -> MvsH:
+        """Get the `MvsH` object at the specified temperature.
+
+        Parameters
+        ----------
+        temperature : float
+            Temperature in Kelvin.
+
+        Returns
+        -------
+        MvsH
+            The `MvsH` object at the specified temperature.
+
+        Raises
+        ------
+        self.ExperimentNotFoundError
+            If no `MvsH` object is found at the specified temperature.
+        """
         for mvsh in self.mvsh:
             if mvsh.temperature == temperature:
                 return mvsh
@@ -246,6 +440,23 @@ class Magnetometry:
         )
 
     def get_zfc(self, field: float) -> ZFC:
+        """Get the `ZFC` object at the specified field.
+
+        Parameters
+        ----------
+        field : float
+            Field in Oe.
+
+        Returns
+        -------
+        ZFC
+            The `ZFC` object at the specified field.
+
+        Raises
+        ------
+        self.ExperimentNotFoundError
+            If no `ZFC` object is found at the specified field.
+        """
         for zfc in self.zfc:
             if zfc.field == field:
                 return zfc
@@ -254,6 +465,23 @@ class Magnetometry:
         )
 
     def get_fc(self, field: float) -> FC:
+        """Get the `FC` object at the specified field.
+
+        Parameters
+        ----------
+        field : float
+            Field in Oe.
+
+        Returns
+        -------
+        FC
+            The `FC` object at the specified field.
+
+        Raises
+        ------
+        self.ExperimentNotFoundError
+            If no `FC` object is found at the specified field.
+        """
         for fc in self.fc:
             if fc.field == field:
                 return fc
@@ -262,9 +490,26 @@ class Magnetometry:
         )
 
     def add_analysis(self, analysis: Analysis) -> None:
+        """Add an analysis to the `Magnetometry` object.
+
+        Parameters
+        ----------
+        analysis : Analysis
+            An instance of a class that implements the `Analysis` protocol.
+
+        See Also
+        --------
+        magnetopy.magnetometry.Analysis
+        """
         self.analyses.append(analysis)
 
     def as_dict(self) -> dict[str, Any]:
+        """Create a dictionary representation of the `Magnetometry` object.
+
+        Returns
+        -------
+        dict[str, Any]
+        """
         return {
             "sample_id": self.sample_id,
             "sample_info": self.sample_info,
@@ -278,7 +523,24 @@ class Magnetometry:
         self,
         temperatures: float | list[float] | None = None,
         **kwargs,
-    ):
+    ) -> tuple[plt.Figure, plt.Axes]:
+        """Plot the M vs. H data in the `Magnetometry` object. If `temperatures` is
+        `None`, all `MvsH` objects will be plotted. Otherwise, only the `MvsH` objects
+        at the specified temperatures will be plotted.
+
+
+        Parameters
+        ----------
+        temperatures : float | list[float] | None, optional
+            Default `None`. The temperatures at which to plot the M vs. H data. If
+            `None`, all `MvsH` objects will be plotted. Otherwise, only the `MvsH`
+            objects at the specified temperatures will be plotted.
+
+        Returns
+        -------
+        tuple[plt.Figure, plt.Axes]
+            The figure and axes objects of the plot.
+        """
         if temperatures is None:
             return plot_mvsh(self.mvsh, **kwargs)
         temperatures = (
@@ -287,7 +549,25 @@ class Magnetometry:
         mvsh = [self.get_mvsh(temperature) for temperature in temperatures]
         return plot_mvsh(mvsh, **kwargs)
 
-    def plot_zfcfc(self, fields: float | list[float] | None = None, **kwargs):
+    def plot_zfcfc(
+        self, fields: float | list[float] | None = None, **kwargs
+    ) -> tuple[plt.Figure, plt.Axes]:
+        """Plot the ZFC/FC data in the `Magnetometry` object. If `fields` is `None`,
+        all `ZFC` and `FC` objects will be plotted. Otherwise, only the `ZFC` and `FC`
+        objects at the specified fields will be plotted.
+
+        Parameters
+        ----------
+        fields : float | list[float] | None, optional
+            Default `None`. The fields at which to plot the ZFC/FC data. If `None`, all
+            `ZFC` and `FC` objects will be plotted. Otherwise, only the `ZFC` and `FC`
+            objects at the specified fields will be plotted.
+
+        Returns
+        -------
+        tuple[plt.Figure, plt.Axes]
+            The figure and axes objects of the plot.
+        """
         if fields is None:
             return plot_zfcfc(self.zfc, self.fc, **kwargs)
         zfc = [self.get_zfc(field) for field in fields]
@@ -295,11 +575,35 @@ class Magnetometry:
         return plot_zfcfc(zfc, fc, **kwargs)
 
     def as_json(self, indent: int = 0) -> str:
+        """Create a JSON representation of the `Magnetometry` object.
+
+        Parameters
+        ----------
+        indent : int, optional
+            Default 0. The number of spaces to indent the JSON.
+
+        Returns
+        -------
+        str
+        """
+
         return json.dumps(self, default=lambda x: x.as_dict(), indent=indent)
 
     def create_report(
         self, directory: str | Path | None = None, overwrite: bool = False
     ) -> None:
+        """Create a JSON report of the `Magnetometry` object.
+
+        Parameters
+        ----------
+        directory : str | Path | None, optional
+            Default `None`. The directory to write the report to. If `None`, the report
+            will be written to the directory containing the .dat files.
+        overwrite : bool, optional
+            Default `False`. Whether to overwrite the report if it already exists. If
+            `False` and the report already exists, the user will be prompted to
+            overwrite the report.
+        """
         if directory:
             directory = Path(directory)
         else:
