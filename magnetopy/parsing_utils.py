@@ -8,12 +8,18 @@ def label_clusters(
     vals: pd.Series, eps: float = 0.001, min_samples: int = 10
 ) -> np.ndarray:
     """For determining the nominal values of data in a series containing one or more
-    nominal values with some noise.
+    nominal values with some fluctuations. The data is first normalized using
+    `sklearn.preprocessing.StandardScaler()`, then clustered using
+    `sklearn.cluster.DBSCAN()`.
+
+    It is assumed that all data belongs to a cluster (i.e. there are no outliers). If
+    this is not the case, `eps` is increased by a factor of 10 and the clustering is
+    tried again.
 
     Parameters
     ----------
     vals : pd.Series
-        A series of data containing one or more nominal values with some noise.
+        A series of data containing one or more nominal values with some fluctuations.
     eps : float, optional
         Passed to `sklearn.cluster.DBSCAN()`. The maximum distance between two samples
         for one to be considered as in the neighborhood of the other, by default 0.001.
@@ -25,10 +31,7 @@ def label_clusters(
     -------
     np.ndarray
         An array of the same size as `vals` which contains the cluster labels for each
-        element in `vals`. Noisy samples are given the label -1. A `vals` series
-        containing, for example, one nominal temperature with noise should return an
-        array with only one cluster label of -1.
-
+        element in `vals`.
     """
     reshaped_vals = vals.values.reshape(-1, 1)
     scaler = StandardScaler()
@@ -55,11 +58,11 @@ def unique_values(
     x : pd.Series
         A series of data containing one or more nominal values with some noise.
     eps : float, optional
-        Passed to `sklearn.cluster.DBSCAN()`. The maximum distance between two samples
-        for one to be considered as in the neighborhood of the other, by default 0.001.
+        Passed to `label_clusters()`. The maximum distance between two samples for one
+        to be considered as in the neighborhood of the other, by default 0.001.
     min_samples : int, optional
-        Passed to `sklearn.cluster.DBSCAN()`. The number of samples in a neighborhood
-        for a point to be considered as a core point, by default 10.
+        Passed to `label_clusters()`. The number of samples in a neighborhood for a
+        point to be considered as a core point, by default 10.
     ndigits : int, optional
         The number of digits after the decimal point to round the nominal values to,
         by default 0.
@@ -68,6 +71,10 @@ def unique_values(
     -------
     list[float]
         The nominal values in `x` with the noise removed.
+
+    See Also
+    --------
+    label_clusters
     """
     cluster_labels = label_clusters(x, eps=eps, min_samples=min_samples)
     unique_vals = []
@@ -127,11 +134,10 @@ def find_temp_turnaround_point(
     -------
     int
         The index of the temperature turnaround point.
-
     """
     outlier_indices = find_outlier_indices(df["Temperature (K)"].diff())
     if len(outlier_indices) == 0:
-        # zfc temp increases, fc temp decreases
+        # Case 1: zfc temp increases, fc temp decreases
         zero_point = abs(
             df["Temperature (K)"]
             .iloc[num_endpoints_ignored:-num_endpoints_ignored]
@@ -139,7 +145,7 @@ def find_temp_turnaround_point(
         ).idxmin()
         return zero_point
     else:
-        # zfc temp increases, reset temp, fc temp increases
+        # Case 2: zfc temp increases, reset temp, fc temp increases
         return outlier_indices[0]
 
 
@@ -151,8 +157,15 @@ def find_sequence_starts(
     where a sequences is defined as a series of numbers that constantly increase or decrease.
     Changes below `fluctuation_tolerance` are ignored.
 
-    Example:
-    ```
+    Parameters
+    ----------
+    x : pd.Series
+        A series of data.
+    flucuation_tolerance : float, optional
+        Changes below this value are ignored, by default 0.
+
+    Examples
+    --------
     >>>x = pd.Series([0, 1, 2, 3, 4, 3, 2, 1])
     >>>_find_sequence_starts(x)
     [0, 5]
@@ -160,7 +173,6 @@ def find_sequence_starts(
     >>>y = pd.Series([0, 1, 2, 3, 0, 1, 2, 3])
     >>>_find_sequence_starts(y)
     [0, 4]
-    ```
     """
     if flucuation_tolerance < 0:
         raise ValueError("fluctuation_tolerance must be non-negative")
