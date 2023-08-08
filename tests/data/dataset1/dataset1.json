@@ -1,0 +1,170 @@
+{
+    "sample_id": "dataset1",
+    "sample_info": {
+        "material": "[Er(TiPS2COT)I(THF)]2",
+        "comment": "salmon powder in eicosane",
+        "mass": 19.8,
+        "volume": null,
+        "molecular_weight": 1566.22,
+        "size": null,
+        "shape": null,
+        "holder": "Straw",
+        "holder_detail": "Standard",
+        "offset": 66.27,
+        "eicosane_mass": 32.4,
+        "diamagnetic_correction": 0.0
+    },
+    "mvsh": [
+        {
+            "origin_file": "mvsh1.dat",
+            "temperature": 2,
+            "field_range": [
+                -70000.35156,
+                70000.375
+            ],
+            "field_correction_file": "",
+            "scaling": [
+                "molar",
+                "eicosane"
+            ]
+        },
+        {
+            "origin_file": "mvsh1.dat",
+            "temperature": 4,
+            "field_range": [
+                -70000.28125,
+                70000.28906
+            ],
+            "field_correction_file": "",
+            "scaling": [
+                "molar",
+                "eicosane"
+            ]
+        },
+        {
+            "origin_file": "mvsh1.dat",
+            "temperature": 6,
+            "field_range": [
+                -70000.26563,
+                70000.41406
+            ],
+            "field_correction_file": "",
+            "scaling": [
+                "molar",
+                "eicosane"
+            ]
+        },
+        {
+            "origin_file": "mvsh1.dat",
+            "temperature": 8,
+            "field_range": [
+                -70000.27344,
+                70000.375
+            ],
+            "field_correction_file": "",
+            "scaling": [
+                "molar",
+                "eicosane"
+            ]
+        },
+        {
+            "origin_file": "mvsh1.dat",
+            "temperature": 10,
+            "field_range": [
+                -70000.3125,
+                70000.46094
+            ],
+            "field_correction_file": "",
+            "scaling": [
+                "molar",
+                "eicosane"
+            ]
+        },
+        {
+            "origin_file": "mvsh1.dat",
+            "temperature": 12,
+            "field_range": [
+                -70000.38672,
+                70000.35156
+            ],
+            "field_correction_file": "",
+            "scaling": [
+                "molar",
+                "eicosane"
+            ]
+        },
+        {
+            "origin_file": "mvsh1.dat",
+            "temperature": 300,
+            "field_range": [
+                -70000.16406,
+                69999.8125
+            ],
+            "field_correction_file": "",
+            "scaling": [
+                "molar",
+                "eicosane"
+            ]
+        }
+    ],
+    "zfc": [
+        {
+            "origin_file": "zfcfc1.dat",
+            "field": 100,
+            "temperature_range": [
+                5.00255632400513,
+                299.939453125
+            ],
+            "scaling": [
+                "molar",
+                "eicosane"
+            ]
+        }
+    ],
+    "fc": [
+        {
+            "origin_file": "zfcfc1.dat",
+            "field": 100,
+            "temperature_range": [
+                5.00277781486511,
+                299.924865722656
+            ],
+            "scaling": [
+                "molar",
+                "eicosane"
+            ]
+        }
+    ],
+    "analyses": [
+        {
+            "mvsh": {
+                "origin_file": "mvsh1.dat",
+                "temperature": 2,
+                "field_range": [
+                    -70000.35156,
+                    70000.375
+                ],
+                "field_correction_file": "",
+                "scaling": [
+                    "molar",
+                    "eicosane"
+                ]
+            },
+            "parsing_args": {
+                "temperature": 2,
+                "segments": "auto"
+            },
+            "results": {
+                "m_s": 10.467101768993821,
+                "h_c": 4501.3806155,
+                "m_r": 8.573807168964388,
+                "moment_units": "bohr magnetons/mol",
+                "field_units": "Oe",
+                "segments": [
+                    "forward",
+                    "reverse"
+                ]
+            }
+        }
+    ]
+}

@@ -269,9 +269,9 @@ def filename_label(filename: str, experiment: str, suppress_warnings: bool) -> s
     return label
 
 
-class ScanHeader:
-    def __init__(self, direction: str, up_header: pd.Series) -> None:
-        self.text: str = up_header["Comment"]
+class RawDcScan:
+    def __init__(self, direction: str, header: pd.Series, scan: pd.DataFrame) -> None:
+        self.text: str = header["Comment"]
         self.direction = direction
         self.low_temp = self._get_value(r"low temp = (\d+\.\d+) K")
         self.high_temp = self._get_value(r"high temp = (\d+\.\d+) K")
@@ -285,6 +285,12 @@ class ScanHeader:
         self.calculated_center = self._get_value(r"calculated center = (\d+\.\d+) mm")
         self.amp_fixed = self._get_value(r"amp fixed = (-?\d+\.\d+) V")
         self.amp_free = self._get_value(r"amp free =(-?\d+\.\d+) V")
+        self.data = scan.copy()
+        self.data.drop(
+            columns=["Comment", "Fixed C Fitted (V)", "Free C Fitted (V)"], inplace=True
+        )
+        self.data.reset_index(drop=True, inplace=True)
+        self.start_time = self.data["Time Stamp (sec)"].iloc[0]
 
     def _get_value(self, regex: str) -> float:
         return float(re.search(regex, self.text).group(1))
@@ -300,24 +306,7 @@ class ScanHeader:
         return f"{self.direction} scan at {self.avg_field:.2f} Oe, {self.avg_temp:2f} K"
 
 
-class RawScan:
-    def __init__(self, direction: str, scan: pd.DataFrame) -> None:
-        self.direction = direction
-        self.data = scan.copy()
-        self.data.drop(
-            columns=["Comment", "Fixed C Fitted (V)", "Free C Fitted (V)"], inplace=True
-        )
-        self.data.reset_index(drop=True, inplace=True)
-        self.start_time = self.data["Time Stamp (sec)"].iloc[0]
-
-    def __repr__(self):
-        return f"RawScan({self.direction} at {self.start_time} sec)"
-
-    def __str__(self):
-        return f"RawScan({self.direction} at {self.start_time} sec)"
-
-
-class ProcessedScan:
+class ProcessedDcScan:
     def __init__(self, scan: pd.DataFrame) -> None:
         self.data = scan.copy()
         self.data.drop(
@@ -347,17 +336,15 @@ class DcMeasurement:
         down_scan: pd.DataFrame,
         processed_scan: pd.DataFrame,
     ) -> None:
-        self.up_header = ScanHeader("up", up_header)
-        self.up_scan = RawScan("up", up_scan)
-        self.down_header = ScanHeader("down", down_header)
-        self.down_scan = RawScan("down", down_scan)
-        self.processed_scan = ProcessedScan(processed_scan)
+        self.up = RawDcScan("up", up_header, up_scan)
+        self.down = RawDcScan("down", down_header, down_scan)
+        self.processed_scan = ProcessedDcScan(processed_scan)
 
     def __repr__(self):
-        return f"DcMeasurement({self.up_header.avg_field:.2f} Oe, {self.up_header.avg_temp:.2f} K)"
+        return f"DcMeasurement({self.up.avg_field:.2f} Oe, {self.up.avg_temp:.2f} K)"
 
     def __str__(self):
-        return f"DcMeasurement({self.up_header.avg_field:.2f} Oe, {self.up_header.avg_temp:.2f} K)"
+        return f"DcMeasurement({self.up.avg_field:.2f} Oe, {self.up.avg_temp:.2f} K)"
 
 
 def create_raw_scans(raw_dat: DatFile) -> list[DcMeasurement]:
@@ -525,17 +512,15 @@ def _get_selected_scans(
 ) -> tuple[pd.DataFrame, int]:
     if scan in ["up", "up_raw"]:
         selected_scans: tuple[pd.DataFrame, int] = [
-            (scan_obj.up_scan.data, scan_obj.up_header.squid_range)
-            for scan_obj in scan_objs
+            (scan_obj.up.data, scan_obj.up.squid_range) for scan_obj in scan_objs
         ]
     elif scan in ["down", "down_raw"]:
         selected_scans: tuple[pd.DataFrame, int] = [
-            (scan_obj.down_scan.data, scan_obj.down_header.squid_range)
-            for scan_obj in scan_objs
+            (scan_obj.down.data, scan_obj.down.squid_range) for scan_obj in scan_objs
         ]
     else:
         selected_scans: tuple[pd.DataFrame, int] = [
-            (scan_obj.processed_scan.data, scan_obj.up_header.squid_range)
+            (scan_obj.processed_scan.data, scan_obj.up.squid_range)
             for scan_obj in scan_objs
         ]
     return selected_scans

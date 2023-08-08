@@ -467,6 +467,8 @@ def plot_single_mvsh(
 ) -> tuple[plt.Figure, plt.Axes]:
     options = handle_kwargs(**kwargs)
 
+    color = "black" if color == "auto" else color
+
     fig, ax = plt.subplots()
     x = mvsh.simplified_data(sequence)["field"] / 10000
     y = mvsh.simplified_data(sequence)["moment"]
