@@ -42,7 +42,8 @@ def linear_color_gradient(
 
     References
     ----------
-    https://bsouthga.dev/posts/color-gradients-with-python
+    [Color Gradients with Python](
+        https://bsouthga.dev/posts/color-gradients-with-python)
     """
 
     def hex_to_rgb(hex_color: str) -> list:

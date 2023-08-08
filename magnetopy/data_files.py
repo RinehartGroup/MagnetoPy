@@ -26,6 +26,13 @@ class NoRawDataError(Exception):
 class GenericFile:
     """A class containing basic metadata about a file.
 
+    Parameters
+    ----------
+    file_path : str | Path
+        The path to the file.
+    experiment_type : str, optional
+        The type of experiment the file is associated with, by default "".
+
     Attributes
     ----------
     local_path : Path
@@ -38,23 +45,9 @@ class GenericFile:
         The date and time the file was created.
     experiment_type : str
         The type of experiment the file is associated with.
-
-    Methods
-    -------
-    as_dict()
-        Serializes the GenericFile object to a dictionary.
     """
 
     def __init__(self, file_path: str | Path, experiment_type: str = "") -> None:
-        """A class containing basic metadata about a file.
-
-        Parameters
-        ----------
-        file_path : str | Path
-            The path to the file.
-        experiment_type : str, optional
-            The type of experiment the file is associated with, by default "".
-        """
         self.local_path = Path(file_path)
         self.length = self.local_path.stat().st_size
         self.date_created = datetime.fromtimestamp(self.local_path.stat().st_ctime)
@@ -96,6 +89,16 @@ class DatFile(GenericFile):
     """A class for reading and storing data from a Quantum Design .dat file from a
     MPMS3 magnetometer.
 
+    Parameters
+    ----------
+    file_path : str | Path
+        The path to the .dat file.
+    parse_raw : bool, optional
+        By default `False`. If `True` and there is a corresponding .rw.dat file, the
+        raw data will be parsed and stored in the `raw_scan` column of the `data`
+        attribute.
+
+
     Attributes
     ----------
     local_path : Path
@@ -105,7 +108,8 @@ class DatFile(GenericFile):
     data : pd.DataFrame
         The data from the .dat file.
     comments : OrderedDict[str, list[str]]
-        Any comments found within the "[Data]" section of the .dat file.
+        Any comments found in the "Comment" column within the "[Data]" section of the
+        .dat file.
     length : int
         The length of the .dat file in bytes.
     sha512 : str
@@ -115,11 +119,6 @@ class DatFile(GenericFile):
     experiments_in_file : list[str]
         The experiments contained in the .dat file. Can include "mvsh", "zfc", "fc",
         and/or "zfcfc".
-
-    Methods
-    -------
-    as_dict()
-        Serializes the DatFile object to a dictionary.
     """
 
     def __init__(self, file_path: str | Path, parse_raw: bool = False) -> None:
@@ -198,12 +197,30 @@ class DatFile(GenericFile):
         return experiments
 
     def append_raw_data(self, rw_dat_file: str | Path) -> None:
-        raw_dat = DatFile(rw_dat_file)
-        raw_scans = create_raw_scans(raw_dat)
+        """Adds a column "raw_scan" to the `data` attribute containing the raw data
+        from the .rw.dat file.
+
+        Parameters
+        ----------
+        rw_dat_file : str | Path
+            The path to the .rw.dat file.
+        """
+        raw_scans = create_raw_scans(rw_dat_file)
         self.combine_dat_and_raw_dfs(raw_scans)
 
     def combine_dat_and_raw_dfs(self, raw: list[DcMeasurement]) -> None:
-        # the .rw.dat file does not account for comments in the .dat file
+        """Data from the .rw.dat file is converted to a list of DcMeasurement objects
+        which must be integrated with the `DataFrame` stored in the `data` attribute.
+        This is not completely straightforward in cases where there are comments in
+        the .dat file. This method takes the list of DcMeasurement objects and
+        integrates them with the `DataFrame` stored in the `data` attribute.
+
+
+        Parameters
+        ----------
+        raw : list[DcMeasurement]
+            A list of DcMeasurement objects created from the .rw.dat file.
+        """
         if len(self.data) == len(raw):
             # there are no comments in the .dat file
             self.data["raw_scan"] = raw
@@ -221,9 +238,54 @@ class DatFile(GenericFile):
             self.data["raw_scan"] = new_raw
 
     def plot_raw(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
+        """If the `data` attribute contains raw data, this method will plot it.
+
+        Parameters
+        ----------
+        *args: Any
+            Arguments to be passed to `plot_raw`.
+        **kwargs: Any
+            Keyword arguments to be passed to `plot_raw`.
+
+        Returns
+        -------
+        tuple[plt.Figure, plt.Axes]
+            The figure and axes objects created by `plot_raw`.
+
+        Raises
+        ------
+        NoRawDataError
+
+        See Also
+        --------
+        plot_raw
+        """
         return plot_raw(self.data, *args, **kwargs)
 
     def plot_raw_residual(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
+        """If the `data` attribute contains raw data, this method will plot the
+        residual between the raw data and the processed data.
+
+        Parameters
+        ----------
+        *args: Any
+            Arguments to be passed to `plot_raw_residual`.
+        **kwargs: Any
+            Keyword arguments to be passed to `plot_raw_residual`.
+
+        Returns
+        -------
+        tuple[plt.Figure, plt.Axes]
+            The figure and axes objects created by `plot_raw_residual`.
+
+        Raises
+        ------
+        NoRawDataError
+
+        See Also
+        --------
+        plot_raw_residual
+        """
         return plot_raw_residual(self.data, *args, **kwargs)
 
     def as_dict(self) -> dict[str, Any]:
@@ -240,7 +302,33 @@ class DatFile(GenericFile):
         return output
 
 
-def filename_label(filename: str, experiment: str, suppress_warnings: bool) -> str:
+def filename_label(
+    filename: str, experiment: str = "", suppress_warnings: bool = False
+) -> str:
+    """Determines the experiment type based on the filename. Currently supported
+    experiments are: "zfc", "fc", "zfcfc", and "mvsh".
+
+    Parameters
+    ----------
+    filename : str
+        The name of the file.
+    experiment : str
+        Used in the case when you are looking for a specific experiment type.
+    suppress_warnings : bool
+        If an `experiment` is passed and the filename indicates a different
+        experiment, a warning will be raised. If `suppress_warnings` is `True`, the
+        warning will be suppressed. Defaults to `False`.
+
+    Returns
+    -------
+    str
+        The experiment type.
+
+    Raises
+    ------
+    FileNameWarning
+        If `experiment` is passed and the filename indicates a different experiment.
+    """
     name = filename.lower()
     label = "unknown"
     if "zfcfc" in name:
@@ -270,7 +358,59 @@ def filename_label(filename: str, experiment: str, suppress_warnings: bool) -> s
 
 
 class RawDcScan:
-    def __init__(self, direction: str, header: pd.Series, scan: pd.DataFrame) -> None:
+    """A class for storing the header information from a single raw scan.
+
+    Parameters
+    ----------
+    direction : Literal["up", "down"]
+        The direction of the scan.
+    header : pd.Series
+        The header information from the .dat file. The information is initially stored
+        in the "Comment" column in a single row preceding the scan data.
+
+    Attributes
+    ----------
+    text : str
+        The original text from the "Comment" column.
+    direction : Literal["up", "down"]
+        The direction of the scan.
+    low_temp : float
+        The lowest temperature recorded during the combined DC scan.
+    high_temp : float
+        The highest temperature recorded during the combined DC scan.
+    avg_temp : float
+        The average temperature recorded during the combined DC scan.
+    low_field : float
+        The lowest magnetic field (in Oe) recorded during the combined DC scan.
+    high_field : float
+        The highest magnetic field (in Oe) recorded during the combined DC scan.
+    drift : float
+        The amount of drift (in V/S) between the DOWN->UP and UP->DOWN scans.
+    slope : float
+        The linear slope (in V/mm) between the DOWN->UP and UP->DOWN scans.
+    squid_range : float
+        The SQUID range [1, 10, 100, or 1000] used during the combined DC scan.
+    given_center : float
+        The center position (in mm) as set during the sample installation wizard.
+    calculated_center : float
+        The calculated center position (in mm) from the Free C Fitted data.
+    amp_fixed : float
+        The amplitude (in V) of the Fixed C Fitted data.
+    amp_free : float
+        The amplitude (in V) of the Free C Fitted data.
+    data : pd.DataFrame
+        The raw scan data. Columns are: "Time Stamp (sec)", "Raw Position (mm)",
+        "Raw Voltage (V)", "Processed Voltage (V)". The Raw Voltage data from both
+        up and down scans are corrected for drift and shifted to center the waveform
+        around V=0, and the results of those corrections are stored in the
+        "Processed Voltage (V)" column.
+    start_time : float
+        The time stamp (in seconds) of the first data point in the scan.
+    """
+
+    def __init__(
+        self, direction: Literal["up", "down"], header: pd.Series, scan: pd.DataFrame
+    ) -> None:
         self.text: str = header["Comment"]
         self.direction = direction
         self.low_temp = self._get_value(r"low temp = (\d+\.\d+) K")
@@ -307,6 +447,26 @@ class RawDcScan:
 
 
 class FitDcScan:
+    """The FitDcScan class stores the simulated voltage data from fits to the
+    directional scans; one for the case in which the center position is allowed to
+    float (Free C Fitted) and one for the case in which the center position is fixed
+    (Fixed C Fitted) based on the initial centering of the sample.
+
+    Parameters
+    ----------
+    scan : pd.DataFrame
+        The processed scan data from the .rw.dat file.
+
+    Attributes
+    ----------
+    data : pd.DataFrame
+        The processed scan data from the .rw.dat file. Columns are: "Time Stamp (sec)",
+        "Raw Position (mm)", "Fixed C Fitted (V)", "Free C Fitted (V)".
+    start_time : float
+        The time stamp (in seconds) of the first data point in the scan.
+
+    """
+
     def __init__(self, scan: pd.DataFrame) -> None:
         self.data = scan.copy()
         self.data.drop(
@@ -324,8 +484,58 @@ class FitDcScan:
 
 
 class DcMeasurement:
-    """
-    [Quantum Design app note](https://www.qdusa.com/siteDocs/appNotes/1500-022.pdf)
+    r"""
+    The Quantum Design software fits the Processed Voltage data from the up and down
+    scans and uses the fit values with system-specific calibration factors to convert
+    the voltages to magnetic moment. This class stores both the raw and processed
+    data from a single DC measurement.
+
+    Parameters
+    ----------
+    up_header : pd.Series
+        The header information from the .rw.dat file for the up scan.
+    up_scan : pd.DataFrame
+        The raw scan data from the .rw.dat file for the up scan.
+    down_header : pd.Series
+        The header information from the .rw.dat file for the down scan.
+    down_scan : pd.DataFrame
+        The raw scan data from the .rw.dat file for the down scan.
+    processed_scan : pd.DataFrame
+        The processed scan data from the .rw.dat file.
+
+    Attributes
+    ----------
+    up : RawDcScan
+        The information about and data from the up scan.
+    down : RawDcScan
+        The information about and data from the down scan.
+    processed_scan : ProcessedDcScan
+        The processed scan data determined by fitting the up and down scans.
+
+    Notes
+    --------
+    Information on the structure of a .rw.dat file can be found in the Quantum Design
+    app note[1].
+
+    The processed scan is determined by fitting the up and down scans to the following
+    equation[1]:
+
+    V(z) = S + A \left\{ 2 \left[ R^2 + (z - C)^2 \right]^{-\frac{3}{2}} -
+    [R^2 + (L + z - C)^2]^{-\frac{3}{2}} - [R^2 + (-L + z - C)^2]^{-\frac{3}{2}}
+    \right\}
+
+    where S is the offset voltage, A is the amplitude, R is the radius of the
+    gradiometer, L is half the length of the gradiometer, and C is the sample center
+    position.
+
+    References
+    ----------
+    [MPMS3 Application Note 1500-022: MPMS3 .rw.dat file format](
+        https://www.qdusa.com/siteDocs/appNotes/1500-022.pdf
+    )
+    [MPMS3 Application Note 1500-023: Background subtraction using the MPMS3](
+        https://qdusa.com/siteDocs/appNotes/1500-023.pdf
+    )
     """
 
     def __init__(
@@ -347,7 +557,21 @@ class DcMeasurement:
         return f"DcMeasurement({self.up.avg_field:.2f} Oe, {self.up.avg_temp:.2f} K)"
 
 
-def create_raw_scans(raw_dat: DatFile) -> list[DcMeasurement]:
+def create_raw_scans(raw_dat: str | Path | DatFile) -> list[DcMeasurement]:
+    """Parse a .rw.dat file and return a list of `DcMeasurement` objects.
+
+    Parameters
+    ----------
+    raw_dat : str | Path | DatFile
+        The path to the .rw.dat file or a `DatFile` object made from the .rw.dat file.
+
+    Returns
+    -------
+    list[DcMeasurement]
+        A list of `DcMeasurement` objects, where each scan is a single `DcMeasurement`.
+    """
+    if not isinstance(raw_dat, DatFile):
+        raw_dat = DatFile(raw_dat)
     df = raw_dat.data
     raw_idx = list(raw_dat.comments.keys())
     scans = []
@@ -384,10 +608,44 @@ def plot_raw(
         "free",
         "fixed",
     ] = "free",
-    colors: tuple[str, str] | None = None,
+    colors: tuple[str, str] = ("purple", "orange"),
     label: bool = True,
     title: str = "",
 ) -> tuple[plt.Figure, plt.Axes]:
+    """Plot the raw voltage data found in the "raw_scan" column of a `DataFrame`, where
+    each row contains a `DcMeasurement` object.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        The `DataFrame` containing the raw data.
+    data_slice : tuple[int, int] | None, optional
+        The slice of data to plot (start, stop). `None` by default. If `None`, all
+        data will be plotted.
+    scan : Literal["up", "up_raw", "down", "down_raw", "procssed"], optional
+        Which data to plot. `"up"` and `"down"` will plot the processed directional
+        scans (which have been adjusted for drift and shifted to center the waveform
+        around 0, but have not been fit), `"up_raw"` and `"down_raw"` will plot the raw
+        voltages as the come straight off the SQUID, and `"processed"` will plot the
+        processed data (which is the result of fitting the up and down scans). `"up"` by
+        default.
+    center : Literal["free", "fixed"], optional
+        Only used if `scan` is `"processed"`; determines whether to plot the "Free C
+        Fitted" or "Fixed C Fitted" data. `"free"` by default.
+    colors : tuple[str, str], optional
+        The (start, end) colors for the color gradient. `"purple"` and `"orange"` by
+        default.
+    label : bool, optional
+        Default `True`. Whether to put labels on the plot for the initial and final
+        scans.
+    title : str, optional
+        The title of the plot. `""` by default.
+
+    Returns
+    -------
+    tuple[plt.Figure, plt.Axes]
+        The figure and axes objects created by `plot_raw`.
+    """
     data = _prepare_data_for_plot(data, data_slice)
     start_label, end_label = _get_voltage_scan_labels(data)
 
@@ -442,6 +700,38 @@ def plot_raw_residual(
     label: bool = True,
     title: str = "",
 ) -> tuple[plt.Figure, plt.Axes]:
+    """Plot the residual between the raw and processed voltage data found in the
+    "raw_scan" column of a `DataFrame`, where each row contains a `DcMeasurement`
+    object.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        The `DataFrame` containing the raw data.
+    data_slice : tuple[int, int] | None, optional
+        The slice of data to plot (start, stop). `None` by default. If `None`, all
+        data will be plotted.
+    scan : Literal["up", "down"], optional
+        Which data to use in the residual calculation. `"up"` and `"down"` will use the
+        processed directional scans (which have been adjusted for drift and shifted to
+        center the waveform around 0, but have not been fit). `"up"` by default.
+    center : Literal["free", "fixed"], optional
+        Only used if `scan` is `"processed"`; determines whether to plot the "Free C
+        Fitted" or "Fixed C Fitted" data. `"free"` by default.
+    colors : tuple[str, str], optional
+        The (start, end) colors for the color gradient. `"purple"` and `"orange"` by
+        default.
+    label : bool, optional
+        Default `True`. Whether to put labels on the plot for the initial and final
+        scans.
+    title : str, optional
+        The title of the plot. `""` by default.
+
+    Returns
+    -------
+    tuple[plt.Figure, plt.Axes]
+        The figure and axes objects created by `plot_raw`.
+    """
     data = _prepare_data_for_plot(data, data_slice)
     start_label, end_label = _get_voltage_scan_labels(data)
 
