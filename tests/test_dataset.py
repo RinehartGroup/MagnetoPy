@@ -5,7 +5,7 @@ from dataclasses import dataclass
 import pytest
 
 from magnetopy import (
-    Dataset,
+    Magnetometry,
     SampleInfo,
     MvsH,
     ZFC,
@@ -142,19 +142,19 @@ expected_experiment_lengths = [
 
 @pytest.mark.parametrize("dataset_name,expected", expected_experiment_lengths)
 def test_dataset_experiment_lengths(dataset_name: str, expected: tuple[int, int, int]):
-    dataset = Dataset(DATA_PATH / dataset_name)
+    dataset = Magnetometry(DATA_PATH / dataset_name)
     assert len(dataset.mvsh) == expected[0]
     assert len(dataset.zfc) == expected[1]
     assert len(dataset.fc) == expected[2]
 
 
 def test_dataset_id_default():
-    dataset = Dataset(DATA_PATH / "dataset1")
+    dataset = Magnetometry(DATA_PATH / "dataset1")
     assert dataset.sample_id == "dataset1"
 
 
 def test_dataset_id_custom():
-    dataset = Dataset(DATA_PATH / "dataset1", "custom_id")
+    dataset = Magnetometry(DATA_PATH / "dataset1", "custom_id")
     assert dataset.sample_id == "custom_id"
 
 
@@ -170,30 +170,30 @@ expected_auto_scaling = [
 
 @pytest.mark.parametrize("dataset_name,expected", expected_auto_scaling)
 def test_auto_scaling(dataset_name: str, expected: list[str]):
-    dataset = Dataset(DATA_PATH / dataset_name)
+    dataset = Magnetometry(DATA_PATH / dataset_name)
     assert dataset.mvsh[0].scaling == expected
 
 
 @pytest.mark.parametrize("dataset_name", datasets)
 def test_mass_scaling(dataset_name: str):
-    dataset = Dataset(DATA_PATH / dataset_name, magnetic_data_scaling="mass")
+    dataset = Magnetometry(DATA_PATH / dataset_name, magnetic_data_scaling="mass")
     assert dataset.mvsh[0].scaling == ["mass"]
 
 
 def test_molar_scaling():
-    dataset = Dataset(DATA_PATH / "dataset4", magnetic_data_scaling="molar")
+    dataset = Magnetometry(DATA_PATH / "dataset4", magnetic_data_scaling="molar")
     assert dataset.mvsh[0].scaling == ["molar"]
 
 
 def test_eicosane_scaling():
-    dataset = Dataset(
+    dataset = Magnetometry(
         DATA_PATH / "dataset4", magnetic_data_scaling=["molar", "eicosane"]
     )
     assert dataset.mvsh[0].scaling == ["molar", "eicosane"]
 
 
 def test_diamagnetic_correction_scaling():
-    dataset = Dataset(
+    dataset = Magnetometry(
         DATA_PATH / "dataset4",
         magnetic_data_scaling=["molar", "diamagnetic_correction"],
     )
@@ -204,20 +204,20 @@ def test_diamagnetic_correction_scaling():
 
 
 def test_true_field_correction():
-    dataset = Dataset(DATA_PATH / "dataset3", true_field_correction="sequence_1")
+    dataset = Magnetometry(DATA_PATH / "dataset3", true_field_correction="sequence_1")
     assert dataset.mvsh[0].field_correction_file == "mvsh_seq1.dat"
 
 
 def test_field_correction_error():
     with pytest.raises(MvsH.FieldCorrectionError):
-        Dataset(DATA_PATH / "dataset1", true_field_correction="sequence_1")
+        Magnetometry(DATA_PATH / "dataset1", true_field_correction="sequence_1")
 
 
 ### Test Get Experiments ###
 
 
 def test_get_mvsh():
-    dataset = Dataset(DATA_PATH / "dataset1")
+    dataset = Magnetometry(DATA_PATH / "dataset1")
     assert (
         dataset.get_mvsh(2)
         .data["uncorrected_moment"]
@@ -226,13 +226,13 @@ def test_get_mvsh():
 
 
 def test_get_mvsh_error():
-    dataset = Dataset(DATA_PATH / "dataset1")
-    with pytest.raises(Dataset.ExperimentNotFoundError):
+    dataset = Magnetometry(DATA_PATH / "dataset1")
+    with pytest.raises(Magnetometry.ExperimentNotFoundError):
         dataset.get_mvsh(500)
 
 
 def test_get_zfc():
-    dataset = Dataset(DATA_PATH / "dataset3")
+    dataset = Magnetometry(DATA_PATH / "dataset3")
     assert (
         dataset.get_zfc(100)
         .data["uncorrected_moment"]
@@ -241,13 +241,13 @@ def test_get_zfc():
 
 
 def test_get_zfc_error():
-    dataset = Dataset(DATA_PATH / "dataset3")
-    with pytest.raises(Dataset.ExperimentNotFoundError):
+    dataset = Magnetometry(DATA_PATH / "dataset3")
+    with pytest.raises(Magnetometry.ExperimentNotFoundError):
         dataset.get_zfc(10000)
 
 
 def test_get_fc():
-    dataset = Dataset(DATA_PATH / "dataset3")
+    dataset = Magnetometry(DATA_PATH / "dataset3")
     assert (
         dataset.get_fc(1000)
         .data["uncorrected_moment"]
@@ -256,6 +256,6 @@ def test_get_fc():
 
 
 def test_get_fc_error():
-    dataset = Dataset(DATA_PATH / "dataset3")
-    with pytest.raises(Dataset.ExperimentNotFoundError):
+    dataset = Magnetometry(DATA_PATH / "dataset3")
+    with pytest.raises(Magnetometry.ExperimentNotFoundError):
         dataset.get_fc(10000)

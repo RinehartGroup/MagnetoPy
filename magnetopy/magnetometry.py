@@ -126,7 +126,7 @@ class Analysis(Protocol):
         ...
 
 
-class Dataset:
+class Magnetometry:
     class ExperimentNotFoundError(Exception):
         pass
 

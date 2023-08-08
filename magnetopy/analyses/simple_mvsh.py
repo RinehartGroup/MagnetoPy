@@ -3,7 +3,7 @@ from typing import Any
 
 import pandas as pd
 
-from magnetopy.dataset import Dataset
+from magnetopy.magnetometry import Magnetometry
 from magnetopy.experiments.mvsh import MvsH
 
 
@@ -32,7 +32,7 @@ class SimpleMvsHAnalysisResults:
 class SimpleMvsHAnalysis:
     def __init__(
         self,
-        dataset: Dataset,
+        dataset: Magnetometry,
         parsing_args: SimpleMvsHAnalysisParsingArgs,
     ) -> None:
         self.parsing_args = parsing_args
