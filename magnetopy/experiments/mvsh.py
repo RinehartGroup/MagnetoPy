@@ -276,18 +276,21 @@ class MvsH:
             raise self.SegmentError(f"Sequence {sequence} not found in data")
         return segment
 
+    def plot(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
+        return plot_mvsh(self, *args, **kwargs)
+
     def plot_raw(
         self,
         segment: Literal["virgin", "forward", "reverse"] = "forward",
         **kwargs,
-    ):
+    ) -> tuple[plt.Figure, plt.Axes]:
         return plot_raw(self._select_sequence(segment), **kwargs)
 
     def plot_raw_residual(
         self,
         segment: Literal["virgin", "forward", "reverse"] = "forward",
         **kwargs,
-    ):
+    ) -> tuple[plt.Figure, plt.Axes]:
         return plot_raw_residual(self._select_sequence(segment), **kwargs)
 
     def as_dict(self) -> dict[str, Any]:
@@ -417,7 +420,7 @@ def plot_mvsh(
     labels: str | list[str] | None = "auto",
     title: str = "",
     **kwargs,
-):
+) -> tuple[plt.Figure, plt.Axes]:
     if isinstance(mvsh, list) and len(mvsh) == 1:
         mvsh = mvsh[0]
     if isinstance(mvsh, MvsH):
@@ -461,7 +464,7 @@ def plot_single_mvsh(
     label: str | None = "auto",
     title: str = "",
     **kwargs,
-):
+) -> tuple[plt.Figure, plt.Axes]:
     options = handle_kwargs(**kwargs)
 
     fig, ax = plt.subplots()
@@ -500,7 +503,7 @@ def plot_multiple_mvsh(
     labels: list[str] | None = None,
     title: str = "",
     **kwargs,
-):
+) -> tuple[plt.Figure, plt.Axes]:
     options = handle_kwargs(**kwargs)
 
     if colors == "auto":

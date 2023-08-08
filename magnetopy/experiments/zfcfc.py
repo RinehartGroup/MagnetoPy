@@ -184,10 +184,13 @@ class ZFCFC:
             simplified_data["temperature"].max(),
         )
 
-    def plot_raw(self, *args, **kwargs):
+    def plot(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
+        return plot_zfcfc(self, *args, **kwargs)
+
+    def plot_raw(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
         return plot_raw(self.data, *args, **kwargs)
 
-    def plot_raw_residual(self, *args, **kwargs):
+    def plot_raw_residual(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
         return plot_raw_residual(self.data, *args, **kwargs)
 
     def as_dict(self) -> dict[str, Any]:
@@ -374,7 +377,7 @@ def plot_zfcfc(
     labels: str | list[str] | None = "auto",
     title: str = "",
     **kwargs,
-):
+) -> tuple[plt.Figure, plt.Axes]:
     if isinstance(zfc, list) and len(zfc) == 1:
         zfc = zfc[0]
     if isinstance(fc, list) and len(fc) == 1:
@@ -430,7 +433,7 @@ def plot_single_zfcfc(
     label: str | None = "auto",
     title: str = "",
     **kwargs,
-):
+) -> tuple[plt.Figure, plt.Axes]:
     options = handle_kwargs(**kwargs)
 
     fig, ax = plt.subplots()
@@ -484,7 +487,7 @@ def plot_multiple_zfcfc(
     labels: list[str] | None = None,
     title: str = "",
     **kwargs,
-):
+) -> tuple[plt.Figure, plt.Axes]:
     options = handle_kwargs(**kwargs)
 
     if colors == "auto":

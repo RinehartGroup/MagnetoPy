@@ -1,5 +1,7 @@
 from typing import Literal
 
+import matplotlib.pyplot as plt
+
 
 def handle_kwargs(**kwargs):
     options = {"xlim": None, "ylim": None, "loc": None, "save": None}
@@ -33,7 +35,9 @@ def get_ylabel(y_val: Literal["moment", "chi", "chi_t"], scaling: list[str]) -> 
     return ylabel
 
 
-def handle_options(ax, label: str | None, title: str, options: dict[str, str]):
+def handle_options(
+    ax: plt.Axes, label: str | None, title: str, options: dict[str, str]
+) -> None:
     if label or title:
         if options["loc"]:
             ax.legend(frameon=False, loc=options["loc"], title=title)

@@ -220,10 +220,10 @@ class DatFile(GenericFile):
                     j += 1
             self.data["raw_scan"] = new_raw
 
-    def plot_raw(self, *args, **kwargs):
+    def plot_raw(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
         return plot_raw(self.data, *args, **kwargs)
 
-    def plot_raw_residual(self, *args, **kwargs):
+    def plot_raw_residual(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
         return plot_raw_residual(self.data, *args, **kwargs)
 
     def as_dict(self) -> dict[str, Any]:
@@ -400,7 +400,7 @@ def plot_raw(
     colors: tuple[str, str] | None = None,
     label: bool = True,
     title: str = "",
-):
+) -> tuple[plt.Figure, plt.Axes]:
     data = _prepare_data_for_plot(data, data_slice)
     start_label, end_label = _get_voltage_scan_labels(data)
 
@@ -454,7 +454,7 @@ def plot_raw_residual(
     colors: tuple[str, str] | None = None,
     label: bool = True,
     title: str = "",
-):
+) -> tuple[plt.Figure, plt.Axes]:
     data = _prepare_data_for_plot(data, data_slice)
     start_label, end_label = _get_voltage_scan_labels(data)
 

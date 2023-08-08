@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 from itertools import cycle
 
+import matplotlib.pyplot as plt
+
 
 def linear_color_gradient(
     start_hex: str,
@@ -101,7 +103,7 @@ def default_colors(n: int) -> list[str]:
     return [next(default) for _ in range(n)]
 
 
-def force_aspect(ax, aspect=1):
+def force_aspect(ax: plt.Axes, aspect=1) -> None:
     # aspect is width/height
     xscale_str = ax.get_xaxis().get_scale()
     yscale_str = ax.get_yaxis().get_scale()
