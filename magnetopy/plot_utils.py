@@ -1,21 +1,48 @@
-from typing import Union
+from typing import Sized, TypeAlias, Literal, NewType
 import numpy as np
 import pandas as pd
 from itertools import cycle
 
 import matplotlib.pyplot as plt
 
+BasicColors: TypeAlias = Literal[
+    "red", "orange", "yellow", "green", "blue", "purple", "black", "white"
+]
+HexColorCode = NewType("HexColorCode", str)
+
 
 def linear_color_gradient(
-    start_hex: str,
-    finish_hex: str = "#FFFFFF",
-    n: Union[int, pd.core.series.Series] = 10,
-):
-    """
-    Modified from https://bsouthga.dev/posts/color-gradients-with-python
-    returns a gradient list of (n) colors between two hex colors.
-    start_hex and finish_hex should be the full six-digit color string,
-    inlcuding the '#' sign ("#FFFFFF")
+    start_color: HexColorCode | BasicColors,
+    finish_color: HexColorCode | BasicColors = "white",
+    n: int | Sized = 10,
+) -> list[HexColorCode]:
+    """Return a list of colors forming linear gradients between two colors.
+
+    Parameters
+    ----------
+    start_color : HexColorCode | basic_colors
+        The starting color as either a hex code (e.g. "#FFFFFF") or a basic color
+        name.
+    finish_color : HexColorCode | basic_colors, optional
+        The ending color as either a hex code (e.g. "#FFFFFF") or a basic color
+        name, by default "white"
+    n : int | Sized, optional
+        The number of colors to return, by default 10.
+
+    Returns
+    -------
+    list[HexColorCode]
+        A list of hex color codes forming a linear gradient between the start and
+        finish colors.
+
+    Notes
+    -----
+    Supported basic colors includes: "red", "orange", "yellow", "green", "blue",
+    "purple", "black", and "white".
+
+    References
+    ----------
+    https://bsouthga.dev/posts/color-gradients-with-python
     """
 
     def hex_to_rgb(hex_color: str) -> list:
@@ -29,7 +56,7 @@ def linear_color_gradient(
             ["0{0:x}".format(v) if v < 16 else "{0:x}".format(v) for v in rgb]
         )
 
-    basic_colors = {
+    _basic_colors = {
         "red": "#FF0000",
         "orange": "#E36D12",
         "yellow": "#FFFF00",
@@ -39,11 +66,11 @@ def linear_color_gradient(
         "black": "#000000",
         "white": "#FFFFFF",
     }
-    start_hex = basic_colors.get(start_hex, start_hex)
-    finish_hex = basic_colors.get(finish_hex, finish_hex)
+    start_color = _basic_colors.get(start_color, start_color)
+    finish_color = _basic_colors.get(finish_color, finish_color)
 
-    start = hex_to_rgb(start_hex)
-    finish = hex_to_rgb(finish_hex)
+    start = hex_to_rgb(start_color)
+    finish = hex_to_rgb(finish_color)
     # Initilize a list of the output colors with the starting color
     rgb_list = [start]
     # Calcuate a color at each evenly spaced value of t from 1 to n
@@ -85,7 +112,24 @@ def linear_color_gradient(
     return hex_list
 
 
-def default_colors(n: int) -> list[str]:
+def default_colors(n: int | Sized) -> list[str]:
+    """Return a list of colors for plotting. The default colors are the first 10
+    colors from the Matplotlib default color cycle. If more than 10 colors are
+    requested, the default colors are cycled.
+
+    Parameters
+    ----------
+    n : int | Sized
+        The number of colors to return or a list-like object of the same length as
+        the number of colors to return.
+
+    Returns
+    -------
+    list[str]
+        A list of colors for plotting.
+    """
+    if not isinstance(n, int):
+        n = len(n)
     default = cycle(
         [
             "#1f77b4",
@@ -104,6 +148,16 @@ def default_colors(n: int) -> list[str]:
 
 
 def force_aspect(ax: plt.Axes, aspect=1) -> None:
+    """Force the aspect ratio of a plot to be a certain value. Uses the axes's current
+    x and y limits to calculate the aspect ratio. Works for both linear and log scales.
+
+    Parameters
+    ----------
+    ax : plt.Axes
+        The axes to force the aspect ratio of.
+    aspect : int, optional
+        The desired aspect ratio, by default 1.
+    """
     # aspect is width/height
     xscale_str = ax.get_xaxis().get_scale()
     yscale_str = ax.get_yaxis().get_scale()
