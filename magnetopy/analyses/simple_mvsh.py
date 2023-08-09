@@ -1,5 +1,5 @@
 from dataclasses import dataclass, asdict
-from typing import Any
+from typing import Any, Literal
 
 import pandas as pd
 
@@ -9,8 +9,23 @@ from magnetopy.experiments.mvsh import MvsH
 
 @dataclass
 class SimpleMvsHAnalysisParsingArgs:
+    """Arguments needed to parse a `Magnetometry` object during the course of an
+    analysis performed by `SimpleMvsHAnalysis`.
+
+    Attributes
+    ----------
+    temperature : float
+        The temperature in Kelvin of the measurement to be analyzed.
+    segments : Literal["auto", "loop", "forward", "reverse"], optional
+        The segments of the measurement to be analyzed. If `"auto"`, the forward and
+        reverse segments will be analyzed if they exist and will be ignored if they
+        don't. If `"loop"`, the forward and reverse segments will be analyzed if they
+        exist and an error will be raised if they don't. If `"forward"` or `"reverse"`,
+        only the forward or reverse segment will be analyzed, respectively.
+    """
+
     temperature: float
-    segments: str = "auto"  # auto, loop, forward, reverse
+    segments: Literal["auto", "loop", "forward", "reverse"] = "auto"
 
     def as_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -18,18 +33,58 @@ class SimpleMvsHAnalysisParsingArgs:
 
 @dataclass
 class SimpleMvsHAnalysisResults:
+    """The results of an analysis performed by `SimpleMvsHAnalysis`.
+
+    Attributes
+    ----------
+    m_s : float
+        The saturation magnetization of the sample in units of `moment_units`.
+    h_c : float
+        The coercive field of the sample in units of `field_units`.
+    m_r : float
+        The remanent magnetization of the sample in units of `moment_units`.
+    moment_units : str
+        The units of the saturation magnetization and remanent magnetization.
+    field_units : str
+        The units of the coercive field.
+    segments : list[{"forward", "reverse"}]
+        The segments of the measurement that were analyzed.
+    """
+
     m_s: float
     h_c: float
     m_r: float
     moment_units: str
     field_units: str
-    segments: list[str]
+    segments: Literal["forward", "reverse"]
 
     def as_dict(self) -> dict[str, Any]:
         return asdict(self)
 
 
 class SimpleMvsHAnalysis:
+    """An analysis of an M vs. H experiment that determines basic information about the
+    hysteresis loop.
+
+    Parameters
+    ----------
+    dataset : Magnetometry
+        The `Magnetometry` object which contains the `MvsH` object to be analyzed.
+    parsing_args : SimpleMvsHAnalysisParsingArgs
+        Arguments needed to parse the `Magnetometry` object to obtain the `MvsH` object
+        to be analyzed.
+
+    Attributes
+    ----------
+    parsing_args : SimpleMvsHAnalysisParsingArgs
+        Arguments needed to parse the `Magnetometry` object to obtain the `MvsH` object
+        to be analyzed.
+    mvsh : MvsH
+        The analyzed `MvsH` object.
+    results : SimpleMvsHAnalysisResults
+        The results of the analysis.
+    """
+
     def __init__(
         self,
         dataset: Magnetometry,
@@ -93,6 +148,13 @@ class SimpleMvsHAnalysis:
             return "bohr magnetons/mol"
 
     def as_dict(self) -> dict[str, Any]:
+        """Return a dictionary representation of the analysis.
+
+        Returns
+        -------
+        dict[str, Any]
+            Keys are `"mvsh"`, `"parsing_args"`, and `"results"`.
+        """
         return {
             "mvsh": self.mvsh,
             "parsing_args": self.parsing_args,
