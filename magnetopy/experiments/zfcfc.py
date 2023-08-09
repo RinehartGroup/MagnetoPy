@@ -23,13 +23,57 @@ class FieldDetectionError(Exception):
 
 
 class ZFCFC:
+    """A single ZFCFC experiment at a given field. Unlikely to be called directly,
+    instead use `ZFC` or `FC`.
+
+    Parameters
+    ----------
+    dat_file : str, Path, or DatFile
+        The .dat file containing the data for the experiment.
+    experiment : {"zfc", "fc"}
+        The type of experiment. Either "zfc" or "fc".
+    field : int or float, optional
+        The magnetic field of the experiment in Oe. Requied if the .dat file contains
+        multiple uncommented experiments at different fields. If `None` and the .dat
+        file contains a single experiment, the field will be automatically detected.
+        Defaults to `None`.
+    parse_raw : bool, optional
+        If `True` and there is a corresponding .rw.dat file, the raw data will be
+        parsed and added to the `data` attribute. Defaults to `False`.
+    **kwargs : dict, optional
+        Keyword arguments used for algorithmic separation of data at the requested
+        field.
+        - n_digits : int, optional
+        - suppress_warnings : bool, optional
+
+    Attributes
+    ----------
+    origin_file : str
+        The name of the .dat file from which the data was parsed.
+    field : float
+        The field of the experiment in Oe.
+    data : pandas.DataFrame
+        The data from the experiment. Columns are taken directly from the .dat file.
+    scaling : list of str
+        The scaling applied to the data. If no scaling has been applied, this will be
+        an empty list. Possible values are: `"mass"`, `"molar"`, `"eicosane"`,
+        and `"diamagnetic_correction"`.
+    temperature_range : tuple of float
+        The minimum and maximum temperature values in the data.
+
+    Raises
+    ------
+    NonMatchingFieldError
+        Raised if the requested field is not in the data.
+    """
+
     class NonMatchingFieldError(Exception):
         pass
 
     def __init__(
         self,
         dat_file: str | Path | DatFile,
-        experiment: str,
+        experiment: Literal["zfc", "fc"],
         field: int | float | None = None,
         parse_raw: bool = False,
         **kwargs,
@@ -147,6 +191,26 @@ class ZFCFC:
         molecular_weight: float = 0,
         diamagnetic_correction: float = 0,
     ) -> None:
+        """Adds the following columns to the `DataFrame` in the `data` attribute:
+        `"moment"`, `"moment_err"`, `"chi"`, `"chi_err"`, `"chi_t"`, and
+        `"chi_t_err"`. A record of what scaling was applied is added to the
+        `scaling` attribute.
+
+        Parameters
+        ----------
+        mass : float, optional
+            mg of sample, by default 0.
+        eicosane_mass : float, optional
+            mg of eicosane, by default 0.
+        molecular_weight : float, optional
+            Molecular weight of the material in g/mol, by default 0.
+        diamagnetic_correction : float, optional
+            Diamagnetic correction of the material in cm^3/mol, by default 0.
+
+        See Also
+        --------
+        magnetopy.experiments.utils.scale_dc_data
+        """
         scale_dc_data(
             self,
             mass,
@@ -156,6 +220,26 @@ class ZFCFC:
         )
 
     def simplified_data(self) -> pd.DataFrame:
+        """Returns a simplified version of the data, removing unnecessary columns
+        and renaming the remaining columns to more convenient names.
+
+        Returns
+        -------
+        pd.DataFrame
+            The simplified data. Contains the columns:
+            - `"time"` in seconds
+            - `"temperature"` in Kelvin
+            - `"field"` in Oe
+            - `"moment"`
+            - `"moment_err"`
+            - `"chi"`
+            - `"chi_err"`
+            - `"chi_t"`
+            - `"chi_t_err"`
+
+            Where units are not specified, they are determined by the scaling applied to the
+            data (see `scaling` attribute).
+        """
         full_df = self.data.copy()
         df = pd.DataFrame()
         df["time"] = full_df["Time Stamp (sec)"]
@@ -184,16 +268,41 @@ class ZFCFC:
             simplified_data["temperature"].max(),
         )
 
-    def plot(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
-        return plot_zfcfc(self, *args, **kwargs)
-
     def plot_raw(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
+        """Plots the raw voltage data from the experiment.
+
+        Returns
+        -------
+        tuple[plt.Figure, plt.Axes]
+
+        See Also
+        --------
+        magnetopy.data_files.plot_raw
+        """
         return plot_raw(self.data, *args, **kwargs)
 
     def plot_raw_residual(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
+        """Plots the residual of the raw voltage data from the experiment.
+
+        Returns
+        -------
+        tuple[plt.Figure, plt.Axes]
+
+        See Also
+        --------
+        magnetopy.data_files.plot_raw_residual
+        """
         return plot_raw_residual(self.data, *args, **kwargs)
 
     def as_dict(self) -> dict[str, Any]:
+        """Returns a dictionary representation of the `MvsH` object.
+
+        Returns
+        -------
+        dict[str, Any]
+            Keys are: `"origin_file"`, `"field"`, `"temperature_range"`,
+            and `"scaling"`.
+        """
         return {
             "origin_file": self.origin_file,
             "field": self.field,
@@ -209,6 +318,28 @@ class ZFCFC:
         n_digits: int = 0,
         parse_raw: bool = False,
     ) -> list[ZFCFC]:
+        """Given a .dat file that contains one or more ZFC or FC experiments, returns a
+        list of `ZFC` or `FC` objects, one for each experiment.
+
+        Parameters
+        ----------
+        dat_file : str | Path | DatFile
+            The .dat file containing the data for the experiment.
+        experiment : {"zfc", "fc"}
+            The type of experiment. Either "zfc" or "fc".
+        n_digits : int, optional
+            The number of digits after the decimal point to round the field to. Defaults
+            to `0`.
+        parse_raw : bool, optional
+            If `True` and there is a corresponding .rw.dat file, the raw data will be
+            parsed and added to the `data` attribute. Defaults to `False`.
+
+        Returns
+        -------
+        list[ZFC] | list[FC]
+            A list of `ZFC` or `FC` objects, one for each experiment in the .dat file,
+            sorted by increasing field.
+        """
         if not isinstance(dat_file, DatFile):
             dat_file = DatFile(Path(dat_file), parse_raw)
         if dat_file.comments:
@@ -276,6 +407,47 @@ class ZFCFC:
 
 
 class ZFC(ZFCFC):
+    """A single ZFC experiment at a given field.
+
+    Parameters
+    ----------
+    dat_file : str, Path, or DatFile
+        The .dat file containing the data for the experiment.
+    field : int or float, optional
+        The magnetic field of the experiment in Oe. Requied if the .dat file contains
+        multiple uncommented experiments at different fields. If `None` and the .dat
+        file contains a single experiment, the field will be automatically detected.
+        Defaults to `None`.
+    parse_raw : bool, optional
+        If `True` and there is a corresponding .rw.dat file, the raw data will be
+        parsed and added to the `data` attribute. Defaults to `False`.
+    **kwargs : dict, optional
+        Keyword arguments used for algorithmic separation of data at the requested
+        field.
+        - n_digits : int, optional
+        - suppress_warnings : bool, optional
+
+    Attributes
+    ----------
+    origin_file : str
+        The name of the .dat file from which the data was parsed.
+    field : float
+        The field of the experiment in Oe.
+    data : pandas.DataFrame
+        The data from the experiment. Columns are taken directly from the .dat file.
+    scaling : list of str
+        The scaling applied to the data. If no scaling has been applied, this will be
+        an empty list. Possible values are: `"mass"`, `"molar"`, `"eicosane"`,
+        and `"diamagnetic_correction"`.
+    temperature_range : tuple of float
+        The minimum and maximum temperature values in the data.
+
+    Raises
+    ------
+    NonMatchingFieldError
+        Raised if the requested field is not in the data.
+    """
+
     def __init__(
         self,
         dat_file: str | Path | DatFile,
@@ -302,6 +474,47 @@ class ZFC(ZFCFC):
 
 
 class FC(ZFCFC):
+    """A single FC experiment at a given field.
+
+    Parameters
+    ----------
+    dat_file : str, Path, or DatFile
+        The .dat file containing the data for the experiment.
+    field : int or float, optional
+        The magnetic field of the experiment in Oe. Requied if the .dat file contains
+        multiple uncommented experiments at different fields. If `None` and the .dat
+        file contains a single experiment, the field will be automatically detected.
+        Defaults to `None`.
+    parse_raw : bool, optional
+        If `True` and there is a corresponding .rw.dat file, the raw data will be
+        parsed and added to the `data` attribute. Defaults to `False`.
+    **kwargs : dict, optional
+        Keyword arguments used for algorithmic separation of data at the requested
+        field.
+        - n_digits : int, optional
+        - suppress_warnings : bool, optional
+
+    Attributes
+    ----------
+    origin_file : str
+        The name of the .dat file from which the data was parsed.
+    field : float
+        The field of the experiment in Oe.
+    data : pandas.DataFrame
+        The data from the experiment. Columns are taken directly from the .dat file.
+    scaling : list of str
+        The scaling applied to the data. If no scaling has been applied, this will be
+        an empty list. Possible values are: `"mass"`, `"molar"`, `"eicosane"`,
+        and `"diamagnetic_correction"`.
+    temperature_range : tuple of float
+        The minimum and maximum temperature values in the data.
+
+    Raises
+    ------
+    NonMatchingFieldError
+        Raised if the requested field is not in the data.
+    """
+
     def __init__(
         self,
         dat_file: str | Path | DatFile,
@@ -378,6 +591,40 @@ def plot_zfcfc(
     title: str = "",
     **kwargs,
 ) -> tuple[plt.Figure, plt.Axes]:
+    """Plots either a single `ZFC`/`FC` pair or several on the same axes.
+
+    Parameters
+    ----------
+    zfc : ZFC | list[ZFC]
+        The ZFC data to plot. Must be the same length as `fc`.
+    fc : FC | list[FC]
+        The FC data to plot. Must be the same length as `zfc`.
+    normalized : bool, optional
+        If `True`, the magnetization will be normalized to the maximum value, by
+        default False.
+    colors : str | list[str], optional
+        A list of colors corresponding to the `ZFC`/`FC` pairs, by default "auto". If
+        "auto" and there is a single pair, the color will be black. If "auto" and
+        there is a list of pairs with different fields, the colors will be a linear
+        gradient from purple to green. If "auto" and the list of pairs is at the same
+        field, the colors will be the default `matplotlib` colors.
+    labels : str | list[str] | None, optional
+        The labels to assign the `ZFC`/`FC` pairs in the axes legend, by default "auto".
+        If "auto", the labels will be the `field` of the `ZFC`/`FC` objects.
+    title : str, optional
+        The title of the plot, by default "".
+    **kwargs
+        Keyword arguments mostly meant to affect the plot style. See `handle_options`
+        for details.
+
+    Returns
+    -------
+    tuple[plt.Figure, plt.Axes]
+
+    See Also
+    --------
+    magnetopy.experiments.plot_utils.handle_options
+    """
     if isinstance(zfc, list) and len(zfc) == 1:
         zfc = zfc[0]
     if isinstance(fc, list) and len(fc) == 1:
@@ -434,6 +681,40 @@ def plot_single_zfcfc(
     title: str = "",
     **kwargs,
 ) -> tuple[plt.Figure, plt.Axes]:
+    """Plots a single `ZFC`/`FC` pair.
+
+    Parameters
+    ----------
+    zfc : ZFC
+        The ZFC data to plot.
+    fc : FC
+        The FC data to plot.
+    normalized : bool, optional
+        If `True`, the magnetization will be normalized to the maximum value, by
+        default False.
+    colors : str | list[str], optional
+        A list of colors corresponding to the `ZFC`/`FC` pairs, by default "auto". If
+        "auto" and there is a single pair, the color will be black. If "auto" and
+        there is a list of pairs with different fields, the colors will be a linear
+        gradient from purple to green. If "auto" and the list of pairs is at the same
+        field, the colors will be the default `matplotlib` colors.
+    labels : str | list[str] | None, optional
+        The labels to assign the `ZFC/`FC` pair in the axes legend, by default "auto".
+        If "auto", the label will be the `field` of the `MvsH` object.
+    title : str, optional
+        The title of the plot, by default "".
+    **kwargs
+        Keyword arguments mostly meant to affect the plot style. See `handle_options`
+        for details.
+
+    Returns
+    -------
+    tuple[plt.Figure, plt.Axes]
+
+    See Also
+    --------
+    magnetopy.experiments.plot_utils.handle_options
+    """
     options = handle_kwargs(**kwargs)
 
     fig, ax = plt.subplots()
@@ -488,6 +769,39 @@ def plot_multiple_zfcfc(
     title: str = "",
     **kwargs,
 ) -> tuple[plt.Figure, plt.Axes]:
+    """Plots several `ZFC`/`FC` pairs on the same axes.
+
+    Parameters
+    ----------
+    zfc : list[ZFC]
+        The ZFC data to plot. Must be the same length as `fc`.
+    fc : list[FC]
+        The FC data to plot. Must be the same length as `zfc`.
+    normalized : bool, optional
+        If `True`, the magnetization will be normalized to the maximum value, by
+        default False.
+    colors : str | list[str], optional
+        A list of colors corresponding to the `ZFC`/`FC` pairs, by default "auto".
+        If "auto" and there is a list of pairs with different fields, the colors will
+        be a linear gradient from purple to green. If "auto" and the list of pairs is
+        at the same field, the colors will be the default `matplotlib` colors.
+    labels : str | list[str] | None, optional
+        The labels to assign the `ZFC`/`FC` pairs in the axes legend, by default "auto".
+        If "auto", the labels will be the `field` of the `ZFC`/`FC` objects.
+    title : str, optional
+        The title of the plot, by default "".
+    **kwargs
+        Keyword arguments mostly meant to affect the plot style. See `handle_options`
+        for details.
+
+    Returns
+    -------
+    tuple[plt.Figure, plt.Axes]
+
+    See Also
+    --------
+    magnetopy.experiments.plot_utils.handle_options
+    """
     options = handle_kwargs(**kwargs)
 
     if colors == "auto":
