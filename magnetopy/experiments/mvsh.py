@@ -16,11 +16,14 @@ from magnetopy.experiments.plot_utils import (
 from magnetopy.experiments.utils import (
     scale_dc_data,
     add_uncorrected_moment_columns,
-    auto_detect_temperature,
     num_digits_after_decimal,
 )
 from magnetopy.parsing_utils import find_sequence_starts, label_clusters, unique_values
 from magnetopy.plot_utils import default_colors, force_aspect, linear_color_gradient
+
+
+class TemperatureDetectionError(Exception):
+    pass
 
 
 class MvsH:
@@ -51,7 +54,7 @@ class MvsH:
         options.update(kwargs)
 
         if temperature is None:
-            temperature = auto_detect_temperature(
+            temperature = _auto_detect_temperature(
                 dat_file, options["eps"], options["min_samples"], options["n_digits"]
             )
 
@@ -410,6 +413,48 @@ class TrueFieldCorrection(MvsH):
         self.data["true_field"] = self.data["uncorrected_moment"] / (
             chi_g * self.pd_mass * 1e-3
         )
+
+
+def _auto_detect_temperature(
+    dat_file: DatFile, eps: float, min_samples: int, n_digits: int
+) -> float:
+    temperature: float | None = None
+    if dat_file.comments:
+        mvsh_comments = []
+        for comment_list in dat_file.comments.values():
+            if "mvsh" in map(str.lower, comment_list):
+                mvsh_comments.append(comment_list)
+        if len(mvsh_comments) != 1:
+            raise TemperatureDetectionError(
+                "Auto-parsing of MvsH objects from DatFile objects requires that "
+                f"there be only one comment containing 'MvsH'. Found "
+                f"{len(mvsh_comments)} comments."
+            )
+        comments = mvsh_comments[0]
+        for comment in comments:
+            if match := re.search(r"\d+", comment):
+                found_temp = float(match.group())
+                # check to see if the unit is C otherwise assume K
+                if "C" in comment:
+                    found_temp += 273
+                temperature = found_temp
+    else:
+        temps = unique_values(
+            dat_file.data["Temperature (K)"], eps, min_samples, n_digits
+        )
+        if len(temps) != 1:
+            raise TemperatureDetectionError(
+                "Auto-parsing of MvsH objects from DatFile objects requires that "
+                f"there be only one temperature in the data. Found {len(temps)} "
+                "temperatures."
+            )
+        temperature = temps[0]
+    if temperature is None:
+        raise TemperatureDetectionError(
+            "Auto-parsing of MvsH objects from DatFile objects failed. "
+            "No temperature found."
+        )
+    return temperature
 
 
 def plot_mvsh(

@@ -1,61 +1,11 @@
-import re
-
 import pandas as pd
-from magnetopy.data_files import DatFile
 from magnetopy.experiments.dc_experiment import DcExperiment
-from magnetopy.parsing_utils import unique_values
-
-
-class TemperatureDetectionError(Exception):
-    pass
 
 
 def num_digits_after_decimal(number: int | float):
     if isinstance(number, int):
         return 0
     return len(str(number).split(".")[1])
-
-
-def auto_detect_temperature(
-    dat_file: DatFile, eps: float, min_samples: int, n_digits: int
-) -> float:
-    temperature: float | None = None
-    if dat_file.comments:
-        mvsh_comments = []
-        for comment_list in dat_file.comments.values():
-            if "mvsh" in map(str.lower, comment_list):
-                mvsh_comments.append(comment_list)
-        if len(mvsh_comments) != 1:
-            raise TemperatureDetectionError(
-                "Auto-parsing of MvsH objects from DatFile objects requires that "
-                f"there be only one comment containing 'MvsH'. Found "
-                f"{len(mvsh_comments)} comments."
-            )
-        comments = mvsh_comments[0]
-        for comment in comments:
-            if match := re.search(r"\d+", comment):
-                found_temp = float(match.group())
-                # check to see if the unit is C otherwise assume K
-                if "C" in comment:
-                    found_temp += 273
-                temperature = found_temp
-    else:
-        temps = unique_values(
-            dat_file.data["Temperature (K)"], eps, min_samples, n_digits
-        )
-        if len(temps) != 1:
-            raise TemperatureDetectionError(
-                "Auto-parsing of MvsH objects from DatFile objects requires that "
-                f"there be only one temperature in the data. Found {len(temps)} "
-                "temperatures."
-            )
-        temperature = temps[0]
-    if temperature is None:
-        raise TemperatureDetectionError(
-            "Auto-parsing of MvsH objects from DatFile objects failed. "
-            "No temperature found."
-        )
-    return temperature
 
 
 def add_uncorrected_moment_columns(experiment: DcExperiment) -> None:

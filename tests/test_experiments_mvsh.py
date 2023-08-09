@@ -8,10 +8,10 @@ from magnetopy import (
     DatFile,
     MvsH,
 )
-from magnetopy.experiments.utils import (
-    num_digits_after_decimal,
+from magnetopy.experiments.utils import num_digits_after_decimal
+from magnetopy.experiments.mvsh import (
     TemperatureDetectionError,
-    auto_detect_temperature,
+    _auto_detect_temperature,
 )
 
 TESTS_PATH = Path(inspect.getfile(inspect.currentframe())).parent
@@ -150,7 +150,7 @@ def test_mvsh_auto_temperature_detection(
     eps = 0.001
     min_samples = 10
     n_digits = args[1]
-    assert auto_detect_temperature(dat_file, eps, min_samples, n_digits) == expected
+    assert _auto_detect_temperature(dat_file, eps, min_samples, n_digits) == expected
 
 
 files_w_multiple_temperatures = [
