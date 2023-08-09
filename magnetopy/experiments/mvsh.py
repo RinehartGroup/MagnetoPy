@@ -27,6 +27,58 @@ class TemperatureDetectionError(Exception):
 
 
 class MvsH:
+    """A single magnetization vs. field (hysteresis) experiment at a single temperature.
+
+    Parameters
+    ----------
+    dat_file : str, Path, or DatFile
+        The .dat file containing the data for the experiment.
+    temperature : int or float, optional
+        The temperature of the experiment in Kelvin. Requied if the .dat file contains
+        multiple uncommented experiments at different temperatures. If `None` and the
+        .dat file contains a single experiment, the temperature will be automatically
+        detected. Defaults to `None`.
+    parse_raw : bool, optional
+        If `True` and there is a corresponding .rw.dat file, the raw data will be
+        parsed and added to the `data` attribute. Defaults to `False`.
+    **kwargs : dict, optional
+        Keyword arguments used for algorithmic separation of data at the requested
+        temperature. See `magnetopy.parsing_utils.label_clusters` for details.
+        - eps : float, optional
+        - min_samples : int, optional
+        - n_digits : int, optional
+
+    Attributes
+    ----------
+    origin_file : str
+        The name of the .dat file from which the data was parsed.
+    temperature : float
+        The temperature of the experiment in Kelvin.
+    data : pandas.DataFrame
+        The data from the experiment. Columns are taken directly from the .dat file.
+    field_correction_file : str
+        The name of the .dat file containing the Pd standard sequence used to correct
+        the magnetic field for flux trapping. If no field correction has been applied,
+        this will be an empty string.
+    scaling : list of str
+        The scaling applied to the data. If no scaling has been applied, this will be
+        an empty list. Possible values are: `"mass"`, `"molar"`, `"eicosane"`,
+        and `"diamagnetic_correction"`.
+    field_range : tuple of float
+        The minimum and maximum field values in the data.
+
+    Raises
+    ------
+    self.TemperatureNotInDataError
+        If the requested temperature is not in the data or the comments are not
+        formatted correctly and the temperature cannot be automatically detected.
+    self.FieldCorrectionError
+        If a field correction is applied but the Pd standard sequence does not have the
+        same number of data points as the MvsH sequence.
+    self.SegmentError
+        If the requested segment is not found in the data.
+    """
+
     class TemperatureNotInDataError(Exception):
         pass
 
@@ -136,7 +188,34 @@ class MvsH:
         file_data.drop(columns=["cluster"], inplace=True)
         return df
 
-    def simplified_data(self, sequence: str = "") -> pd.DataFrame:
+    def simplified_data(
+        self, sequence: Literal["", "virgin", "forward", "reverse", "loop"] = ""
+    ) -> pd.DataFrame:
+        """Returns a simplified version of the data, removing unnecessary columns
+        and renaming the remaining columns to more convenient names.
+
+        Parameters
+        ----------
+        sequence : {"", "virgin", "forward", "reverse", "loop"}, optional
+            Return the selected sequence. By default "", which returns the full data.
+
+        Returns
+        -------
+        pd.DataFrame
+            The simplified data. Contains the columns:
+            - `"time"` in seconds
+            - `"temperature"` in Kelvin
+            - `"field"` in Oe
+            - `"moment"`
+            - `"moment_err"`
+            - `"chi"`
+            - `"chi_err"`
+            - `"chi_t"`
+            - `"chi_t_err"`
+
+            Where units are not specified, they are determined by the scaling applied to the
+            data (see `scaling` attribute).
+        """
         full_df = self._select_sequence(sequence) if sequence else self.data.copy()
         df = pd.DataFrame()
         df["time"] = full_df["Time Stamp (sec)"]
@@ -168,6 +247,26 @@ class MvsH:
         molecular_weight: float = 0,
         diamagnetic_correction: float = 0,
     ) -> None:
+        """Adds the following columns to the `DataFrame` in the `data` attribute:
+        `"moment"`, `"moment_err"`, `"chi"`, `"chi_err"`, `"chi_t"`, and
+        `"chi_t_err"`. A record of what scaling was applied is added to the
+        `scaling` attribute.
+
+        Parameters
+        ----------
+        mass : float, optional
+            mg of sample, by default 0.
+        eicosane_mass : float, optional
+            mg of eicosane, by default 0.
+        molecular_weight : float, optional
+            Molecular weight of the material in g/mol, by default 0.
+        diamagnetic_correction : float, optional
+            Diamagnetic correction of the material in cm^3/mol, by default 0.
+
+        See Also
+        --------
+        magnetopy.experiments.utils.scale_dc_data
+        """
         scale_dc_data(
             self,
             mass,
@@ -177,6 +276,49 @@ class MvsH:
         )
 
     def correct_field(self, field_correction_file: str | Path) -> None:
+        """Applies a field correction to the data given data collected on the palladium
+        standard with the same sequence as the current `MvsH` object. Adds a column
+        called `"true_field"` to the `DataFrame` in the `data` attribute.
+
+        Parameters
+        ----------
+        field_correction_file : str | Path
+            The name of the .dat file containing the Pd standard sequence, or if a
+            configuration file containing calibration data is present, the name of the
+            sequence in the configuration file.
+
+        Raises
+        ------
+        self.FieldCorrectionError
+            The true field calibration requires that the sequences of both the
+            M vs. H experiment and the calibration experiment be exactly the same. This
+            function only checks that they are the same length, and if they are not,
+            raises this error.
+
+        See Also
+        --------
+        magnetopy.cli.calibration_install
+
+        Notes
+        -----
+        As described in the Quantum Design application note[1], the magnetic field
+        reported by the magnetometer is determined by current from the magnet power
+        supply and not by direct measurement. Flux trapping in the magnet can cause
+        the reported field to be different from the actual field. While always present,
+        it is most obvious in hysteresis curves of soft, non-hysteretic materials. In
+        some cases the forward and reverse scans can have negative and postive
+        coercivities, respectively, which is not physically possible.
+
+        The true field correction remedies this by using a Pd standard to determine the
+        actual field applied to the sample. Assuming the calibration and sample
+        sequences are the same, it is assumed that the flux trapping is the same for
+        both sequences, and the calculated field from the measurement on the Pd
+        standard is applied to the sample data.
+
+        References
+        ----------
+        [1] [Correcting for the Absolute Field Error using the Pd Standard](https://qdusa.com/siteDocs/appNotes/1500-021.pdf)
+        """
         pd_mvsh = TrueFieldCorrection(field_correction_file)
         if len(pd_mvsh.data) != len(self.data):
             raise self.FieldCorrectionError(
@@ -207,7 +349,9 @@ class MvsH:
     def loop(self) -> pd.DataFrame:
         return self._select_sequence("loop")
 
-    def _select_sequence(self, sequence: str) -> pd.DataFrame:
+    def _select_sequence(
+        self, sequence: Literal["virgin", "forward", "reverse", "loop"]
+    ) -> pd.DataFrame:
         sequence_starts = find_sequence_starts(
             self.data["Magnetic Field (Oe)"], self._field_fluctuation_tolerance
         )
@@ -280,6 +424,16 @@ class MvsH:
         return segment
 
     def plot(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
+        """Plots the MvsH data. See `plot_mvsh()` for details.
+
+        Returns
+        -------
+        tuple[plt.Figure, plt.Axes]
+
+        See Also
+        --------
+        plot_mvsh
+        """
         return plot_mvsh(self, *args, **kwargs)
 
     def plot_raw(
@@ -287,6 +441,21 @@ class MvsH:
         segment: Literal["virgin", "forward", "reverse"] = "forward",
         **kwargs,
     ) -> tuple[plt.Figure, plt.Axes]:
+        """Plots the raw voltage data for the requested segment.
+
+        Parameters
+        ----------
+        segment : {"virgin", "forward", "reverse"}, optional
+            The segment of the M vs. H data to plot, by default "forward"
+
+        Returns
+        -------
+        tuple[plt.Figure, plt.Axes]
+
+        See Also
+        --------
+        magnetopy.data_files.plot_raw
+        """
         return plot_raw(self._select_sequence(segment), **kwargs)
 
     def plot_raw_residual(
@@ -294,9 +463,32 @@ class MvsH:
         segment: Literal["virgin", "forward", "reverse"] = "forward",
         **kwargs,
     ) -> tuple[plt.Figure, plt.Axes]:
+        """Plots the residual of the raw voltage data for the requested segment.
+
+        Parameters
+        ----------
+        segment : {"virgin", "forward", "reverse"}, optional
+            The segment of the M vs. H data to plot, by default "forward"
+
+        Returns
+        -------
+        tuple[plt.Figure, plt.Axes]
+
+        See Also
+        --------
+        magnetopy.data_files.plot_raw_residual
+        """
         return plot_raw_residual(self._select_sequence(segment), **kwargs)
 
     def as_dict(self) -> dict[str, Any]:
+        """Returns a dictionary representation of the `MvsH` object.
+
+        Returns
+        -------
+        dict[str, Any]
+            Keys are: `"origin_file"`, `"temperature"`, `"field_range"`,
+            `"field_correction_file"`, and `"scaling"`.
+        """
         return {
             "origin_file": self.origin_file,
             "temperature": self.temperature,
@@ -314,6 +506,33 @@ class MvsH:
         ndigits: int = 0,
         parse_raw: bool = False,
     ) -> list[MvsH]:
+        """Given a .dat file that contains one or more M vs. H experiments, returns a
+        list of `MvsH` objects, one for each experiment.
+
+        Parameters
+        ----------
+        dat_file : str | Path | DatFile
+            The .dat file containing the data for the experiment.
+        eps : float, optional
+            See `magnetopy.parsing_utils.label_clusters` for details, by default 0.001
+        min_samples : int, optional
+            See `magnetopy.parsing_utils.label_clusters` for details, by default 10
+        ndigits : int, optional
+            See `magnetopy.parsing_utils.label_clusters` for details, by default 0
+        parse_raw : bool, optional
+            If `True` and there is a corresponding .rw.dat file, the raw data will be
+            parsed and added to the `data` attribute. Defaults to `False`.
+
+        Returns
+        -------
+        list[MvsH]
+            A list of `MvsH` objects, one for each experiment in the .dat file, sorted
+            by increasing temperature.
+
+        See Also
+        --------
+        magnetopy.parsing_utils.label_clusters
+        """
         if not isinstance(dat_file, DatFile):
             dat_file = DatFile(Path(dat_file), parse_raw)
         if dat_file.comments:
@@ -366,9 +585,41 @@ class MvsH:
 
 
 class TrueFieldCorrection(MvsH):
-    """
-    Corrects magnetic field for flux trapping according to
-    https://qdusa.com/siteDocs/appNotes/1500-021.pdf
+    """A special `MvsH` class for handling the palladium standard calibration data
+    used to correct the magnetic field for flux trapping. Unlikely to be used directly
+    by the user, and instead will be called from the `correct_field` method of the
+    `MvsH` class.
+
+    Parameters
+    ----------
+    sequence : str | Path
+        This could be a path to a .dat file containing the Pd standard sequence, or if
+        a configuration file containing calibration data is present, the name of the
+        sequence in the configuration file.
+
+    See Also
+    --------
+    magnetopy.cli.calibration_install
+
+    Notes
+    -----
+    As described in the Quantum Design application note[1], the magnetic field
+    reported by the magnetometer is determined by current from the magnet power
+    supply and not by direct measurement. Flux trapping in the magnet can cause
+    the reported field to be different from the actual field. While always present,
+    it is most obvious in hysteresis curves of soft, non-hysteretic materials. In
+    some cases the forward and reverse scans can have negative and postive
+    coercivities, respectively, which is not physically possible.
+
+    The true field correction remedies this by using a Pd standard to determine the
+    actual field applied to the sample. Assuming the calibration and sample
+    sequences are the same, it is assumed that the flux trapping is the same for
+    both sequences, and the calculated field from the measurement on the Pd
+    standard is applied to the sample data.
+
+    References
+    ----------
+    [1] [Correcting for the Absolute Field Error using the Pd Standard](https://qdusa.com/siteDocs/appNotes/1500-021.pdf)
     """
 
     def __init__(self, sequence: str | Path):
@@ -460,12 +711,47 @@ def _auto_detect_temperature(
 def plot_mvsh(
     mvsh: MvsH | list[MvsH],
     normalized: bool = False,
-    sequence: str = "",
+    segment: Literal["", "virgin", "forward", "reverse", "loop"] = "",
     colors: str | list[str] = "auto",
     labels: str | list[str] | None = "auto",
     title: str = "",
     **kwargs,
 ) -> tuple[plt.Figure, plt.Axes]:
+    """Plots either a single M vs. H experiment or several on the same axes.
+
+    Parameters
+    ----------
+    mvsh : MvsH | list[MvsH]
+        The data to plot given as a single or list of `MvsH` objects.
+    normalized : bool, optional
+        If `True`, the magnetization will be normalized to the maximum value, by
+        default False.
+    segment : {"", "virgin", "forward", "reverse", "loop"}, optional
+        If a segment is given, only that segment will be plotted, by default "".
+    colors : str | list[str], optional
+        A list of colors corresponding to the `MvsH` objects in `mvsh`, by default
+        "auto". If "auto" and `mvsh` is a single `MvsH` object, the color will be
+        black. If "auto" and `mvsh` is a list of `MvsH` objects with different
+        temperatures, the colors will be a linear gradient from blue to red. If
+        "auto" and `mvsh` is a list of `MvsH` objects with the same temperature, the
+        colors will be the default `matplotlib` colors.
+    labels : str | list[str] | None, optional
+        The labels to assign the `MvsH` objects in the axes legend, by default "auto".
+        If "auto", the labels will be the `temperature` of the `MvsH` objects.
+    title : str, optional
+        The title of the plot, by default "".
+    **kwargs
+        Keyword arguments mostly meant to affect the plot style. See `handle_options`
+        for details.
+
+    Returns
+    -------
+    tuple[plt.Figure, plt.Axes]
+
+    See Also
+    --------
+    magnetopy.experiments.plot_utils.handle_options
+    """
     if isinstance(mvsh, list) and len(mvsh) == 1:
         mvsh = mvsh[0]
     if isinstance(mvsh, MvsH):
@@ -476,7 +762,7 @@ def plot_mvsh(
         return plot_single_mvsh(
             mvsh=mvsh,
             normalized=normalized,
-            sequence=sequence,
+            sequence=segment,
             color=colors,
             label=labels,
             title=title,
@@ -493,7 +779,7 @@ def plot_mvsh(
     return plot_multiple_mvsh(
         mvsh,
         normalized=normalized,
-        sequence=sequence,
+        sequence=segment,
         colors=colors,
         labels=labels,
         title=title,
@@ -510,6 +796,36 @@ def plot_single_mvsh(
     title: str = "",
     **kwargs,
 ) -> tuple[plt.Figure, plt.Axes]:
+    """Plots a single M vs. H experiment.
+
+    Parameters
+    ----------
+    mvsh : MvsH
+        The data to plot given as a single `MvsH` object.
+    normalized : bool, optional
+        If `True`, the magnetization will be normalized to the maximum value, by
+        default False.
+    segment : {"", "virgin", "forward", "reverse", "loop"}, optional
+        If a segment is given, only that segment will be plotted, by default "".
+    colors : str | list[str], optional
+        The color of the plot, by default "auto". If "auto", the color will be black.
+    labels : str | list[str] | None, optional
+        The labels to assign the `MvsH` object in the axes legend, by default "auto".
+        If "auto", the label will be the `temperature` of the `MvsH` object.
+    title : str, optional
+        The title of the plot, by default "".
+    **kwargs
+        Keyword arguments mostly meant to affect the plot style. See `handle_options`
+        for details.
+
+    Returns
+    -------
+    tuple[plt.Figure, plt.Axes]
+
+    See Also
+    --------
+    magnetopy.experiments.plot_utils.handle_options
+    """
     options = handle_kwargs(**kwargs)
 
     color = "black" if color == "auto" else color
@@ -551,6 +867,40 @@ def plot_multiple_mvsh(
     title: str = "",
     **kwargs,
 ) -> tuple[plt.Figure, plt.Axes]:
+    """Plots several M vs. H experiment on the same axes.
+
+    Parameters
+    ----------
+    mvsh : MvsH | list[MvsH]
+        The data to plot given as a list of `MvsH` objects.
+    normalized : bool, optional
+        If `True`, the magnetization will be normalized to the maximum value, by
+        default False.
+    segment : {"", "virgin", "forward", "reverse", "loop"}, optional
+        If a segment is given, only that segment will be plotted, by default "".
+    colors : str | list[str], optional
+        A list of colors corresponding to the `MvsH` objects in `mvsh`, by default
+        "auto". If "auto" and `mvsh` is a list of `MvsH` objects with different
+        temperatures, the colors will be a linear gradient from blue to red. If
+        "auto" and `mvsh` is a list of `MvsH` objects with the same temperature, the
+        colors will be the default `matplotlib` colors.
+    labels : str | list[str] | None, optional
+        The labels to assign the `MvsH` objects in the axes legend, by default "auto".
+        If "auto", the labels will be the `temperature` of the `MvsH` objects.
+    title : str, optional
+        The title of the plot, by default "".
+    **kwargs
+        Keyword arguments mostly meant to affect the plot style. See `handle_options`
+        for details.
+
+    Returns
+    -------
+    tuple[plt.Figure, plt.Axes]
+
+    See Also
+    --------
+    magnetopy.experiments.plot_utils.handle_options
+    """
     options = handle_kwargs(**kwargs)
 
     if colors == "auto":
