@@ -1,1 +1,71 @@
-site_name: My Docs
+site_name: MagnetoPy
+site_description: Magnetometry Research in Python
+site_author: Rinehart Group
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Tutorial: tutorial.md
+  - Examples: examples.md
+  - File Formatting: parsing_guidelines.md
+  - API:
+      - Magnetopy:
+          - Magnetometry: api/magnetometry.md
+          - Data Files:
+              - GenericFile: api/generic_file.md
+              - DatFile: api/dat_file.md
+  - About: about.md
+
+theme:
+  name: material
+  logo: assets/icons/72ppi/magpy_72ppi.png
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.next_prev
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+  language: en
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [.]
+          options:
+            show_root_heading: true
+            members_order: source
+            docstring_style: numpy
+            # members_order: source
+            # separate_signature: false
+            # filters: ["!^_"]
+            # docstring_options:
+            #   ignore_init_summary: true
+            # merge_init_into_class: false
+# extra:
+#   social:
+#     - icon: fontawesome/brands/github-alt
+#       link: https://github.com/james-willett
+#     - icon: fontawesome/brands/twitter
+#       link: https://twitter.com/TheJamesWillett
+#     - icon: fontawesome/brands/linkedin
+#       link: https://www.linkedin.com/in/willettjames/
+
+# markdown_extensions:
+#   - pymdownx.highlight:
+#       anchor_linenums: true
+#   - pymdownx.inlinehilite
+#   - pymdownx.snippets
+#   - admonition
+#   - pymdownx.arithmatex:
+#       generic: true
+#   - footnotes
+#   - pymdownx.details
+#   - pymdownx.superfences
+#   - pymdownx.mark
+#   - attr_list
