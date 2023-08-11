@@ -11,8 +11,16 @@ nav:
       - Magnetopy:
           - Magnetometry: api/magnetometry.md
           - Data Files:
-              - GenericFile: api/generic_file.md
               - DatFile: api/dat_file.md
+              - GenericFile: api/generic_file.md
+          - Experiments:
+              - DcExperiment: api/dc_experiment.md
+              - MvsH: api/mvsh.md
+              - ZFC, FC, ZFCFC: api/zfcfc.md
+              - Utils: api/experiments_utils.md
+          - Utils:
+              - Parsing: api/parsing_utils.md
+              - Plotting: api/plot_utils.md
   - About: about.md
 
 theme:
@@ -41,31 +49,21 @@ plugins:
             show_root_heading: true
             members_order: source
             docstring_style: numpy
-            # members_order: source
-            # separate_signature: false
-            # filters: ["!^_"]
-            # docstring_options:
-            #   ignore_init_summary: true
-            # merge_init_into_class: false
-# extra:
-#   social:
-#     - icon: fontawesome/brands/github-alt
-#       link: https://github.com/james-willett
-#     - icon: fontawesome/brands/twitter
-#       link: https://twitter.com/TheJamesWillett
-#     - icon: fontawesome/brands/linkedin
-#       link: https://www.linkedin.com/in/willettjames/
+watch:
+  - docs
+  - magnetopy
+markdown_extensions:
+  - markdown_katex:
+      no_inline_svg: True
+      insert_fonts_css: True
 
-# markdown_extensions:
-#   - pymdownx.highlight:
-#       anchor_linenums: true
-#   - pymdownx.inlinehilite
-#   - pymdownx.snippets
-#   - admonition
-#   - pymdownx.arithmatex:
-#       generic: true
-#   - footnotes
-#   - pymdownx.details
-#   - pymdownx.superfences
-#   - pymdownx.mark
-#   - attr_list
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  #   - admonition
+  #   - footnotes
+  #   - pymdownx.details
+  #   - pymdownx.superfences
+  #   - pymdownx.mark
+  - attr_list

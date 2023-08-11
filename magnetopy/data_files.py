@@ -237,15 +237,49 @@ class DatFile(GenericFile):
                     j += 1
             self.data["raw_scan"] = new_raw
 
-    def plot_raw(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
+    def plot_raw(
+        self,
+        data_slice: tuple[int, int] | None = None,
+        scan: Literal[
+            "up",
+            "up_raw",
+            "down",
+            "down_raw",
+            "processed",
+        ] = "up",
+        center: Literal[
+            "free",
+            "fixed",
+        ] = "free",
+        colors: tuple[str, str] = ("purple", "orange"),
+        label: bool = True,
+        title: str = "",
+    ) -> tuple[plt.Figure, plt.Axes]:
         """If the `data` attribute contains raw data, this method will plot it.
 
         Parameters
         ----------
-        *args: Any
-            Arguments to be passed to `plot_raw`.
-        **kwargs: Any
-            Keyword arguments to be passed to `plot_raw`.
+        data_slice : tuple[int, int] | None, optional
+            The slice of data to plot (start, stop). `None` by default. If `None`, all
+            data will be plotted.
+        scan : Literal["up", "up_raw", "down", "down_raw", "procssed"], optional
+            Which data to plot. `"up"` and `"down"` will plot the processed directional
+            scans (which have been adjusted for drift and shifted to center the waveform
+            around 0, but have not been fit), `"up_raw"` and `"down_raw"` will plot the raw
+            voltages as the come straight off the SQUID, and `"processed"` will plot the
+            processed data (which is the result of fitting the up and down scans). `"up"` by
+            default.
+        center : Literal["free", "fixed"], optional
+            Only used if `scan` is `"processed"`; determines whether to plot the "Free C
+            Fitted" or "Fixed C Fitted" data. `"free"` by default.
+        colors : tuple[str, str], optional
+            The (start, end) colors for the color gradient. `"purple"` and `"orange"` by
+            default.
+        label : bool, optional
+            Default `True`. Whether to put labels on the plot for the initial and final
+            scans.
+        title : str, optional
+            The title of the plot. `""` by default.
 
         Returns
         -------
@@ -255,23 +289,41 @@ class DatFile(GenericFile):
         Raises
         ------
         NoRawDataError
-
-        See Also
-        --------
-        plot_raw
         """
-        return plot_raw(self.data, *args, **kwargs)
+        return plot_raw(self.data, data_slice, scan, center, colors, label, title)
 
-    def plot_raw_residual(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
+    def plot_raw_residual(
+        self,
+        data_slice: tuple[int, int] | None = None,
+        scan: Literal["up", "down"] = "up",
+        center: Literal["free", "fixed"] = "free",
+        colors: tuple[str, str] | None = None,
+        label: bool = True,
+        title: str = "",
+    ) -> tuple[plt.Figure, plt.Axes]:
         """If the `data` attribute contains raw data, this method will plot the
         residual between the raw data and the processed data.
 
         Parameters
         ----------
-        *args: Any
-            Arguments to be passed to `plot_raw_residual`.
-        **kwargs: Any
-            Keyword arguments to be passed to `plot_raw_residual`.
+        data_slice : tuple[int, int] | None, optional
+            The slice of data to plot (start, stop). `None` by default. If `None`, all
+            data will be plotted.
+        scan : Literal["up", "down"], optional
+            Which data to use in the residual calculation. `"up"` and `"down"` will use the
+            processed directional scans (which have been adjusted for drift and shifted to
+            center the waveform around 0, but have not been fit). `"up"` by default.
+        center : Literal["free", "fixed"], optional
+            Only used if `scan` is `"processed"`; determines whether to plot the "Free C
+            Fitted" or "Fixed C Fitted" data. `"free"` by default.
+        colors : tuple[str, str], optional
+            The (start, end) colors for the color gradient. `"purple"` and `"orange"` by
+            default.
+        label : bool, optional
+            Default `True`. Whether to put labels on the plot for the initial and final
+            scans.
+        title : str, optional
+            The title of the plot. `""` by default.
 
         Returns
         -------
@@ -281,12 +333,10 @@ class DatFile(GenericFile):
         Raises
         ------
         NoRawDataError
-
-        See Also
-        --------
-        plot_raw_residual
         """
-        return plot_raw_residual(self.data, *args, **kwargs)
+        return plot_raw_residual(
+            self.data, data_slice, scan, center, colors, label, title
+        )
 
     def as_dict(self) -> dict[str, Any]:
         """Serializes the DatFile object to a dictionary.
@@ -520,9 +570,12 @@ class DcMeasurement:
     The processed scan is determined by fitting the up and down scans to the following
     equation[1]:
 
+    ```math
     V(z) = S + A \left\{ 2 \left[ R^2 + (z - C)^2 \right]^{-\frac{3}{2}} -
     [R^2 + (L + z - C)^2]^{-\frac{3}{2}} - [R^2 + (-L + z - C)^2]^{-\frac{3}{2}}
     \right\}
+    ```
+
 
     where S is the offset voltage, A is the amplitude, R is the radius of the
     gradiometer, L is half the length of the gradiometer, and C is the sample center
@@ -533,6 +586,7 @@ class DcMeasurement:
     [MPMS3 Application Note 1500-022: MPMS3 .rw.dat file format](
         https://www.qdusa.com/siteDocs/appNotes/1500-022.pdf
     )
+
     [MPMS3 Application Note 1500-023: Background subtraction using the MPMS3](
         https://qdusa.com/siteDocs/appNotes/1500-023.pdf
     )

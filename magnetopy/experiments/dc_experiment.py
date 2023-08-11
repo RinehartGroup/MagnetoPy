@@ -16,20 +16,6 @@ class DcExperiment(Protocol):
     scaling : list[str]
         A list of identifiers used to track what scaling was applied to the data, e.g.,
         `"mass"`, `"eicosane_mass"`, `"molecular_weight"`, `"diamagnetic_correction"`.
-
-    Methods
-    -------
-    scale_moment(mass=0, eicosane_mass=0, molecular_weight=0, diamagnetic_correction=0)
-        Scale the moment by the given values. Scaled values are added to the `data`
-        attribute in the following columns: `"chi"`, `"chi_err"`, `"chi_t"`,
-        `"chi_t_err"`, `"moment"`, and `"moment_err"`. The units of these columns will
-        be determined by what scaling was applied.
-    simplified_data(*args, **kwargs)
-        Returns a simplified version of the data, with only the columns needed for
-        most analyses and plotting. These columns are: `"time"` (in seconds),
-        `"temperature"` (in Kelvin), `"field"` (in Oe), `"moment"`, `"moment_err"`,
-        `"chi"`, `"chi_err"`, `"chi_t"`, and `"chi_t_err"`. Where units are not
-        specified, they are determined by what scaling was applied.
     """
 
     data: pd.DataFrame
@@ -42,7 +28,37 @@ class DcExperiment(Protocol):
         molecular_weight: float = 0,
         diamagnetic_correction: float = 0,
     ) -> None:
+        """Scale the moment by the given values. Scaled values are added to the `data`
+        attribute in the following columns: `"chi"`, `"chi_err"`, `"chi_t"`,
+        `"chi_t_err"`, `"moment"`, and `"moment_err"`. The units of these columns will
+        be determined by what scaling was applied.
+
+        Parameters
+        ----------
+        mass : float, optional
+            Mass in mg, by default 0
+        eicosane_mass : float, optional
+            Eicosane mass in mg, by default 0
+        molecular_weight : float, optional
+            Molecular weight in g/mol, by default 0
+        diamagnetic_correction : float, optional
+            Diamagnetic Correction in cm^3/mol, by default 0
+        """
         ...
 
     def simplified_data(self, *args, **kwargs) -> pd.DataFrame:
+        """Returns a simplified version of the data, with only the columns needed for
+        most analyses and plotting. These columns are: `"time"` (in seconds),
+        `"temperature"` (in Kelvin), `"field"` (in Oe), `"moment"`, `"moment_err"`,
+        `"chi"`, `"chi_err"`, `"chi_t"`, and `"chi_t_err"`. Where units are not
+        specified, they are determined by what scaling was applied.
+
+        Returns
+        -------
+        pd.DataFrame
+            A `DataFrame` with the columns: `"time"` (in seconds),
+            `"temperature"` (in Kelvin), `"field"` (in Oe), `"moment"`, `"moment_err"`,
+            `"chi"`, `"chi_err"`, `"chi_t"`, and `"chi_t_err"`. Where units are not
+            specified, they are determined by what scaling was applied.
+        """
         ...

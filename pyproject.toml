@@ -30,6 +30,7 @@ dev = [
     "mkdocs-material",
     "mkdocstrings",
     "mkdocstrings-python",
+    "markdown-katex",
 ]
 
 [project.scripts]

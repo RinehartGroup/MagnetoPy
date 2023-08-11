@@ -71,10 +71,6 @@ def unique_values(
     -------
     list[float]
         The nominal values in `x` with the noise removed.
-
-    See Also
-    --------
-    label_clusters
     """
     cluster_labels = label_clusters(x, eps=eps, min_samples=min_samples)
     unique_vals = []

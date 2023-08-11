@@ -1,9 +1,9 @@
-from typing import Sized, TypeAlias, Literal, NewType
-import numpy as np
-import pandas as pd
 from itertools import cycle
+from typing import Literal, NewType, Sized, TypeAlias
 
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
 BasicColors: TypeAlias = Literal[
     "red", "orange", "yellow", "green", "blue", "purple", "black", "white"

@@ -56,12 +56,12 @@ def scale_dc_data(
     `diamagnetic_correction`. A record of what scaling was applied is added to the
     `scaling` attribute of the `DcExperiment` object.
 
-    Extended Summary
-    ----------------
-    If `mass` is given but not `molecular_weight`, the only available scaling is
+    Here are the currently supported scaling options:
+
+    - If `mass` is given but not `molecular_weight`, the only available scaling is
     a mass correction.
 
-    If `mass` and `molecular` weight are given, a molar correction is applied. The
+    - If `mass` and `molecular` weight are given, a molar correction is applied. The
     molar correction can be further modified by giving `eicosane_mass` and/or
     `diamagnetic_correction`.
 

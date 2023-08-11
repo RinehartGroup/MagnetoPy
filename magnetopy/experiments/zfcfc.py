@@ -196,6 +196,8 @@ class ZFCFC:
         `"chi_t_err"`. A record of what scaling was applied is added to the
         `scaling` attribute.
 
+        See `magnetopy.experiments.utils.scale_dc_data` for more information.
+
         Parameters
         ----------
         mass : float, optional
@@ -206,10 +208,6 @@ class ZFCFC:
             Molecular weight of the material in g/mol, by default 0.
         diamagnetic_correction : float, optional
             Diamagnetic correction of the material in cm^3/mol, by default 0.
-
-        See Also
-        --------
-        magnetopy.experiments.utils.scale_dc_data
         """
         scale_dc_data(
             self,
@@ -268,31 +266,104 @@ class ZFCFC:
             simplified_data["temperature"].max(),
         )
 
-    def plot_raw(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
-        """Plots the raw voltage data from the experiment.
+    def plot_raw(
+        self,
+        scan: Literal[
+            "up",
+            "up_raw",
+            "down",
+            "down_raw",
+            "processed",
+        ] = "up",
+        center: Literal[
+            "free",
+            "fixed",
+        ] = "free",
+        colors: tuple[str, str] = ("blue", "red"),
+        label: bool = True,
+        title: str = "",
+    ) -> tuple[plt.Figure, plt.Axes]:
+        """Plots the raw voltage data from the experiment. Ensures that the data is
+        ordered from low to high temperature so that the default color gradient (blue
+        to red) is appropriate.
+
+        Parameters
+        ----------
+        scan : Literal["up", "up_raw", "down", "down_raw", "procssed"], optional
+            Which data to plot. `"up"` and `"down"` will plot the processed directional
+            scans (which have been adjusted for drift and shifted to center the waveform
+            around 0, but have not been fit), `"up_raw"` and `"down_raw"` will plot the
+            raw voltages as the come straight off the SQUID, and `"processed"` will
+            plot the processed data (which is the result of fitting the up and down
+            scans). `"up"` by default.
+        center : Literal["free", "fixed"], optional
+            Only used if `scan` is `"processed"`; determines whether to plot the "Free C
+            Fitted" or "Fixed C Fitted" data. `"free"` by default.
+        colors : tuple[str, str], optional
+            The (start, end) colors for the color gradient. `"blue"` and `"red"` by
+            default.
+        label : bool, optional
+            Default `True`. Whether to put labels on the plot for the initial and final
+            scans.
+        title : str, optional
+            The title of the plot. `""` by default.
 
         Returns
         -------
         tuple[plt.Figure, plt.Axes]
-
-        See Also
-        --------
-        magnetopy.data_files.plot_raw
         """
-        return plot_raw(self.data, *args, **kwargs)
+        df = self.data.copy()
+        df = df.sort_values("Temperature (K)")
+        return plot_raw(df, None, scan, center, colors, label, title)
 
-    def plot_raw_residual(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
-        """Plots the residual of the raw voltage data from the experiment.
+    def plot_raw_residual(
+        self,
+        scan: Literal[
+            "up",
+            "up_raw",
+            "down",
+            "down_raw",
+            "processed",
+        ] = "up",
+        center: Literal[
+            "free",
+            "fixed",
+        ] = "free",
+        colors: tuple[str, str] = ("blue", "red"),
+        label: bool = True,
+        title: str = "",
+    ) -> tuple[plt.Figure, plt.Axes]:
+        """Plots the residual of the raw voltage data from the experiment. Ensures that
+        the data is ordered from low to high temperature so that the default color
+        gradient (blue to red) is appropriate.
 
+        Parameters
+        ----------
+        scan : Literal["up", "up_raw", "down", "down_raw", "procssed"], optional
+            Which data to plot. `"up"` and `"down"` will plot the processed directional
+            scans (which have been adjusted for drift and shifted to center the waveform
+            around 0, but have not been fit), `"up_raw"` and `"down_raw"` will plot the
+            raw voltages as the come straight off the SQUID, and `"processed"` will
+            plot the processed data (which is the result of fitting the up and down
+            scans). `"up"` by default.
+        center : Literal["free", "fixed"], optional
+            Only used if `scan` is `"processed"`; determines whether to plot the "Free C
+            Fitted" or "Fixed C Fitted" data. `"free"` by default.
+        colors : tuple[str, str], optional
+            The (start, end) colors for the color gradient. `"blue"` and `"red"` by
+            default.
+        label : bool, optional
+            Default `True`. Whether to put labels on the plot for the initial and final
+            scans.
+        title : str, optional
+            The title of the plot. `""` by default.
         Returns
         -------
         tuple[plt.Figure, plt.Axes]
-
-        See Also
-        --------
-        magnetopy.data_files.plot_raw_residual
         """
-        return plot_raw_residual(self.data, *args, **kwargs)
+        df = self.data.copy()
+        df = df.sort_values("Temperature (K)")
+        return plot_raw_residual(df, None, scan, center, colors, label, title)
 
     def as_dict(self) -> dict[str, Any]:
         """Returns a dictionary representation of the `MvsH` object.
@@ -614,16 +685,13 @@ def plot_zfcfc(
     title : str, optional
         The title of the plot, by default "".
     **kwargs
-        Keyword arguments mostly meant to affect the plot style. See `handle_options`
-        for details.
+        Keyword arguments mostly meant to affect the plot style. See
+        `magnetopy.experiments.plot_utils.handle_options` for details.
+
 
     Returns
     -------
     tuple[plt.Figure, plt.Axes]
-
-    See Also
-    --------
-    magnetopy.experiments.plot_utils.handle_options
     """
     if isinstance(zfc, list) and len(zfc) == 1:
         zfc = zfc[0]
@@ -692,28 +760,25 @@ def plot_single_zfcfc(
     normalized : bool, optional
         If `True`, the magnetization will be normalized to the maximum value, by
         default False.
-    colors : str | list[str], optional
+    color : str | list[str], optional
         A list of colors corresponding to the `ZFC`/`FC` pairs, by default "auto". If
         "auto" and there is a single pair, the color will be black. If "auto" and
         there is a list of pairs with different fields, the colors will be a linear
         gradient from purple to green. If "auto" and the list of pairs is at the same
         field, the colors will be the default `matplotlib` colors.
-    labels : str | list[str] | None, optional
+    label : str | list[str] | None, optional
         The labels to assign the `ZFC/`FC` pair in the axes legend, by default "auto".
         If "auto", the label will be the `field` of the `MvsH` object.
     title : str, optional
         The title of the plot, by default "".
     **kwargs
-        Keyword arguments mostly meant to affect the plot style. See `handle_options`
-        for details.
+        Keyword arguments mostly meant to affect the plot style. See
+        `magnetopy.experiments.plot_utils.handle_options` for details.
+
 
     Returns
     -------
     tuple[plt.Figure, plt.Axes]
-
-    See Also
-    --------
-    magnetopy.experiments.plot_utils.handle_options
     """
     options = handle_kwargs(**kwargs)
 
@@ -791,16 +856,13 @@ def plot_multiple_zfcfc(
     title : str, optional
         The title of the plot, by default "".
     **kwargs
-        Keyword arguments mostly meant to affect the plot style. See `handle_options`
-        for details.
+        Keyword arguments mostly meant to affect the plot style. See
+        `magnetopy.experiments.plot_utils.handle_options` for details.
+
 
     Returns
     -------
     tuple[plt.Figure, plt.Axes]
-
-    See Also
-    --------
-    magnetopy.experiments.plot_utils.handle_options
     """
     options = handle_kwargs(**kwargs)
 

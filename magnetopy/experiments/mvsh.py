@@ -44,8 +44,11 @@ class MvsH:
     **kwargs : dict, optional
         Keyword arguments used for algorithmic separation of data at the requested
         temperature. See `magnetopy.parsing_utils.label_clusters` for details.
+
         - eps : float, optional
+
         - min_samples : int, optional
+
         - n_digits : int, optional
 
     Attributes
@@ -252,6 +255,8 @@ class MvsH:
         `"chi_t_err"`. A record of what scaling was applied is added to the
         `scaling` attribute.
 
+        See `magnetopy.experiments.utils.scale_dc_data` for more information.
+
         Parameters
         ----------
         mass : float, optional
@@ -262,10 +267,6 @@ class MvsH:
             Molecular weight of the material in g/mol, by default 0.
         diamagnetic_correction : float, optional
             Diamagnetic correction of the material in cm^3/mol, by default 0.
-
-        See Also
-        --------
-        magnetopy.experiments.utils.scale_dc_data
         """
         scale_dc_data(
             self,
@@ -279,6 +280,9 @@ class MvsH:
         """Applies a field correction to the data given data collected on the palladium
         standard with the same sequence as the current `MvsH` object. Adds a column
         called `"true_field"` to the `DataFrame` in the `data` attribute.
+
+        See `magnetopy.cli.calibration_insall` for information on how to create a
+        calibration directory.
 
         Parameters
         ----------
@@ -294,10 +298,6 @@ class MvsH:
             M vs. H experiment and the calibration experiment be exactly the same. This
             function only checks that they are the same length, and if they are not,
             raises this error.
-
-        See Also
-        --------
-        magnetopy.cli.calibration_install
 
         Notes
         -----
@@ -423,23 +423,60 @@ class MvsH:
             raise self.SegmentError(f"Sequence {sequence} not found in data")
         return segment
 
-    def plot(self, *args, **kwargs) -> tuple[plt.Figure, plt.Axes]:
-        """Plots the MvsH data. See `plot_mvsh()` for details.
+    def plot(
+        self,
+        normalized: bool = False,
+        segment: str = "",
+        color: str = "black",
+        label: str | None = "auto",
+        title: str = "",
+        **kwargs,
+    ) -> tuple[plt.Figure, plt.Axes]:
+        """Plots the M vs. H data data.
+
+        Parameters
+        ----------
+        normalized : bool, optional
+            If `True`, the magnetization will be normalized to the maximum value, by
+            default False.
+        segment : {"", "virgin", "forward", "reverse", "loop"}, optional
+            If a segment is given, only that segment will be plotted, by default "".
+        color : str | list[str], optional
+            The color of the plot, by default "auto". If "auto", the color will be black.
+        label : str | list[str] | None, optional
+            The labels to assign the `MvsH` object in the axes legend, by default "auto".
+            If "auto", the label will be the `temperature` of the `MvsH` object.
+        title : str, optional
+            The title of the plot, by default "".
+        **kwargs
+            Keyword arguments mostly meant to affect the plot style. See
+            `magnetopy.experiments.plot_utils.handle_options` for details.
 
         Returns
         -------
         tuple[plt.Figure, plt.Axes]
-
-        See Also
-        --------
-        plot_mvsh
         """
-        return plot_mvsh(self, *args, **kwargs)
+        return plot_single_mvsh(
+            self, normalized, segment, color, label, title, **kwargs
+        )
 
     def plot_raw(
         self,
         segment: Literal["virgin", "forward", "reverse"] = "forward",
-        **kwargs,
+        scan: Literal[
+            "up",
+            "up_raw",
+            "down",
+            "down_raw",
+            "processed",
+        ] = "up",
+        center: Literal[
+            "free",
+            "fixed",
+        ] = "free",
+        colors: tuple[str, str] = ("purple", "orange"),
+        label: bool = True,
+        title: str = "",
     ) -> tuple[plt.Figure, plt.Axes]:
         """Plots the raw voltage data for the requested segment.
 
@@ -447,21 +484,41 @@ class MvsH:
         ----------
         segment : {"virgin", "forward", "reverse"}, optional
             The segment of the M vs. H data to plot, by default "forward"
+        scan : Literal["up", "up_raw", "down", "down_raw", "procssed"], optional
+            Which data to plot. `"up"` and `"down"` will plot the processed directional
+            scans (which have been adjusted for drift and shifted to center the waveform
+            around 0, but have not been fit), `"up_raw"` and `"down_raw"` will plot the raw
+            voltages as the come straight off the SQUID, and `"processed"` will plot the
+            processed data (which is the result of fitting the up and down scans). `"up"` by
+            default.
+        center : Literal["free", "fixed"], optional
+            Only used if `scan` is `"processed"`; determines whether to plot the "Free C
+            Fitted" or "Fixed C Fitted" data. `"free"` by default.
+        colors : tuple[str, str], optional
+            The (start, end) colors for the color gradient. `"purple"` and `"orange"` by
+            default.
+        label : bool, optional
+            Default `True`. Whether to put labels on the plot for the initial and final
+            scans.
+        title : str, optional
+            The title of the plot. `""` by default.
 
         Returns
         -------
         tuple[plt.Figure, plt.Axes]
-
-        See Also
-        --------
-        magnetopy.data_files.plot_raw
         """
-        return plot_raw(self._select_sequence(segment), **kwargs)
+        return plot_raw(
+            self._select_sequence(segment), None, scan, center, colors, label, title
+        )
 
     def plot_raw_residual(
         self,
         segment: Literal["virgin", "forward", "reverse"] = "forward",
-        **kwargs,
+        scan: Literal["up", "down"] = "up",
+        center: Literal["free", "fixed"] = "free",
+        colors: tuple[str, str] | None = None,
+        label: bool = True,
+        title: str = "",
     ) -> tuple[plt.Figure, plt.Axes]:
         """Plots the residual of the raw voltage data for the requested segment.
 
@@ -469,16 +526,29 @@ class MvsH:
         ----------
         segment : {"virgin", "forward", "reverse"}, optional
             The segment of the M vs. H data to plot, by default "forward"
+        scan : Literal["up", "down"], optional
+            Which data to use in the residual calculation. `"up"` and `"down"` will use the
+            processed directional scans (which have been adjusted for drift and shifted to
+            center the waveform around 0, but have not been fit). `"up"` by default.
+        center : Literal["free", "fixed"], optional
+            Only used if `scan` is `"processed"`; determines whether to plot the "Free C
+            Fitted" or "Fixed C Fitted" data. `"free"` by default.
+        colors : tuple[str, str], optional
+            The (start, end) colors for the color gradient. `"purple"` and `"orange"` by
+            default.
+        label : bool, optional
+            Default `True`. Whether to put labels on the plot for the initial and final
+            scans.
+        title : str, optional
+            The title of the plot. `""` by default.
 
         Returns
         -------
         tuple[plt.Figure, plt.Axes]
-
-        See Also
-        --------
-        magnetopy.data_files.plot_raw_residual
         """
-        return plot_raw_residual(self._select_sequence(segment), **kwargs)
+        return plot_raw_residual(
+            self._select_sequence(segment), None, scan, center, colors, label, title
+        )
 
     def as_dict(self) -> dict[str, Any]:
         """Returns a dictionary representation of the `MvsH` object.
@@ -528,10 +598,6 @@ class MvsH:
         list[MvsH]
             A list of `MvsH` objects, one for each experiment in the .dat file, sorted
             by increasing temperature.
-
-        See Also
-        --------
-        magnetopy.parsing_utils.label_clusters
         """
         if not isinstance(dat_file, DatFile):
             dat_file = DatFile(Path(dat_file), parse_raw)
@@ -612,7 +678,7 @@ class TrueFieldCorrection(MvsH):
     coercivities, respectively, which is not physically possible.
 
     The true field correction remedies this by using a Pd standard to determine the
-    actual field applied to the sample. Assuming the calibration and sample
+    actual field applied to the sample. Provided the calibration and sample
     sequences are the same, it is assumed that the flux trapping is the same for
     both sequences, and the calculated field from the measurement on the Pd
     standard is applied to the sample data.
@@ -741,16 +807,12 @@ def plot_mvsh(
     title : str, optional
         The title of the plot, by default "".
     **kwargs
-        Keyword arguments mostly meant to affect the plot style. See `handle_options`
-        for details.
+        Keyword arguments mostly meant to affect the plot style. See
+        `magnetopy.experiments.plot_utils.handle_options` for details.
 
     Returns
     -------
     tuple[plt.Figure, plt.Axes]
-
-    See Also
-    --------
-    magnetopy.experiments.plot_utils.handle_options
     """
     if isinstance(mvsh, list) and len(mvsh) == 1:
         mvsh = mvsh[0]
@@ -762,7 +824,7 @@ def plot_mvsh(
         return plot_single_mvsh(
             mvsh=mvsh,
             normalized=normalized,
-            sequence=segment,
+            segment=segment,
             color=colors,
             label=labels,
             title=title,
@@ -779,7 +841,7 @@ def plot_mvsh(
     return plot_multiple_mvsh(
         mvsh,
         normalized=normalized,
-        sequence=segment,
+        segment=segment,
         colors=colors,
         labels=labels,
         title=title,
@@ -790,7 +852,7 @@ def plot_mvsh(
 def plot_single_mvsh(
     mvsh: MvsH,
     normalized: bool = False,
-    sequence: str = "",
+    segment: str = "",
     color: str = "black",
     label: str | None = "auto",
     title: str = "",
@@ -807,32 +869,28 @@ def plot_single_mvsh(
         default False.
     segment : {"", "virgin", "forward", "reverse", "loop"}, optional
         If a segment is given, only that segment will be plotted, by default "".
-    colors : str | list[str], optional
+    color : str | list[str], optional
         The color of the plot, by default "auto". If "auto", the color will be black.
-    labels : str | list[str] | None, optional
+    label : str | list[str] | None, optional
         The labels to assign the `MvsH` object in the axes legend, by default "auto".
         If "auto", the label will be the `temperature` of the `MvsH` object.
     title : str, optional
         The title of the plot, by default "".
     **kwargs
-        Keyword arguments mostly meant to affect the plot style. See `handle_options`
-        for details.
+        Keyword arguments mostly meant to affect the plot style. See
+        `magnetopy.experiments.plot_utils.handle_options` for details.
 
     Returns
     -------
     tuple[plt.Figure, plt.Axes]
-
-    See Also
-    --------
-    magnetopy.experiments.plot_utils.handle_options
     """
     options = handle_kwargs(**kwargs)
 
     color = "black" if color == "auto" else color
 
     fig, ax = plt.subplots()
-    x = mvsh.simplified_data(sequence)["field"] / 10000
-    y = mvsh.simplified_data(sequence)["moment"]
+    x = mvsh.simplified_data(segment)["field"] / 10000
+    y = mvsh.simplified_data(segment)["moment"]
     y = y / y.max() if normalized else y
     if label is None:
         ax.plot(x, y, c=color)
@@ -861,7 +919,7 @@ def plot_single_mvsh(
 def plot_multiple_mvsh(
     mvsh: list[MvsH],
     normalized: bool = False,
-    sequence: str = "",
+    segment: str = "",
     colors: list[str] | Literal["auto"] = "auto",
     labels: list[str] | None = None,
     title: str = "",
@@ -890,16 +948,12 @@ def plot_multiple_mvsh(
     title : str, optional
         The title of the plot, by default "".
     **kwargs
-        Keyword arguments mostly meant to affect the plot style. See `handle_options`
-        for details.
+        Keyword arguments mostly meant to affect the plot style. See
+        `magnetopy.experiments.plot_utils.handle_options` for details.
 
     Returns
     -------
     tuple[plt.Figure, plt.Axes]
-
-    See Also
-    --------
-    magnetopy.experiments.plot_utils.handle_options
     """
     options = handle_kwargs(**kwargs)
 
@@ -915,8 +969,8 @@ def plot_multiple_mvsh(
 
     fig, ax = plt.subplots()
     for m, color, label in zip(mvsh, colors, labels):
-        x = m.simplified_data(sequence)["field"] / 10000
-        y = m.simplified_data(sequence)["moment"]
+        x = m.simplified_data(segment)["field"] / 10000
+        y = m.simplified_data(segment)["moment"]
         y = y / y.max() if normalized else y
         if label:
             ax.plot(x, y, c=color, label=label)

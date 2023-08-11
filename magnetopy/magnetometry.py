@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass, asdict
 import json
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Any, Literal, Protocol
 
 import matplotlib.pyplot as plt
 
@@ -183,7 +183,7 @@ class Magnetometry:
         Default `"auto"`. Instructions for scaling the magnetic moment. Options are
         "mass", "molar", "eicosane", "diamagnetic_correction", and "auto". If "auto" is
         specified, the scaling will be determined automatically based on the available
-        sample information.
+        sample information found in the first .dat file found in the directory.
     true_field_correction : str | Path, optional
         The path to a file containing the M vs. H data of a Pd standard sample and to
         be used for correcting the field of all `MvsH` objects. Note that this is a
@@ -223,12 +223,12 @@ class Magnetometry:
 
     Notes
     -----
-    The user can overwrite the automatic scaling of the magnetic data first by
-    overwriting the relevant attributes of the `sample_info` attribute (e.g. `mass`,
-    `molecular_weight`, etc.), then overwriting the `magnetic_data_scaling` attribute
-    with a list of the desired scaling options (e.g. `[molar,
-    diamagnetic_correction]`), and then by calling the `scale_dc_data` method.
-
+    Scaling of magnetic data occurs during object initialization, unless
+    `magnetic_data_scaling` is set to `''`. If the user needs to overwrite the
+    automatically scaled values (say, if the sample information from the .dat file
+    needs to be altered), the user can do so by overwriting the relevant attributes of
+    the `sample_info` attribute (e.g. `mass`, `molecular_weight`, etc.), then calling
+    the `scale_dc_data` method.
     """
 
     class ExperimentNotFoundError(Exception):
@@ -270,25 +270,22 @@ class Magnetometry:
     def extract_mvsh(
         self, eps: float = 0.001, min_samples: int = 10, ndigits: int = 0
     ) -> list[MvsH]:
-        """Extracts all M vs. H experiments found within `dat_files`.
+        """Extracts all M vs. H experiments found within `dat_files`. This is run
+        during object initialization but is available to the user in the event that
+        the default parsing parameters need to be changed for proper data extraction.
+
+        See `magnetopy.experiments.mvsh.MvsH.get_all_in_file` for more information.
 
         Parameters
         ----------
         eps : float, optional
-            Default 0.001
         min_samples : int, optional
-            Default 10
         ndigits : int, optional
-            Default 0
 
         Returns
         -------
         list[MvsH]
             The `MvsH` objects found in `dat_files`.
-
-        See Also
-        --------
-        magnetopy.experiments.mvsh.MvsH.get_all_in_file
         """
         mvsh_files = [
             dat_file
@@ -302,21 +299,20 @@ class Magnetometry:
         return mvsh_objs
 
     def extract_zfc(self, n_digits: int = 0) -> list[ZFC]:
-        """Extracts all ZFC experiments found within `dat_files`.
+        """Extracts all ZFC experiments found within `dat_files`. This is run
+        during object initialization but is available to the user in the event that
+        the default parsing parameters need to be changed for proper data extraction.
+
+        See `magnetopy.experiments.zfcfc.ZFC.get_all_in_file` for more information.
 
         Parameters
         ----------
         n_digits : int, optional
-            Default 0
 
         Returns
         -------
         list[ZFC]
             The `ZFC` objects found in `dat_files`.
-
-        See Also
-        --------
-        magnetopy.experiments.zfcfc.ZFC.get_all_in_file
         """
         zfc_files = [
             dat_file
@@ -330,7 +326,11 @@ class Magnetometry:
         return zfc_objs
 
     def extract_fc(self, n_digits: int = 0) -> list[FC]:
-        """Extracts all FC experiments found within `dat_files`.
+        """Extracts all FC experiments found within `dat_files`. This is run
+        during object initialization but is available to the user in the event that
+        the default parsing parameters need to be changed for proper data extraction.
+
+        See `magnetopy.experiments.zfcfc.FC.get_all_in_file` for more information.
 
         Parameters
         ----------
@@ -341,10 +341,6 @@ class Magnetometry:
         -------
         list[FC]
             The `FC` objects found in `dat_files`.
-
-        See Also
-        --------
-        magnetopy.experiments.zfcfc.FC.get_all_in_file
         """
         fc_files = [
             dat_file
@@ -361,11 +357,11 @@ class Magnetometry:
         """Scales the magnetic moment of all `DcExperiment` objects (i.e., `MvsH`,
         `ZFC`, and `FC` objects) in the `Magnetometry` object according to the scaling
         options specified in `magnetic_data_scaling` and the sample information in
-        `sample_info`.
+        `sample_info`. This is run during object initialization but is available to
+        the user in the event that either the defaul scaling options or the sample
+        information need to be changed for proper data scaling.
 
-        See Also
-        --------
-        magnetopy.experiments.utils.scale_dc_data
+        See `magnetopy.experiments.utils.scale_dc_data` for more information.
         """
         experiments: list[DcExperiment] = []
         experiments.extend(self.mvsh)
@@ -402,14 +398,12 @@ class Magnetometry:
         """A convenience method for correcting the field of all `MvsH` objects in the
         `Magnetometry` object using the same field correction file.
 
+        See `magnetopy.experiments.mvsh.MvsH.correct_field` for more information.
+
         Parameters
         ----------
         field_correction_file : str | Path
             The path to the field correction file.
-
-        See Also
-        --------
-        magnetopy.experiments.mvsh.MvsH.correct_field
         """
         for experiment in self.mvsh:
             experiment.correct_field(field_correction_file)
@@ -492,14 +486,13 @@ class Magnetometry:
     def add_analysis(self, analysis: Analysis) -> None:
         """Add an analysis to the `Magnetometry` object.
 
+        See `magnetopy.magnetometry.Analysis` for more information.
+
         Parameters
         ----------
         analysis : Analysis
             An instance of a class that implements the `Analysis` protocol.
 
-        See Also
-        --------
-        magnetopy.magnetometry.Analysis
         """
         self.analyses.append(analysis)
 
@@ -522,6 +515,11 @@ class Magnetometry:
     def plot_mvsh(
         self,
         temperatures: float | list[float] | None = None,
+        normalized: bool = False,
+        segment: Literal["", "virgin", "forward", "reverse", "loop"] = "",
+        colors: str | list[str] = "auto",
+        labels: str | list[str] | None = "auto",
+        title: str = "",
         **kwargs,
     ) -> tuple[plt.Figure, plt.Axes]:
         """Plot the M vs. H data in the `Magnetometry` object. If `temperatures` is
@@ -535,6 +533,26 @@ class Magnetometry:
             Default `None`. The temperatures at which to plot the M vs. H data. If
             `None`, all `MvsH` objects will be plotted. Otherwise, only the `MvsH`
             objects at the specified temperatures will be plotted.
+        normalized : bool, optional
+            If `True`, the magnetization will be normalized to the maximum value, by
+            default False.
+        segment : {"", "virgin", "forward", "reverse", "loop"}, optional
+            If a segment is given, only that segment will be plotted, by default "".
+        colors : str | list[str], optional
+            A list of colors corresponding to the `MvsH` objects in `mvsh`, by default
+            "auto". If "auto" and `mvsh` is a single `MvsH` object, the color will be
+            black. If "auto" and `mvsh` is a list of `MvsH` objects with different
+            temperatures, the colors will be a linear gradient from blue to red. If
+            "auto" and `mvsh` is a list of `MvsH` objects with the same temperature, the
+            colors will be the default `matplotlib` colors.
+        labels : str | list[str] | None, optional
+            The labels to assign the `MvsH` objects in the axes legend, by default "auto".
+            If "auto", the labels will be the `temperature` of the `MvsH` objects.
+        title : str, optional
+            The title of the plot, by default "".
+        **kwargs
+            Keyword arguments mostly meant to affect the plot style. See
+            `magnetopy.experiments.plot_utils.handle_options` for details.
 
         Returns
         -------
@@ -542,15 +560,24 @@ class Magnetometry:
             The figure and axes objects of the plot.
         """
         if temperatures is None:
-            return plot_mvsh(self.mvsh, **kwargs)
+            return plot_mvsh(
+                self.mvsh, normalized, segment, colors, labels, title, **kwargs
+            )
         temperatures = (
             [temperatures] if isinstance(temperatures, float) else temperatures
         )
         mvsh = [self.get_mvsh(temperature) for temperature in temperatures]
-        return plot_mvsh(mvsh, **kwargs)
+        return plot_mvsh(mvsh, normalized, segment, colors, labels, title, **kwargs)
 
     def plot_zfcfc(
-        self, fields: float | list[float] | None = None, **kwargs
+        self,
+        fields: float | list[float] | None = None,
+        y_val: Literal["moment", "chi", "chi_t"] = "moment",
+        normalized: bool = False,
+        color: str = "black",
+        label: str | None = "auto",
+        title: str = "",
+        **kwargs,
     ) -> tuple[plt.Figure, plt.Axes]:
         """Plot the ZFC/FC data in the `Magnetometry` object. If `fields` is `None`,
         all `ZFC` and `FC` objects will be plotted. Otherwise, only the `ZFC` and `FC`
@@ -562,6 +589,23 @@ class Magnetometry:
             Default `None`. The fields at which to plot the ZFC/FC data. If `None`, all
             `ZFC` and `FC` objects will be plotted. Otherwise, only the `ZFC` and `FC`
             objects at the specified fields will be plotted.
+        normalized : bool, optional
+            If `True`, the magnetization will be normalized to the maximum value, by
+            default False.
+        color : str | list[str], optional
+            A list of colors corresponding to the `ZFC`/`FC` pairs, by default "auto". If
+            "auto" and there is a single pair, the color will be black. If "auto" and
+            there is a list of pairs with different fields, the colors will be a linear
+            gradient from purple to green. If "auto" and the list of pairs is at the same
+            field, the colors will be the default `matplotlib` colors.
+        label : str | list[str] | None, optional
+            The labels to assign the `ZFC`/`FC` pair in the axes legend, by default "auto".
+            If "auto", the label will be the `field` of the `MvsH` object.
+        title : str, optional
+            The title of the plot, by default "".
+        **kwargs
+            Keyword arguments mostly meant to affect the plot style. See `handle_options`
+            for details.
 
         Returns
         -------
@@ -569,10 +613,12 @@ class Magnetometry:
             The figure and axes objects of the plot.
         """
         if fields is None:
-            return plot_zfcfc(self.zfc, self.fc, **kwargs)
+            return plot_zfcfc(
+                self.zfc, self.fc, y_val, normalized, color, label, title, **kwargs
+            )
         zfc = [self.get_zfc(field) for field in fields]
         fc = [self.get_fc(field) for field in fields]
-        return plot_zfcfc(zfc, fc, **kwargs)
+        return plot_zfcfc(zfc, fc, y_val, normalized, color, label, title, **kwargs)
 
     def as_json(self, indent: int = 0) -> str:
         """Create a JSON representation of the `Magnetometry` object.
