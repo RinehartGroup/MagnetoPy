@@ -3,10 +3,9 @@ site_description: Magnetometry Research in Python
 site_author: Rinehart Group
 nav:
   - Home: index.md
-  - Installation: installation.md
-  - Tutorial: tutorial.md
+  - Getting Started: getting_started.md
   - Examples: examples.md
-  - File Formatting: parsing_guidelines.md
+  - File Formatting: file_formatting.md
   - API:
       - Magnetopy:
           - Magnetometry: api/magnetometry.md
@@ -21,7 +20,6 @@ nav:
           - Utils:
               - Parsing: api/parsing_utils.md
               - Plotting: api/plot_utils.md
-  - About: about.md
 
 theme:
   name: material

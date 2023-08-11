@@ -21,6 +21,18 @@ class DcExperiment(Protocol):
     data: pd.DataFrame
     scaling: list[str]
 
+    def __init__(self, *args, parse_raw: bool = False, **kwargs) -> None:
+        """Creates the `DcExperiment` object.
+
+        Parameters
+        ----------
+        parse_raw : bool, optional
+            If True and there is a corresponding .rw.dat file, the raw data will be
+            parsed and added to the data attribute in the `"raw_scan"` column when
+            creating the underlying `DatFile` object.
+
+        """
+
     def scale_moment(
         self,
         mass: float = 0,
