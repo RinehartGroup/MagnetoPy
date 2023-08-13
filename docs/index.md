@@ -4,6 +4,8 @@
 
 MagnetoPy is a Python package containing tools to aid researchers in the analysis of magnetic data, with a particular emphasis on aiding researchers in developing and publishing new analyses. It contains robust and flexible methods for parsing and processing data files and _transforming the data into standard interfaces_ from which researchers can perform their research. It also contains some record keeping capabilities such that any processing steps performed on the data can be recorded and reproduced at a later date.
 
+MagnetoPy is built with a primary focus on in-depth analysis of magnetic data and development of new analyses. For this reason we mostly envision users of MagnetoPy using it in a notebook environment (e.g., Jupyter notebooks). Once an analysis becomes routine, however, using MagnetoPy as a library in a script is also possible, and will probably make script/app development easier.
+
 ## Experiment and Data File Interfaces
 
 Consider a project where a group of researchers propose a new model for fitting variable field magnetization (i.e., hysteresis) data. The model ultimately only needs access to field and magnetization data to then return the values of the fit parameters.

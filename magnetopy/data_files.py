@@ -490,7 +490,7 @@ class RawDcScan:
         return (self.low_field + self.high_field) / 2
 
     def __repr__(self):
-        return f"ScanHeader({self.direction}, {self.avg_field:.2f} Oe, {self.avg_temp:.2f} K)"
+        return f"RawDcScan({self.direction}, {self.avg_field:.2f} Oe, {self.avg_temp:.2f} K)"
 
     def __str__(self):
         return f"{self.direction} scan at {self.avg_field:.2f} Oe, {self.avg_temp:2f} K"

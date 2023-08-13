@@ -4,7 +4,10 @@ site_author: Rinehart Group
 nav:
   - Home: index.md
   - Getting Started: getting_started.md
-  - Examples: examples.md
+  - Examples:
+      - Overview: examples/README.md
+      - Reading a .dat File: examples/reading_dat_file.ipynb
+      - Raw Data and the .rw.dat File: examples/rwdat_file.ipynb
   - File Formatting: file_formatting.md
   - API:
       - Magnetopy:
@@ -17,6 +20,8 @@ nav:
               - MvsH: api/mvsh.md
               - ZFC, FC, ZFCFC: api/zfcfc.md
               - Utils: api/experiments_utils.md
+          - Analyses:
+              - SimpleMvsHAnalysis: api/simple_mvsh_analysis.md
           - Utils:
               - Parsing: api/parsing_utils.md
               - Plotting: api/plot_utils.md
@@ -39,6 +44,7 @@ theme:
 
 plugins:
   - search
+  - mkdocs-jupyter
   - mkdocstrings:
       handlers:
         python:

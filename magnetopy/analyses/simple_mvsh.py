@@ -64,7 +64,7 @@ class SimpleMvsHAnalysisResults:
 
 class SimpleMvsHAnalysis:
     """An analysis of an M vs. H experiment that determines basic information about the
-    hysteresis loop.
+    hysteresis loop (i.e., saturation magnetization, coercive field, remnant field).
 
     Parameters
     ----------
