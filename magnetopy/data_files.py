@@ -317,10 +317,10 @@ class FitDcScan:
         self.start_time = self.data["Time Stamp (sec)"].iloc[0]
 
     def __repr__(self):
-        return f"ProcessedScan({self.start_time} sec)"
+        return f"FitDcScan({self.start_time} sec)"
 
     def __str__(self):
-        return f"ProcessedScan({self.start_time} sec)"
+        return f"FitDcScan({self.start_time} sec)"
 
 
 class DcMeasurement:
@@ -334,11 +334,11 @@ class DcMeasurement:
         up_scan: pd.DataFrame,
         down_header: pd.Series,
         down_scan: pd.DataFrame,
-        processed_scan: pd.DataFrame,
+        fit_scan: pd.DataFrame,
     ) -> None:
         self.up = RawDcScan("up", up_header, up_scan)
         self.down = RawDcScan("down", down_header, down_scan)
-        self.processed_scan = FitDcScan(processed_scan)
+        self.fit_scan = FitDcScan(fit_scan)
 
     def __repr__(self):
         return f"DcMeasurement({self.up.avg_field:.2f} Oe, {self.up.avg_temp:.2f} K)"
@@ -359,13 +359,13 @@ def create_raw_scans(raw_dat: DatFile) -> list[DcMeasurement]:
             raw_idx[i + 1] + 1 : raw_idx[i + 1] + (raw_idx[i + 1] - raw_idx[i])
         ]
         try:
-            processed_scan = df.iloc[
+            fit_scan = df.iloc[
                 raw_idx[i + 1] + (raw_idx[i + 1] - raw_idx[i]) : raw_idx[i + 2]
             ]
         except IndexError:
-            processed_scan = df.iloc[raw_idx[i + 1] + (raw_idx[i + 1] - raw_idx[i]) :]
+            fit_scan = df.iloc[raw_idx[i + 1] + (raw_idx[i + 1] - raw_idx[i]) :]
         scans.append(
-            DcMeasurement(up_header, up_scan, down_header, down_scan, processed_scan)
+            DcMeasurement(up_header, up_scan, down_header, down_scan, fit_scan)
         )
     return scans
 
@@ -378,7 +378,7 @@ def plot_raw(
         "up_raw",
         "down",
         "down_raw",
-        "processed",
+        "fit",
     ] = "up",
     center: Literal[
         "free",
@@ -447,15 +447,15 @@ def plot_raw_residual(
 
     scan_objs: list[DcMeasurement] = data["raw_scan"]
     scans_w_squid_range = _get_selected_scans(scan, scan_objs)
-    processed_scans = [scan_obj.processed_scan.data for scan_obj in scan_objs]
+    fit_scans = [scan_obj.fit_scan.data for scan_obj in scan_objs]
 
     if colors is None:
         colors = ("purple", "orange")
     colors = linear_color_gradient(colors[0], colors[1], len(scans_w_squid_range))
 
     fig, ax = plt.subplots()
-    for i, ((scan_df, squid_range), processed_df, color) in enumerate(
-        zip(scans_w_squid_range, processed_scans, colors)
+    for i, ((scan_df, squid_range), fit_df, color) in enumerate(
+        zip(scans_w_squid_range, fit_scans, colors)
     ):
         row_label = None
         if label and i == 0:
@@ -465,11 +465,11 @@ def plot_raw_residual(
 
         x = scan_df["Raw Position (mm)"]
         if center == "free":
-            y_processed = processed_df["Free C Fitted (V)"] * squid_range
+            y_fit = fit_df["Free C Fitted (V)"] * squid_range
         else:
-            y_processed = processed_df["Fixed C Fitted (V)"] * squid_range
+            y_fit = fit_df["Fixed C Fitted (V)"] * squid_range
         y_raw = scan_df["Processed Voltage (V)"] * squid_range
-        y = y_raw - y_processed
+        y = y_raw - y_fit
 
         if row_label:
             ax.plot(x, y, color=color, label=row_label)
@@ -520,7 +520,6 @@ def _get_selected_scans(
         ]
     else:
         selected_scans: tuple[pd.DataFrame, int] = [
-            (scan_obj.processed_scan.data, scan_obj.up.squid_range)
-            for scan_obj in scan_objs
+            (scan_obj.fit_scan.data, scan_obj.up.squid_range) for scan_obj in scan_objs
         ]
     return selected_scans

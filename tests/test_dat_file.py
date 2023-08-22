@@ -312,9 +312,5 @@ def test_expected_times(dat_file_path: Path, idx: int, expected: _ExpectedTimes)
     assert meas.up.data["Time Stamp (sec)"].iloc[-1] == expected.up_end
     assert meas.down.data["Time Stamp (sec)"].iloc[0] == expected.down_start
     assert meas.down.data["Time Stamp (sec)"].iloc[-1] == expected.down_end
-    assert (
-        meas.processed_scan.data["Time Stamp (sec)"].iloc[0] == expected.processed_start
-    )
-    assert (
-        meas.processed_scan.data["Time Stamp (sec)"].iloc[-1] == expected.processed_end
-    )
+    assert meas.fit_scan.data["Time Stamp (sec)"].iloc[0] == expected.processed_start
+    assert meas.fit_scan.data["Time Stamp (sec)"].iloc[-1] == expected.processed_end
