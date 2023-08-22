@@ -26,11 +26,13 @@ dependencies = [
 dev = [
     "black",
     "pytest",
+    "pytest-cov",
     "mkdocs",
     "mkdocs-material",
     "mkdocstrings",
     "mkdocstrings-python",
     "markdown-katex",
+    "mkdocs-jupyter",
 ]
 
 [project.scripts]
