@@ -192,15 +192,15 @@ class MvsH:
         return df
 
     def simplified_data(
-        self, sequence: Literal["", "virgin", "forward", "reverse", "loop"] = ""
+        self, segment: Literal["", "virgin", "forward", "reverse", "loop"] = ""
     ) -> pd.DataFrame:
         """Returns a simplified version of the data, removing unnecessary columns
         and renaming the remaining columns to more convenient names.
 
         Parameters
         ----------
-        sequence : {"", "virgin", "forward", "reverse", "loop"}, optional
-            Return the selected sequence. By default "", which returns the full data.
+        segment : {"", "virgin", "forward", "reverse", "loop"}, optional
+            Return the selected segment. By default "", which returns the full data.
 
         Returns
         -------
@@ -219,7 +219,7 @@ class MvsH:
             Where units are not specified, they are determined by the scaling applied to the
             data (see `scaling` attribute).
         """
-        full_df = self._select_sequence(sequence) if sequence else self.data.copy()
+        full_df = self.select_segment(segment) if segment else self.data.copy()
         df = pd.DataFrame()
         df["time"] = full_df["Time Stamp (sec)"]
         df["temperature"] = full_df["Temperature (K)"]
@@ -335,93 +335,115 @@ class MvsH:
 
     @property
     def virgin(self) -> pd.DataFrame:
-        return self._select_sequence("virgin")
+        return self.select_segment("virgin")
 
     @property
     def forward(self) -> pd.DataFrame:
-        return self._select_sequence("forward")
+        return self.select_segment("forward")
 
     @property
     def reverse(self) -> pd.DataFrame:
-        return self._select_sequence("reverse")
+        return self.select_segment("reverse")
 
     @property
     def loop(self) -> pd.DataFrame:
-        return self._select_sequence("loop")
+        return self.select_segment("loop")
 
-    def _select_sequence(
-        self, sequence: Literal["virgin", "forward", "reverse", "loop"]
+    def select_segment(
+        self, segment: Literal["virgin", "forward", "reverse", "loop"]
     ) -> pd.DataFrame:
-        sequence_starts = find_sequence_starts(
+        """Returns the requested segment of the data, if it exists.
+
+        Parameters
+        ----------
+        segment : {"virgin", "forward", "reverse", "loop"}
+            The segment of the M vs. H data to return. "loop" refers to the combination
+            of the forward and reverse scans.
+
+        Returns
+        -------
+        pd.DataFrame
+            The requested segment of the data.
+
+        Raises
+        ------
+        self.SegmentError
+            If the requested segment is not found in the data.
+        """
+        segment_starts = find_sequence_starts(
             self.data["Magnetic Field (Oe)"], self._field_fluctuation_tolerance
         )
         df = self.data.copy()
-        segment = None
-        if len(sequence_starts) == 3:
+        requested_segment = None
+        if len(segment_starts) == 3:
             # assume virgin -> reverse -> forward
-            if sequence == "virgin":
-                segment = df[sequence_starts[0] : sequence_starts[1]].reset_index(
-                    drop=True
-                )
-            elif sequence == "reverse":
-                segment = df[sequence_starts[1] - 1 : sequence_starts[2]].reset_index(
-                    drop=True
-                )
-            elif sequence == "forward":
-                segment = df[sequence_starts[2] - 1 :].reset_index(drop=True)
-            elif sequence == "loop":
-                segment = df[sequence_starts[1] - 1 :].reset_index(drop=True)
-        elif len(sequence_starts) == 2:
-            if sequence == "loop":
-                segment = df
+            if segment == "virgin":
+                requested_segment = df[
+                    segment_starts[0] : segment_starts[1]
+                ].reset_index(drop=True)
+            elif segment == "reverse":
+                requested_segment = df[
+                    segment_starts[1] - 1 : segment_starts[2]
+                ].reset_index(drop=True)
+            elif segment == "forward":
+                requested_segment = df[segment_starts[2] - 1 :].reset_index(drop=True)
+            elif segment == "loop":
+                requested_segment = df[segment_starts[1] - 1 :].reset_index(drop=True)
+        elif len(segment_starts) == 2:
+            if segment == "loop":
+                requested_segment = df
             # check to see if it's forward -> reverse or reverse -> forward
             elif (
-                df.at[sequence_starts[0], "Magnetic Field (Oe)"]
-                > df.at[sequence_starts[1], "Magnetic Field (Oe)"]
+                df.at[segment_starts[0], "Magnetic Field (Oe)"]
+                > df.at[segment_starts[1], "Magnetic Field (Oe)"]
             ):
-                if sequence == "reverse":
-                    segment = df[sequence_starts[0] : sequence_starts[1]].reset_index(
+                if segment == "reverse":
+                    requested_segment = df[
+                        segment_starts[0] : segment_starts[1]
+                    ].reset_index(drop=True)
+                elif segment == "forward":
+                    requested_segment = df[segment_starts[1] - 1 :].reset_index(
                         drop=True
                     )
-                elif sequence == "forward":
-                    segment = df[sequence_starts[1] - 1 :].reset_index(drop=True)
             else:
-                if sequence == "forward":
-                    segment = df[sequence_starts[0] : sequence_starts[1]].reset_index(
+                if segment == "forward":
+                    requested_segment = df[
+                        segment_starts[0] : segment_starts[1]
+                    ].reset_index(drop=True)
+                elif segment == "reverse":
+                    requested_segment = df[segment_starts[1] - 1 :].reset_index(
                         drop=True
                     )
-                elif sequence == "reverse":
-                    segment = df[sequence_starts[1] - 1 :].reset_index(drop=True)
-        elif len(sequence_starts) == 1:
-            if sequence == "loop":
+        elif len(segment_starts) == 1:
+            if segment == "loop":
                 raise self.SegmentError(
                     "Full loop requested but only one segment found"
                 )
-            elif sequence == "virgin":
+            elif segment == "virgin":
                 if abs(df.at[0, "Magnetic Field (Oe)"]) > 5:
                     raise self.SegmentError(
                         "Virgin scan requested but data does not start at zero field"
                     )
-                segment = df
-            elif sequence == "forward":
+                requested_segment = df
+            elif segment == "forward":
                 if df.at[0, "Magnetic Field (Oe)"] > 0:
                     raise self.SegmentError(
                         "Forward scan requested but start field is greater than end field."
                     )
-                segment = df
-            elif sequence == "reverse":
+                requested_segment = df
+            elif segment == "reverse":
                 if df.at[0, "Magnetic Field (Oe)"] < 0:
                     raise self.SegmentError(
                         "Reverse scan requested but start field is less than end field."
                     )
-                segment = df
+                requested_segment = df
         else:
             raise self.SegmentError(
-                f"Something went wrong. {len(sequence_starts)} segments found"
+                f"Something went wrong. {len(segment_starts)} segments found"
             )
-        if segment is None:
-            raise self.SegmentError(f"Sequence {sequence} not found in data")
-        return segment
+        if requested_segment is None:
+            raise self.SegmentError(f"Sequence {segment} not found in data")
+        return requested_segment
 
     def plot(
         self,
@@ -508,7 +530,7 @@ class MvsH:
         tuple[plt.Figure, plt.Axes]
         """
         return plot_raw(
-            self._select_sequence(segment), None, scan, center, colors, label, title
+            self.select_segment(segment), None, scan, center, colors, label, title
         )
 
     def plot_raw_residual(
@@ -547,7 +569,7 @@ class MvsH:
         tuple[plt.Figure, plt.Axes]
         """
         return plot_raw_residual(
-            self._select_sequence(segment), None, scan, center, colors, label, title
+            self.select_segment(segment), None, scan, center, colors, label, title
         )
 
     def as_dict(self) -> dict[str, Any]:
