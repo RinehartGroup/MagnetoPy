@@ -833,7 +833,9 @@ def plot_raw_residual(
 def _prepare_data_for_plot(
     data: pd.DataFrame, data_slice: tuple[int, int] | None
 ) -> pd.DataFrame:
-    data = data.copy().drop(columns=["Comment"])
+    data = data.copy()
+    data = data[data["Comment"].isna()]
+    data = data.drop(columns=["Comment"])
     if data_slice is not None:
         data = data.iloc[slice(*data_slice)]
     if "raw_scan" not in data.columns:

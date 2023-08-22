@@ -4,4 +4,8 @@
 
 ::: magnetopy.data_files.RawDcScan
 
-::: magnetopy.data_files.ProcessedDcScan
+::: magnetopy.data_files.FitDcScan
+
+::: magnetopy.data_files.plot_raw
+
+::: magnetopy.data_files.plot_raw_residual
