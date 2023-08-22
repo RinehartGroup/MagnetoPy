@@ -3,7 +3,7 @@ from magnetopy.data_files import (
     GenericFile,
     DcMeasurement,
     RawDcScan,
-    ProcessedDcScan,
+    FitDcScan,
     plot_raw,
     plot_raw_residual,
 )

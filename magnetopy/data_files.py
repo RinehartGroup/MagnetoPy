@@ -245,7 +245,7 @@ class DatFile(GenericFile):
             "up_raw",
             "down",
             "down_raw",
-            "processed",
+            "fit",
         ] = "up",
         center: Literal[
             "free",
@@ -262,15 +262,15 @@ class DatFile(GenericFile):
         data_slice : tuple[int, int] | None, optional
             The slice of data to plot (start, stop). `None` by default. If `None`, all
             data will be plotted.
-        scan : Literal["up", "up_raw", "down", "down_raw", "procssed"], optional
+        scan : Literal["up", "up_raw", "down", "down_raw", "fit"], optional
             Which data to plot. `"up"` and `"down"` will plot the processed directional
             scans (which have been adjusted for drift and shifted to center the waveform
             around 0, but have not been fit), `"up_raw"` and `"down_raw"` will plot the raw
-            voltages as the come straight off the SQUID, and `"processed"` will plot the
-            processed data (which is the result of fitting the up and down scans). `"up"` by
+            voltages as the come straight off the SQUID, and `"fit"` will plot the
+            fit data (which is the result of fitting the up and down scans). `"up"` by
             default.
         center : Literal["free", "fixed"], optional
-            Only used if `scan` is `"processed"`; determines whether to plot the "Free C
+            Only used if `scan` is `"fit"`; determines whether to plot the "Free C
             Fitted" or "Fixed C Fitted" data. `"free"` by default.
         colors : tuple[str, str], optional
             The (start, end) colors for the color gradient. `"purple"` and `"orange"` by
@@ -302,7 +302,7 @@ class DatFile(GenericFile):
         title: str = "",
     ) -> tuple[plt.Figure, plt.Axes]:
         """If the `data` attribute contains raw data, this method will plot the
-        residual between the raw data and the processed data.
+        residual between the raw data and the fit data.
 
         Parameters
         ----------
@@ -314,7 +314,7 @@ class DatFile(GenericFile):
             processed directional scans (which have been adjusted for drift and shifted to
             center the waveform around 0, but have not been fit). `"up"` by default.
         center : Literal["free", "fixed"], optional
-            Only used if `scan` is `"processed"`; determines whether to plot the "Free C
+            Only used if `scan` is `"fit"`; determines whether to plot the "Free C
             Fitted" or "Fixed C Fitted" data. `"free"` by default.
         colors : tuple[str, str], optional
             The (start, end) colors for the color gradient. `"purple"` and `"orange"` by
@@ -505,12 +505,12 @@ class FitDcScan:
     Parameters
     ----------
     scan : pd.DataFrame
-        The processed scan data from the .rw.dat file.
+        The fit scan data from the .rw.dat file.
 
     Attributes
     ----------
     data : pd.DataFrame
-        The processed scan data from the .rw.dat file. Columns are: "Time Stamp (sec)",
+        The fit scan data from the .rw.dat file. Columns are: "Time Stamp (sec)",
         "Raw Position (mm)", "Fixed C Fitted (V)", "Free C Fitted (V)".
     start_time : float
         The time stamp (in seconds) of the first data point in the scan.
@@ -537,7 +537,7 @@ class DcMeasurement:
     r"""
     The Quantum Design software fits the Processed Voltage data from the up and down
     scans and uses the fit values with system-specific calibration factors to convert
-    the voltages to magnetic moment. This class stores both the raw and processed
+    the voltages to magnetic moment. This class stores both the raw and fit
     data from a single DC measurement.
 
     Parameters
@@ -550,8 +550,8 @@ class DcMeasurement:
         The header information from the .rw.dat file for the down scan.
     down_scan : pd.DataFrame
         The raw scan data from the .rw.dat file for the down scan.
-    processed_scan : pd.DataFrame
-        The processed scan data from the .rw.dat file.
+    fit_scan : pd.DataFrame
+        The fit scan data from the .rw.dat file.
 
     Attributes
     ----------
@@ -559,15 +559,15 @@ class DcMeasurement:
         The information about and data from the up scan.
     down : RawDcScan
         The information about and data from the down scan.
-    processed_scan : ProcessedDcScan
-        The processed scan data determined by fitting the up and down scans.
+    fit_scan : FitDcScan
+        The fit scan data determined by fitting the up and down scans.
 
     Notes
     --------
     Information on the structure of a .rw.dat file can be found in the Quantum Design
     app note[1].
 
-    The processed scan is determined by fitting the up and down scans to the following
+    The fit scan is determined by fitting the up and down scans to the following
     equation[1]:
 
     ```math
@@ -676,15 +676,15 @@ def plot_raw(
     data_slice : tuple[int, int] | None, optional
         The slice of data to plot (start, stop). `None` by default. If `None`, all
         data will be plotted.
-    scan : Literal["up", "up_raw", "down", "down_raw", "procssed"], optional
+    scan : Literal["up", "up_raw", "down", "down_raw", "fit"], optional
         Which data to plot. `"up"` and `"down"` will plot the processed directional
         scans (which have been adjusted for drift and shifted to center the waveform
         around 0, but have not been fit), `"up_raw"` and `"down_raw"` will plot the raw
-        voltages as the come straight off the SQUID, and `"processed"` will plot the
-        processed data (which is the result of fitting the up and down scans). `"up"` by
+        voltages as the come straight off the SQUID, and `"fit"` will plot the
+        fit data (which is the result of fitting the up and down scans). `"up"` by
         default.
     center : Literal["free", "fixed"], optional
-        Only used if `scan` is `"processed"`; determines whether to plot the "Free C
+        Only used if `scan` is `"fit"`; determines whether to plot the "Free C
         Fitted" or "Fixed C Fitted" data. `"free"` by default.
     colors : tuple[str, str], optional
         The (start, end) colors for the color gradient. `"purple"` and `"orange"` by
@@ -754,7 +754,7 @@ def plot_raw_residual(
     label: bool = True,
     title: str = "",
 ) -> tuple[plt.Figure, plt.Axes]:
-    """Plot the residual between the raw and processed voltage data found in the
+    """Plot the residual between the raw and fit voltage data found in the
     "raw_scan" column of a `DataFrame`, where each row contains a `DcMeasurement`
     object.
 
@@ -770,8 +770,8 @@ def plot_raw_residual(
         processed directional scans (which have been adjusted for drift and shifted to
         center the waveform around 0, but have not been fit). `"up"` by default.
     center : Literal["free", "fixed"], optional
-        Only used if `scan` is `"processed"`; determines whether to plot the "Free C
-        Fitted" or "Fixed C Fitted" data. `"free"` by default.
+        Determines whether to use the "Free C Fitted" or "Fixed C Fitted" data for the
+        fit data. `"free"` by default.
     colors : tuple[str, str], optional
         The (start, end) colors for the color gradient. `"purple"` and `"orange"` by
         default.
