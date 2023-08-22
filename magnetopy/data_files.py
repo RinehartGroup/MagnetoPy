@@ -306,7 +306,7 @@ class RawDcScan:
         return f"{self.direction} scan at {self.avg_field:.2f} Oe, {self.avg_temp:2f} K"
 
 
-class ProcessedDcScan:
+class FitDcScan:
     def __init__(self, scan: pd.DataFrame) -> None:
         self.data = scan.copy()
         self.data.drop(
@@ -338,7 +338,7 @@ class DcMeasurement:
     ) -> None:
         self.up = RawDcScan("up", up_header, up_scan)
         self.down = RawDcScan("down", down_header, down_scan)
-        self.processed_scan = ProcessedDcScan(processed_scan)
+        self.processed_scan = FitDcScan(processed_scan)
 
     def __repr__(self):
         return f"DcMeasurement({self.up.avg_field:.2f} Oe, {self.up.avg_temp:.2f} K)"
