@@ -15,3 +15,6 @@
             - extract_mvsh
             - extract_zfc
             - extract_fc
+
+
+::: magnetopy.magnetometry.SampleInfo
