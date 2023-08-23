@@ -8,7 +8,8 @@ nav:
       - Overview: examples/README.md
       - Reading a .dat File: examples/reading_dat_file.ipynb
       - Raw Data and the .rw.dat File: examples/rwdat_file.ipynb
-      - The MvsH Experiment: examples/mvsh.ipynb
+      - The MvsH Experiment Class: examples/mvsh.ipynb
+      - The ZFC and FC Experiment Classes: examples/zfcfc.ipynb
   - API:
       - Magnetopy:
           - Magnetometry: api/magnetometry.md
