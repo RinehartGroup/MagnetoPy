@@ -1,5 +1,13 @@
 # MagnetoPy
 
+## Installation
+
+While MagnetoPy is still in development, install directly from GitHub:
+
+```
+pip install git+https://github.com/RinehartGroup/MagnetoPy.git
+```
+
 ## What is MagnetoPy and why is it useful?
 
 MagnetoPy is a Python package containing tools to aid researchers in the analysis of magnetic data, with a particular emphasis on aiding researchers in developing and publishing new analyses. It contains robust and flexible methods for parsing and processing data files and _transforming the data into standard interfaces_ from which researchers can perform their research. It also contains some record keeping capabilities such that any processing steps performed on the data can be recorded and reproduced at a later date.
