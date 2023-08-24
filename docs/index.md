@@ -2,11 +2,15 @@
 
 ## Installation
 
-While MagnetoPy is still in development, install directly from GitHub:
+While MagnetoPy is still in development, install directly from [the GitHub repository](https://github.com/RinehartGroup/MagnetoPy.git):
 
 ```
 pip install git+https://github.com/RinehartGroup/MagnetoPy.git
 ```
+
+## Documentation
+
+Documentation is available at [https://rinehartgroup.github.io/MagnetoPy/](https://rinehartgroup.github.io/MagnetoPy/).
 
 ## What is MagnetoPy and why is it useful?
 
