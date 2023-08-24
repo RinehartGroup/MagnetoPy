@@ -599,13 +599,13 @@ class Magnetometry:
         normalized : bool, optional
             If `True`, the magnetization will be normalized to the maximum value, by
             default False.
-        color : str | list[str], optional
+        colors : str | list[str], optional
             A list of colors corresponding to the `ZFC`/`FC` pairs, by default "auto". If
             "auto" and there is a single pair, the color will be black. If "auto" and
             there is a list of pairs with different fields, the colors will be a linear
             gradient from purple to green. If "auto" and the list of pairs is at the same
             field, the colors will be the default `matplotlib` colors.
-        label : str | list[str] | None, optional
+        labels : str | list[str] | None, optional
             The labels to assign the `ZFC`/`FC` pair in the axes legend, by default "auto".
             If "auto", the label will be the `field` of the `MvsH` object.
         title : str, optional
