@@ -138,11 +138,6 @@ class Analysis(Protocol):
         it is recommended that a `dataclass` be used, and that the `dataclass` have an
         `as_dict` method.
 
-    Methods
-    -------
-    as_dict() -> dict[str, Any]
-        Return a dictionary representation of the analysis.
-
     Notes
     -----
     While not yet enforced, it is strongly recommended that any class that implements
@@ -162,6 +157,13 @@ class Analysis(Protocol):
     """
 
     def as_dict(self) -> dict[str, Any]:
+        """Return a dictionary representation of the analysis. Should include the
+        results of the analysis along with any parsing and fitting arguments used.
+
+        Returns
+        -------
+        dict[str, Any]
+        """
         ...
 
 
@@ -199,7 +201,7 @@ class Magnetometry:
     ----------
     sample_id : str
         The sample ID.
-    dat_files : list[DatFile]
+    files : list[DatFile]
         A list of the `DatFile` objects in the directory. Note that this includes both
         .dat and .rw.dat files.
     magnetic_data_scaling : list[str]
@@ -209,8 +211,8 @@ class Magnetometry:
         "diamagnetic_correction"] | ["molar", "eicosane", "diamagnetic_correction"]`.
     sample_info : SampleInfo
         Information specific to the particular sample used for magnetic measurements.
-        Note that this is determined by reading the first `DatFile` in `dat_files`, and
-        it is assumed that all `DatFile` objects in `dat_files` are for the same
+        Note that this is determined by reading the first `DatFile` in `files`, and
+        it is assumed that all `DatFile` objects in `files` are for the same
         sample.
     mvsh : list[MvsH]
         A list of the `MvsH` objects in the directory.
@@ -244,7 +246,7 @@ class Magnetometry:
     ) -> None:
         path = Path(path)
         self.sample_id = path.name if sample_id == "auto" else sample_id
-        self.dat_files = [
+        self.files = [
             DatFile(file, parse_raw) for file in path.rglob("*.dat") if file.is_file()
         ]
         self.magnetic_data_scaling = (
@@ -252,7 +254,7 @@ class Magnetometry:
             if isinstance(magnetic_data_scaling, str)
             else magnetic_data_scaling
         )
-        self.sample_info = SampleInfo.from_dat_file(self.dat_files[0])
+        self.sample_info = SampleInfo.from_dat_file(self.files[0])
         self.mvsh = self.extract_mvsh()
         self.zfc = self.extract_zfc()
         self.fc = self.extract_fc()
@@ -270,7 +272,7 @@ class Magnetometry:
     def extract_mvsh(
         self, eps: float = 0.001, min_samples: int = 10, ndigits: int = 0
     ) -> list[MvsH]:
-        """Extracts all M vs. H experiments found within `dat_files`. This is run
+        """Extracts all M vs. H experiments found within `files`. This is run
         during object initialization but is available to the user in the event that
         the default parsing parameters need to be changed for proper data extraction.
 
@@ -285,11 +287,11 @@ class Magnetometry:
         Returns
         -------
         list[MvsH]
-            The `MvsH` objects found in `dat_files`.
+            The `MvsH` objects found in `files`.
         """
         mvsh_files = [
             dat_file
-            for dat_file in self.dat_files
+            for dat_file in self.files
             if "mvsh" in dat_file.experiments_in_file
         ]
         mvsh_objs: list[MvsH] = []
@@ -299,7 +301,7 @@ class Magnetometry:
         return mvsh_objs
 
     def extract_zfc(self, n_digits: int = 0) -> list[ZFC]:
-        """Extracts all ZFC experiments found within `dat_files`. This is run
+        """Extracts all ZFC experiments found within `files`. This is run
         during object initialization but is available to the user in the event that
         the default parsing parameters need to be changed for proper data extraction.
 
@@ -312,11 +314,11 @@ class Magnetometry:
         Returns
         -------
         list[ZFC]
-            The `ZFC` objects found in `dat_files`.
+            The `ZFC` objects found in `files`.
         """
         zfc_files = [
             dat_file
-            for dat_file in self.dat_files
+            for dat_file in self.files
             if set(["zfc", "zfcfc"]).intersection(dat_file.experiments_in_file)
         ]
         zfc_objs: list[ZFC] = []
@@ -326,7 +328,7 @@ class Magnetometry:
         return zfc_objs
 
     def extract_fc(self, n_digits: int = 0) -> list[FC]:
-        """Extracts all FC experiments found within `dat_files`. This is run
+        """Extracts all FC experiments found within `files`. This is run
         during object initialization but is available to the user in the event that
         the default parsing parameters need to be changed for proper data extraction.
 
@@ -340,11 +342,11 @@ class Magnetometry:
         Returns
         -------
         list[FC]
-            The `FC` objects found in `dat_files`.
+            The `FC` objects found in `files`.
         """
         fc_files = [
             dat_file
-            for dat_file in self.dat_files
+            for dat_file in self.files
             if set(["fc", "zfcfc"]).intersection(dat_file.experiments_in_file)
         ]
         fc_objs: list[FC] = []
@@ -483,18 +485,22 @@ class Magnetometry:
             f"No FC experiment found at field {field} Oe"
         )
 
-    def add_analysis(self, analysis: Analysis) -> None:
+    def add_analysis(self, analysis: Analysis | list[Analysis]) -> None:
         """Add an analysis to the `Magnetometry` object.
 
         See `magnetopy.magnetometry.Analysis` for more information.
 
         Parameters
         ----------
-        analysis : Analysis
-            An instance of a class that implements the `Analysis` protocol.
+        analysis : Analysis | list[Analysis]
+            An instance of a class (or list of such instances) that implements the
+            `Analysis` protocol.
 
         """
-        self.analyses.append(analysis)
+        if isinstance(analysis, list):
+            self.analyses.extend(analysis)
+        else:
+            self.analyses.append(analysis)
 
     def as_dict(self) -> dict[str, Any]:
         """Create a dictionary representation of the `Magnetometry` object.
@@ -505,6 +511,7 @@ class Magnetometry:
         """
         return {
             "sample_id": self.sample_id,
+            "files": self.files,
             "sample_info": self.sample_info,
             "mvsh": self.mvsh,
             "zfc": self.zfc,
@@ -574,8 +581,8 @@ class Magnetometry:
         fields: float | list[float] | None = None,
         y_val: Literal["moment", "chi", "chi_t"] = "moment",
         normalized: bool = False,
-        color: str = "black",
-        label: str | None = "auto",
+        colors: str | list[str] = "auto",
+        labels: str | list[str] | None = "auto",
         title: str = "",
         **kwargs,
     ) -> tuple[plt.Figure, plt.Axes]:
@@ -614,11 +621,11 @@ class Magnetometry:
         """
         if fields is None:
             return plot_zfcfc(
-                self.zfc, self.fc, y_val, normalized, color, label, title, **kwargs
+                self.zfc, self.fc, y_val, normalized, colors, labels, title, **kwargs
             )
         zfc = [self.get_zfc(field) for field in fields]
         fc = [self.get_fc(field) for field in fields]
-        return plot_zfcfc(zfc, fc, y_val, normalized, color, label, title, **kwargs)
+        return plot_zfcfc(zfc, fc, y_val, normalized, colors, labels, title, **kwargs)
 
     def as_json(self, indent: int = 0) -> str:
         """Create a JSON representation of the `Magnetometry` object.
@@ -653,7 +660,7 @@ class Magnetometry:
         if directory:
             directory = Path(directory)
         else:
-            directory = self.dat_files[0].local_path.parent
+            directory = self.files[0].local_path.parent
         path = directory / f"{self.sample_id}.json"
         if path.exists() and overwrite is False:
             reponse = input(f"File {path} already exists. Overwrite? [y/N] ")

@@ -10,11 +10,11 @@ Data:
 Experiments:
 
 - [The `MvsH` Experiment Class](mvsh)
-- [The `ZFC` and `FC` Experiment Classes](zfcfc)
+- [Datasets in MagnetoPy: The `Magnetometry` Class](zfcfc)
 
 Datasets:
 
-- The MagnetoPy Dataset Class: `Magnetometry`
+- [The MagnetoPy Dataset Class: `Magnetometry`](magnetometry)
 
 Analyses:
 

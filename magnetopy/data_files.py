@@ -738,7 +738,7 @@ def plot_raw(
     ax.set_xlabel("Position (mm)")
     ax.set_ylabel("Scaled Voltage (V)")
     if label:
-        ax.legend()
+        ax.legend(frameon=False)
     if title:
         ax.set_title(title)
     force_aspect(ax)

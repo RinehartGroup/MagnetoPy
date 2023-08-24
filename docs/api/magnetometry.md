@@ -18,3 +18,6 @@
 
 
 ::: magnetopy.magnetometry.SampleInfo
+
+
+::: magnetopy.magnetometry.Analysis
