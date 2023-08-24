@@ -3,7 +3,6 @@ site_description: Magnetometry Research in Python
 site_author: Rinehart Group
 nav:
   - Home: index.md
-  - Getting Started: getting_started.md
   - Examples:
       - Overview: examples/README.md
       - Reading a .dat File: examples/reading_dat_file.ipynb
