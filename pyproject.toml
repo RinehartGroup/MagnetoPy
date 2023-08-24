@@ -14,17 +14,29 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "numpy >=1.0.0, <2.0.0",
-    "pandas >=1.0.0, <2.0.0",
-    "scipy >=1.0.0, <2.0.0",
-    "matplotlib >=3.0.0, <4.0.0",
+    "numpy",
+    "pandas",
+    "scipy",
+    "matplotlib",
+    "scikit-learn",
+    "GitPython",
 ]
 
 [project.optional-dependencies]
 dev = [
     "black",
     "pytest",
+    "pytest-cov",
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocstrings",
+    "mkdocstrings-python",
+    "markdown-katex",
+    "mkdocs-jupyter",
 ]
+
+[project.scripts]
+mp-calibration = "magnetopy.cli.calibration_install:main"
 
 [tool.setuptools]
 packages = ["magnetopy"]

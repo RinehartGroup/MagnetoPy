@@ -1,0 +1,77 @@
+site_name: MagnetoPy
+site_description: Magnetometry Research in Python
+site_author: Rinehart Group
+nav:
+  - Home: index.md
+  - Getting Started: getting_started.md
+  - Examples:
+      - Overview: examples/README.md
+      - Reading a .dat File: examples/reading_dat_file.ipynb
+      - Raw Data and the .rw.dat File: examples/rwdat_file.ipynb
+      - The MvsH Experiment Class: examples/mvsh.ipynb
+      - The ZFC and FC Experiment Classes: examples/zfcfc.ipynb
+      - Datasets in MagnetoPy - The `Magnetometry` Class: examples/magnetometry.ipynb
+  - API:
+      - Magnetopy:
+          - Magnetometry: api/magnetometry.md
+          - Data Files:
+              - DatFile: api/dat_file.md
+              - GenericFile: api/generic_file.md
+          - Experiments:
+              - DcExperiment: api/dc_experiment.md
+              - MvsH: api/mvsh.md
+              - ZFC, FC, ZFCFC: api/zfcfc.md
+              - Utils: api/experiments_utils.md
+          - Analyses:
+              - SimpleMvsHAnalysis: api/simple_mvsh_analysis.md
+          - Utils:
+              - Parsing: api/parsing_utils.md
+              - Plotting: api/plot_utils.md
+  - File Formatting: file_formatting.md
+  - Standard Calibration Library: standard_calibration_library.md
+
+theme:
+  name: material
+  logo: assets/icons/72ppi/magpy_72ppi.png
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.next_prev
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+  language: en
+
+plugins:
+  - search
+  - mkdocs-jupyter
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [.]
+          options:
+            show_root_heading: true
+            members_order: source
+            docstring_style: numpy
+watch:
+  - docs
+  - magnetopy
+markdown_extensions:
+  - markdown_katex:
+      no_inline_svg: True
+      insert_fonts_css: True
+
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  #   - admonition
+  #   - footnotes
+  #   - pymdownx.details
+  #   - pymdownx.superfences
+  #   - pymdownx.mark
+  - attr_list
