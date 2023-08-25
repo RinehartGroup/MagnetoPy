@@ -28,7 +28,7 @@ Typically, the code used to perform the analysis contains a lot of hard-coded in
 
 MagnetoPy provides interfaces for experiments that abstract away the details of the data files and measurement methods, allowing researchers to focus on the analysis. In the current example, the researchers would be interested in the `MvsH` class, which provides a standard interface for accessing variable field magnetization data.
 
-After using analyses within MagnetoPy, the serialized form of the magnetometry dataset contains all of the information that future researchers would need to reproduce the analysis, [as shown in this example](examples/magnetometry/#analyses-and-serialization). This includes the raw data, the processing steps, and the analysis itself. Thus, the activation barrier for other researchers to apply the analysis to their own data is greatly reduced.
+After using analyses within MagnetoPy, the serialized form of the magnetometry dataset contains all of the information that future researchers would need to reproduce the analysis, [as shown in this example](https://rinehartgroup.github.io/MagnetoPy/examples/magnetometry/#analyses-and-serialization). This includes the raw data, the processing steps, and the analysis itself. Thus, the activation barrier for other researchers to apply the analysis to their own data is greatly reduced.
 
 ### Currently Supported Interfaces
 
