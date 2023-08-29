@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/550421239.svg)](https://zenodo.org/badge/latestdoi/550421239)
+
 # MagnetoPy
 
 ## Installation
