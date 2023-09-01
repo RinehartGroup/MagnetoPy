@@ -1,0 +1,1 @@
+::: magnetopy.magnetometry.Analysis

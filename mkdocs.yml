@@ -10,6 +10,7 @@ nav:
       - The MvsH Experiment Class: examples/mvsh.ipynb
       - The ZFC and FC Experiment Classes: examples/zfcfc.ipynb
       - Datasets in MagnetoPy - The `Magnetometry` Class: examples/magnetometry.ipynb
+      - A Simple MvsH Analysis: examples/mvsh_analysis.ipynb
   - API:
       - Magnetopy:
           - Magnetometry: api/magnetometry.md
@@ -22,6 +23,7 @@ nav:
               - ZFC, FC, ZFCFC: api/zfcfc.md
               - Utils: api/experiments_utils.md
           - Analyses:
+              - Analysis (Protocol): api/analysis.md
               - SimpleMvsHAnalysis: api/simple_mvsh_analysis.md
           - Utils:
               - Parsing: api/parsing_utils.md
