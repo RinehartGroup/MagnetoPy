@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/550421239.svg)](https://zenodo.org/badge/latestdoi/550421239)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8319969.svg)](https://doi.org/10.5281/zenodo.8319969)
 
 # MagnetoPy
 
