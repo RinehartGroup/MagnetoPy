@@ -18,7 +18,23 @@ Documentation is available at [https://rinehartgroup.github.io/MagnetoPy/](https
 
 MagnetoPy is a Python package containing tools to aid researchers in the analysis of magnetic data, with a particular emphasis on aiding researchers in developing and publishing new analyses. It contains robust and flexible methods for parsing and processing data files and _transforming the data into standard interfaces_ from which researchers can perform their research. It also contains some record keeping capabilities such that any processing steps performed on the data can be recorded and reproduced at a later date.
 
-MagnetoPy is built with a primary focus on in-depth analysis of magnetic data and development of new analyses. For this reason we mostly envision users of MagnetoPy using it in a notebook environment (e.g., Jupyter notebooks). Once an analysis becomes routine, however, using MagnetoPy as a library in a script is also possible, and will probably make script/app development easier.
+MagnetoPy is built with a primary focus on in-depth analysis of magnetic data and development of new analyses. For this reason we mostly envision users of MagnetoPy using it in a notebook environment (e.g., Jupyter notebooks). Once an analysis becomes routine, however, using MagnetoPy as a library in a script is also possible, and will make script/app development easier.
+
+## Experiment and Data File Interfaces
+
+Scientific data analysis typically follows a similar pattern: data is collected, parsed, processed, analyzed, and reported. Each step has some code associated with it. Without some forethought and planning with regard to the architecture, however, the code for each step can become tightly coupled to the code for the other steps. This can make it difficult to reuse code for a particular step in a different context. For example, a researcher trying to use someone else's code may have to rewrite the code relating to the latter steps in that process if their workflow slightly deviates from that of the original researcher. They may even have to rewrite the entire workflow!
+
+<p align="center">
+    <img src="docs/assets/without_magnetopy.svg" alt="Coupled Workflow" style="height:300px;"/>
+</p>
+
+Alternatively, by making well-defined interfaces for each step of the process, the code for each step can be decoupled from the code for the other steps. There may be different implementations of each step -- for example, one researcher's processing step may include a background subtraction, while another researcher's processing step may not -- the code representing the analyis workflow should allow for and record these differences, but subsquent steps in the workflow should not need to know about them.
+
+This decoupled approach means that if the existing code does not already work for a particular researcher's workflow, they can simply write their own implementation of the step that does not work for them, and then use the existing code for the other steps. This is the approach taken by MagnetoPy.
+
+<p align="center">
+    <img src="docs/assets/with_magnetopy.svg" alt="Decoupled Workflow" style="height:250px;"/>
+</p>
 
 ## Experiment and Data File Interfaces
 
