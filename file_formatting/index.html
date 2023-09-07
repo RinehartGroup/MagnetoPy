@@ -396,6 +396,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/mvsh_analysis/" class="md-nav__link">
+        A Simple M vs. H Analysis
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -669,6 +683,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../api/analysis/" class="md-nav__link">
+        Analysis (Protocol)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/simple_mvsh_analysis/" class="md-nav__link">
         SimpleMvsHAnalysis
       </a>
@@ -844,6 +872,19 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-names" class="md-nav__link">
+    File Names
+  </a>
+  
+    <nav class="md-nav" aria-label="File Names">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
   <a href="#uncommented-files" class="md-nav__link">
     Uncommented Files
@@ -853,15 +894,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#mvsh_1" class="md-nav__link">
-    MvsH
+  <a href="#zfcfc-zfc-fc_1" class="md-nav__link">
+    ZFCFC, ZFC, FC
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#zfcfc-zfc-fc_1" class="md-nav__link">
-    ZFCFC, ZFC, FC
+  <a href="#mvsh_1" class="md-nav__link">
+    MvsH
   </a>
   
 </li>
@@ -967,6 +1008,19 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-names" class="md-nav__link">
+    File Names
+  </a>
+  
+    <nav class="md-nav" aria-label="File Names">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
   <a href="#uncommented-files" class="md-nav__link">
     Uncommented Files
@@ -976,15 +1030,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#mvsh_1" class="md-nav__link">
-    MvsH
+  <a href="#zfcfc-zfc-fc_1" class="md-nav__link">
+    ZFCFC, ZFC, FC
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#zfcfc-zfc-fc_1" class="md-nav__link">
-    ZFCFC, ZFC, FC
+  <a href="#mvsh_1" class="md-nav__link">
+    MvsH
   </a>
   
 </li>
@@ -1015,28 +1069,64 @@
 
 
 <h1 id="parsing-conventions-and-capabilities">Parsing Conventions and Capabilities</h1>
-<p><code>magnetopy</code> can read in a variety of raw magnetic data and convert it to useful Python objects. The following sections describe what sort of file conventions are compatible with <code>magnetopy</code> and how the automatic parsing works.</p>
+<p>MagnetoPy can read in a variety of raw magnetic data and convert it to useful Python objects. The following sections describe what sort of file conventions are compatible with MagnetoPy and how the automatic parsing works.</p>
 <h2 id="sample-info-and-moment-scaling">Sample Info and Moment Scaling</h2>
-<p>When creating a <code>Dataset</code> object, <code>magnetopy</code> will assume that all files within the given folder are from the same sample. Thus, the <code>Dataset.sample_info</code> attribute will be created by looking at the sample information in the header of the first file that it finds.</p>
-<p>The sample information is also used to automatically scale the magnetic moment data in all dc measurements (i.e., all <code>MvsH</code>, <code>ZFC</code>, and <code>FC</code> objects within the dataset).</p>
+<p>When creating a <a href="../api/magnetometry/#magnetopy.magnetometry.Magnetometry"><code>Magnetometry</code></a> object, MagnetoPy will assume that all files within the given folder are from the same sample. Thus, the <code>Magnetometry.sample_info</code> attribute will be created by looking at the sample information in the header of the first file that it finds.</p>
+<p>The sample information is also used to <a href="../api/magnetometry/#magnetopy.magnetometry.Magnetometry.scale_dc_data">automatically scale the magnetic moment data in all dc measurements</a> (i.e., all <code>MvsH</code>, <code>ZFC</code>, and <code>FC</code> objects within the dataset).</p>
 <h2 id="dat-file-conventions">.dat File Conventions</h2>
-<h3 id="commented-files">Commented Files</h3>
-<p>Comments should be comma separated and can be in any order.</p>
-<h4 id="mvsh">MvsH</h4>
+<p>MagnetoPy determines what experiment(s) is/are contained in a given file by checking the following items in this order:</p>
 <ul>
-<li>comments must include:</li>
+<li>comments embedded in the data section of the file (e.g., the section of the file after the row containing "[DATA]" in a Quantum Design MPMP3 .dat file)</li>
+<li>the file name</li>
+<li>the actual data</li>
+</ul>
+<div class="alert alert-info">
+  <strong>Note:</strong> It is strongly recommended to use the comment method to specify the experiment type, as this removes any ambiguity, and adding support for new experiment types will be easiest with commented files.
+</div>
+
+<h3 id="commented-files">Commented Files</h3>
+<p>In Quantum Design's MPMS3 MultiVu software, comments are added using the "Datafile Comment" section of the Sequence Command panel.</p>
+<div align="center">
+  <img src="../assets/comment_command.png" alt="Comment Command" style="height:200px;">
+</div>
+
+<p>The comment should be placed immediately after setting the file location, as shown in the following example of a sequence containing ZFC and FC experiments.</p>
+<div align="center">
+  <img src="../assets/sequence.png" alt="Commented Sequence" style="height:400px;">
+</div>
+
+<p>Comments should be comma separated and can be in any order. The following experiments should be commented as follows:</p>
+<h4 id="mvsh">MvsH</h4>
+<p>Comments must include:</p>
+<ul>
 <li>"MvsH" (case insensitive)</li>
 <li>the nominal temperature written as "XX", "XX K", or "XX C" (values without a unit are assumed to be K)</li>
 </ul>
 <h4 id="zfcfc-zfc-fc">ZFCFC, ZFC, FC</h4>
+<p>Comments must include:</p>
 <ul>
-<li>comments must include:</li>
 <li>"ZFC" or "FC" (case insensitive)</li>
 <li>the nominal magnetic field strength written as "XX", "XX Oe", or "XX T" (values without a unit are assumed to be Oe)</li>
 </ul>
+<h2 id="file-names">File Names</h2>
+<p>Recognized file names are (case insensitive):</p>
+<ul>
+<li>"zfcfc"</li>
+<li>further parsing will assume the file contain a single ZFC/FC experiment</li>
+<li>further parsing will assume the experiments are in the order ZFC then FC</li>
+<li>"zfc"</li>
+<li>further parsing will assume the file contain a single ZFC experiment</li>
+<li>"fc"</li>
+<li>further parsing will assume the file contain a single FC experiment</li>
+<li>"mvsh"</li>
+<li>further parsing can handle one or multiple MvsH experiments within the same file</li>
+</ul>
 <h3 id="uncommented-files">Uncommented Files</h3>
-<h4 id="mvsh_1">MvsH</h4>
+<p>Differentiating between files containing ZFCFC and MvsH experiments is done by checking the number of unique field values in the data, since it is assumed that ZFCFC files will only have a single field value.</p>
 <h4 id="zfcfc-zfc-fc_1">ZFCFC, ZFC, FC</h4>
+<p>The automatic parsing of uncommented files containing ZFC/FC experiments currently only supports files with a single ZFC/FC pair. The data must be in the order ZFC then FC. The FC experiment can be collected with increasing or decreasing temperature.</p>
+<h4 id="mvsh_1">MvsH</h4>
+<p>Files containing M vs. H data can contain one or multiple experiments at different nominal temperatures. Due to the temperature fluctuations, experiments are grouped by nominal temperatures using <a href="https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html">scikit-learn's DBSCAN clustering algorithm</a>. Default values for the <code>eps</code> and <code>min_samples</code> parameters are provided and can be overwritten during <a href="../../api/mvsh/#magnetopy.experiments.mvsh.MvsH"><code>MvsH</code> object creation</a> or <a href="../../api/magnetometry/#magnetopy.magnetometry.Magnetometry.extract_mvsh"><code>Magnetometry.extract_mvsh()</code></a></p>
 
 
 

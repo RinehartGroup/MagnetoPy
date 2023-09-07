@@ -65,7 +65,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#standard-calibration-library" class="md-skip">
+        <a href="#standard-calibration-repository" class="md-skip">
           Skip to content
         </a>
       
@@ -394,6 +394,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/mvsh_analysis/" class="md-nav__link">
+        A Simple M vs. H Analysis
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -667,6 +681,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../api/analysis/" class="md-nav__link">
+        Analysis (Protocol)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/simple_mvsh_analysis/" class="md-nav__link">
         SimpleMvsHAnalysis
       </a>
@@ -791,9 +819,40 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Standard Calibration Library
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         Standard Calibration Library
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contents" class="md-nav__link">
+    Contents
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -819,6 +878,21 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contents" class="md-nav__link">
+    Contents
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -832,7 +906,33 @@
                   
 
 
-<h1 id="standard-calibration-library">Standard Calibration Library</h1>
+<h1 id="standard-calibration-repository">Standard Calibration Repository</h1>
+<p>MagnetoPy can be used to perform field corrections on M vs. H experiments and, in the future, may also implement manual background subtraction methods for dc measurements. Each magnetometer will have its own calibration files. Research groups may choose to maintain a repository of these files to serve as a single source of truth for their instrument and so that outside groups and reviewers have the necessary access to reproduce the results.</p>
+<h2 id="contents">Contents</h2>
+<p>The Rinehart group's repository is located in <a href="https://github.com/RinehartGroup/MagnetoPyCalibration">MagnetoPyCalibration</a>.</p>
+<p>In general, a calibration library must include a the files containing calibraiton data and a json file describing the files.</p>
+<p>"calibration.json" has the following structure:</p>
+<pre><code class="language-json">{
+  &quot;moment&quot;: &quot;moment.dat&quot;,
+  &quot;mvsh&quot;: {
+    &quot;sequence_1&quot;: &quot;mvsh_seq1.dat&quot;,
+    &quot;sequence_2&quot;: &quot;mvsh_seq2.dat&quot;
+  }
+}
+</code></pre>
+<p>The actual files are stored in the directory "calibration_files". It's assumed that, when needed, a .rw.dat file containing the unprocessed data is also stored in this folder (with the default convention of having the same name as the .dat file, but with the .rw.dat extension).</p>
+<p>Only two categories of calibration files are currently supported.</p>
+<ol>
+<li>
+<p>"moment"</p>
+<p>Used for the determination of the <a href="https://qdusa.com/siteDocs/appNotes/1500-023.pdf">system-specific calibration factor</a>. There should only ever need to be one of these files.</p>
+</li>
+<li>
+<p>"mvsh"</p>
+<p>Used for <a href="https://qdusa.com/siteDocs/appNotes/1500-021.pdf">determining the "true field" during an M vs H sequence</a>. Per the application note, all measurements should be collected at 298 K. The temperature of the calibration data does not need to match the temperature of the target data, but the sequence of fields should be the exact same.</p>
+<p>The "mvsh" keys are the names of the sequences. These names are referred to by <code>magnetopy</code> for easy access to the correct calibration data. See the <a href="../../examples/mvsh/#correcting-the-field-for-flux-trapping">field correction example</a> for more details.</p>
+</li>
+</ol>
 
 
 
