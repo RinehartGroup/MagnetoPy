@@ -1,22 +1,25 @@
 {
+    "_class_": "Magnetometry",
     "sample_id": "dataset1",
     "files": [
         {
+            "_class_": "DatFile",
             "experiment_type": "magnetometry",
-            "local_path": "../../tests/data/dataset1/mvsh1.dat",
-            "length": 2604806,
+            "local_path": "..\\..\\tests\\data\\dataset1\\mvsh1.dat",
+            "length": 2612152,
             "date_created": "2020-07-11T11:07:00",
-            "sha512": "f9f8ac5d5b84cc00a57073d330c0f8b005e90201eadc588649388a35666f427bdc6beaa9c8ef5d58e70099a54ced7d9006f9800b8014639e790a2f0423acd6a5",
+            "sha512": "6fc436762a00b890eb3649eb50a885ced587781bf3b9738f04a49e768ad471f1671110f282e7be2ac2ed623a006abcc2da3914e09c165276b4bd63e06760b28f",
             "experiments_in_file": [
                 "mvsh"
             ]
         },
         {
+            "_class_": "DatFile",
             "experiment_type": "magnetometry",
-            "local_path": "../../tests/data/dataset1/zfcfc1.dat",
-            "length": 261387,
+            "local_path": "..\\..\\tests\\data\\dataset1\\zfcfc1.dat",
+            "length": 261932,
             "date_created": "2021-09-18T19:46:00",
-            "sha512": "4936c3d7b1733a51c318754134a7a04ec6e0a7edc75e20cec8488df8ae14409d72370f0a77855dc9ebf704734e81cf21f0beb7c10b38a37514742cea0168979d",
+            "sha512": "f7cd14ea7ca9f3245780a608808b497b484f744774dd456a54dab73ef507a8aa75bd2383bc446af89b6aa5b57393b5f8773f77227d2e5fa5b8953980899ea64e",
             "experiments_in_file": [
                 "zfcfc"
             ]
@@ -34,10 +37,12 @@
         "holder_detail": "Standard",
         "offset": 66.27,
         "eicosane_mass": 32.4,
-        "diamagnetic_correction": 0.0
+        "diamagnetic_correction": 0.0,
+        "_class_": "SampleInfo"
     },
     "mvsh": [
         {
+            "_class_": "MvsH",
             "origin_file": "mvsh1.dat",
             "temperature": 2,
             "field_range": [
@@ -51,6 +56,7 @@
             ]
         },
         {
+            "_class_": "MvsH",
             "origin_file": "mvsh1.dat",
             "temperature": 4,
             "field_range": [
@@ -64,6 +70,7 @@
             ]
         },
         {
+            "_class_": "MvsH",
             "origin_file": "mvsh1.dat",
             "temperature": 6,
             "field_range": [
@@ -77,6 +84,7 @@
             ]
         },
         {
+            "_class_": "MvsH",
             "origin_file": "mvsh1.dat",
             "temperature": 8,
             "field_range": [
@@ -90,6 +98,7 @@
             ]
         },
         {
+            "_class_": "MvsH",
             "origin_file": "mvsh1.dat",
             "temperature": 10,
             "field_range": [
@@ -103,6 +112,7 @@
             ]
         },
         {
+            "_class_": "MvsH",
             "origin_file": "mvsh1.dat",
             "temperature": 12,
             "field_range": [
@@ -116,6 +126,7 @@
             ]
         },
         {
+            "_class_": "MvsH",
             "origin_file": "mvsh1.dat",
             "temperature": 300,
             "field_range": [
@@ -131,6 +142,7 @@
     ],
     "zfc": [
         {
+            "_class_": "ZFC",
             "origin_file": "zfcfc1.dat",
             "field": 100,
             "temperature_range": [
@@ -145,6 +157,7 @@
     ],
     "fc": [
         {
+            "_class_": "FC",
             "origin_file": "zfcfc1.dat",
             "field": 100,
             "temperature_range": [
@@ -159,7 +172,9 @@
     ],
     "analyses": [
         {
+            "_class_": "SimpleMvsHAnalysis",
             "mvsh": {
+                "_class_": "MvsH",
                 "origin_file": "mvsh1.dat",
                 "temperature": 2,
                 "field_range": [
@@ -174,7 +189,8 @@
             },
             "parsing_args": {
                 "temperature": 2,
-                "segments": "auto"
+                "segments": "auto",
+                "_class_": "SimpleMvsHAnalysisParsingArgs"
             },
             "results": {
                 "m_s": 10.467101768993821,
@@ -185,11 +201,14 @@
                 "segments": [
                     "forward",
                     "reverse"
-                ]
+                ],
+                "_class_": "SimpleMvsHAnalysisResults"
             }
         },
         {
+            "_class_": "SimpleMvsHAnalysis",
             "mvsh": {
+                "_class_": "MvsH",
                 "origin_file": "mvsh1.dat",
                 "temperature": 4,
                 "field_range": [
@@ -204,7 +223,8 @@
             },
             "parsing_args": {
                 "temperature": 4,
-                "segments": "auto"
+                "segments": "auto",
+                "_class_": "SimpleMvsHAnalysisParsingArgs"
             },
             "results": {
                 "m_s": 9.449626372913347,
@@ -215,11 +235,14 @@
                 "segments": [
                     "forward",
                     "reverse"
-                ]
+                ],
+                "_class_": "SimpleMvsHAnalysisResults"
             }
         },
         {
+            "_class_": "SimpleMvsHAnalysis",
             "mvsh": {
+                "_class_": "MvsH",
                 "origin_file": "mvsh1.dat",
                 "temperature": 6,
                 "field_range": [
@@ -234,7 +257,8 @@
             },
             "parsing_args": {
                 "temperature": 6,
-                "segments": "auto"
+                "segments": "auto",
+                "_class_": "SimpleMvsHAnalysisParsingArgs"
             },
             "results": {
                 "m_s": 9.318969635074463,
@@ -245,11 +269,14 @@
                 "segments": [
                     "forward",
                     "reverse"
-                ]
+                ],
+                "_class_": "SimpleMvsHAnalysisResults"
             }
         },
         {
+            "_class_": "SimpleMvsHAnalysis",
             "mvsh": {
+                "_class_": "MvsH",
                 "origin_file": "mvsh1.dat",
                 "temperature": 8,
                 "field_range": [
@@ -264,7 +291,8 @@
             },
             "parsing_args": {
                 "temperature": 8,
-                "segments": "auto"
+                "segments": "auto",
+                "_class_": "SimpleMvsHAnalysisParsingArgs"
             },
             "results": {
                 "m_s": 9.225003160337351,
@@ -275,11 +303,14 @@
                 "segments": [
                     "forward",
                     "reverse"
-                ]
+                ],
+                "_class_": "SimpleMvsHAnalysisResults"
             }
         },
         {
+            "_class_": "SimpleMvsHAnalysis",
             "mvsh": {
+                "_class_": "MvsH",
                 "origin_file": "mvsh1.dat",
                 "temperature": 10,
                 "field_range": [
@@ -294,7 +325,8 @@
             },
             "parsing_args": {
                 "temperature": 10,
-                "segments": "auto"
+                "segments": "auto",
+                "_class_": "SimpleMvsHAnalysisParsingArgs"
             },
             "results": {
                 "m_s": 9.006286086184483,
@@ -305,11 +337,14 @@
                 "segments": [
                     "forward",
                     "reverse"
-                ]
+                ],
+                "_class_": "SimpleMvsHAnalysisResults"
             }
         },
         {
+            "_class_": "SimpleMvsHAnalysis",
             "mvsh": {
+                "_class_": "MvsH",
                 "origin_file": "mvsh1.dat",
                 "temperature": 12,
                 "field_range": [
@@ -324,7 +359,8 @@
             },
             "parsing_args": {
                 "temperature": 12,
-                "segments": "auto"
+                "segments": "auto",
+                "_class_": "SimpleMvsHAnalysisParsingArgs"
             },
             "results": {
                 "m_s": 8.874340922463201,
@@ -335,11 +371,14 @@
                 "segments": [
                     "forward",
                     "reverse"
-                ]
+                ],
+                "_class_": "SimpleMvsHAnalysisResults"
             }
         },
         {
+            "_class_": "SimpleMvsHAnalysis",
             "mvsh": {
+                "_class_": "MvsH",
                 "origin_file": "mvsh1.dat",
                 "temperature": 300,
                 "field_range": [
@@ -354,7 +393,8 @@
             },
             "parsing_args": {
                 "temperature": 300,
-                "segments": "auto"
+                "segments": "auto",
+                "_class_": "SimpleMvsHAnalysisParsingArgs"
             },
             "results": {
                 "m_s": 0.9941340745856104,
@@ -364,7 +404,8 @@
                 "field_units": "Oe",
                 "segments": [
                     "reverse"
-                ]
+                ],
+                "_class_": "SimpleMvsHAnalysisResults"
             }
         }
     ]

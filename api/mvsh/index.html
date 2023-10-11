@@ -1428,7 +1428,7 @@ same number of data points as the MvsH sequence.</p>
   </table>
 
             <details class="quote">
-              <summary>Source code in <code>magnetopy/experiments/mvsh.py</code></summary>
+              <summary>Source code in <code>magnetopy\experiments\mvsh.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-29"> 29</a></span>
 <span class="normal"><a href="#__codelineno-0-30"> 30</a></span>
 <span class="normal"><a href="#__codelineno-0-31"> 31</a></span>
@@ -2072,7 +2072,8 @@ same number of data points as the MvsH sequence.</p>
 <span class="normal"><a href="#__codelineno-0-669">669</a></span>
 <span class="normal"><a href="#__codelineno-0-670">670</a></span>
 <span class="normal"><a href="#__codelineno-0-671">671</a></span>
-<span class="normal"><a href="#__codelineno-0-672">672</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="k">class</span> <span class="nc">MvsH</span><span class="p">:</span>
+<span class="normal"><a href="#__codelineno-0-672">672</a></span>
+<span class="normal"><a href="#__codelineno-0-673">673</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="k">class</span> <span class="nc">MvsH</span><span class="p">:</span>
 <a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A single magnetization vs. field (hysteresis) experiment at a single temperature.</span>
 <a id="__codelineno-0-31" name="__codelineno-0-31"></a>
 <a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="sd">    Parameters</span>
@@ -2628,94 +2629,95 @@ same number of data points as the MvsH sequence.</p>
 <a id="__codelineno-0-582" name="__codelineno-0-582"></a><span class="sd">            `&quot;field_correction_file&quot;`, and `&quot;scaling&quot;`.</span>
 <a id="__codelineno-0-583" name="__codelineno-0-583"></a><span class="sd">        &quot;&quot;&quot;</span>
 <a id="__codelineno-0-584" name="__codelineno-0-584"></a>        <span class="k">return</span> <span class="p">{</span>
-<a id="__codelineno-0-585" name="__codelineno-0-585"></a>            <span class="s2">&quot;origin_file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin_file</span><span class="p">,</span>
-<a id="__codelineno-0-586" name="__codelineno-0-586"></a>            <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">temperature</span><span class="p">,</span>
-<a id="__codelineno-0-587" name="__codelineno-0-587"></a>            <span class="s2">&quot;field_range&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_range</span><span class="p">,</span>
-<a id="__codelineno-0-588" name="__codelineno-0-588"></a>            <span class="s2">&quot;field_correction_file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_correction_file</span><span class="p">,</span>
-<a id="__codelineno-0-589" name="__codelineno-0-589"></a>            <span class="s2">&quot;scaling&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaling</span><span class="p">,</span>
-<a id="__codelineno-0-590" name="__codelineno-0-590"></a>        <span class="p">}</span>
-<a id="__codelineno-0-591" name="__codelineno-0-591"></a>
-<a id="__codelineno-0-592" name="__codelineno-0-592"></a>    <span class="nd">@classmethod</span>
-<a id="__codelineno-0-593" name="__codelineno-0-593"></a>    <span class="k">def</span> <span class="nf">get_all_in_file</span><span class="p">(</span>
-<a id="__codelineno-0-594" name="__codelineno-0-594"></a>        <span class="bp">cls</span><span class="p">,</span>
-<a id="__codelineno-0-595" name="__codelineno-0-595"></a>        <span class="n">dat_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="n">DatFile</span><span class="p">,</span>
-<a id="__codelineno-0-596" name="__codelineno-0-596"></a>        <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
-<a id="__codelineno-0-597" name="__codelineno-0-597"></a>        <span class="n">min_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-<a id="__codelineno-0-598" name="__codelineno-0-598"></a>        <span class="n">ndigits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-<a id="__codelineno-0-599" name="__codelineno-0-599"></a>        <span class="n">parse_raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-<a id="__codelineno-0-600" name="__codelineno-0-600"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">MvsH</span><span class="p">]:</span>
-<a id="__codelineno-0-601" name="__codelineno-0-601"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Given a .dat file that contains one or more M vs. H experiments, returns a</span>
-<a id="__codelineno-0-602" name="__codelineno-0-602"></a><span class="sd">        list of `MvsH` objects, one for each experiment.</span>
-<a id="__codelineno-0-603" name="__codelineno-0-603"></a>
-<a id="__codelineno-0-604" name="__codelineno-0-604"></a><span class="sd">        Parameters</span>
-<a id="__codelineno-0-605" name="__codelineno-0-605"></a><span class="sd">        ----------</span>
-<a id="__codelineno-0-606" name="__codelineno-0-606"></a><span class="sd">        dat_file : str | Path | DatFile</span>
-<a id="__codelineno-0-607" name="__codelineno-0-607"></a><span class="sd">            The .dat file containing the data for the experiment.</span>
-<a id="__codelineno-0-608" name="__codelineno-0-608"></a><span class="sd">        eps : float, optional</span>
-<a id="__codelineno-0-609" name="__codelineno-0-609"></a><span class="sd">            See `magnetopy.parsing_utils.label_clusters` for details, by default 0.001</span>
-<a id="__codelineno-0-610" name="__codelineno-0-610"></a><span class="sd">        min_samples : int, optional</span>
-<a id="__codelineno-0-611" name="__codelineno-0-611"></a><span class="sd">            See `magnetopy.parsing_utils.label_clusters` for details, by default 10</span>
-<a id="__codelineno-0-612" name="__codelineno-0-612"></a><span class="sd">        ndigits : int, optional</span>
-<a id="__codelineno-0-613" name="__codelineno-0-613"></a><span class="sd">            See `magnetopy.parsing_utils.label_clusters` for details, by default 0</span>
-<a id="__codelineno-0-614" name="__codelineno-0-614"></a><span class="sd">        parse_raw : bool, optional</span>
-<a id="__codelineno-0-615" name="__codelineno-0-615"></a><span class="sd">            If `True` and there is a corresponding .rw.dat file, the raw data will be</span>
-<a id="__codelineno-0-616" name="__codelineno-0-616"></a><span class="sd">            parsed and added to the `data` attribute. Defaults to `False`.</span>
-<a id="__codelineno-0-617" name="__codelineno-0-617"></a>
-<a id="__codelineno-0-618" name="__codelineno-0-618"></a><span class="sd">        Returns</span>
-<a id="__codelineno-0-619" name="__codelineno-0-619"></a><span class="sd">        -------</span>
-<a id="__codelineno-0-620" name="__codelineno-0-620"></a><span class="sd">        list[MvsH]</span>
-<a id="__codelineno-0-621" name="__codelineno-0-621"></a><span class="sd">            A list of `MvsH` objects, one for each experiment in the .dat file, sorted</span>
-<a id="__codelineno-0-622" name="__codelineno-0-622"></a><span class="sd">            by increasing temperature.</span>
-<a id="__codelineno-0-623" name="__codelineno-0-623"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-624" name="__codelineno-0-624"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dat_file</span><span class="p">,</span> <span class="n">DatFile</span><span class="p">):</span>
-<a id="__codelineno-0-625" name="__codelineno-0-625"></a>            <span class="n">dat_file</span> <span class="o">=</span> <span class="n">DatFile</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">dat_file</span><span class="p">),</span> <span class="n">parse_raw</span><span class="p">)</span>
-<a id="__codelineno-0-626" name="__codelineno-0-626"></a>        <span class="k">if</span> <span class="n">dat_file</span><span class="o">.</span><span class="n">comments</span><span class="p">:</span>
-<a id="__codelineno-0-627" name="__codelineno-0-627"></a>            <span class="n">mvsh_objs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_all_mvsh_in_commented_file</span><span class="p">(</span><span class="n">dat_file</span><span class="p">)</span>
-<a id="__codelineno-0-628" name="__codelineno-0-628"></a>        <span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-0-629" name="__codelineno-0-629"></a>            <span class="n">mvsh_objs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_all_mvsh_in_uncommented_file</span><span class="p">(</span>
-<a id="__codelineno-0-630" name="__codelineno-0-630"></a>                <span class="n">dat_file</span><span class="p">,</span>
-<a id="__codelineno-0-631" name="__codelineno-0-631"></a>                <span class="n">eps</span><span class="p">,</span>
-<a id="__codelineno-0-632" name="__codelineno-0-632"></a>                <span class="n">min_samples</span><span class="p">,</span>
-<a id="__codelineno-0-633" name="__codelineno-0-633"></a>                <span class="n">ndigits</span><span class="p">,</span>
-<a id="__codelineno-0-634" name="__codelineno-0-634"></a>            <span class="p">)</span>
-<a id="__codelineno-0-635" name="__codelineno-0-635"></a>        <span class="n">mvsh_objs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">temperature</span><span class="p">)</span>
-<a id="__codelineno-0-636" name="__codelineno-0-636"></a>        <span class="k">return</span> <span class="n">mvsh_objs</span>
-<a id="__codelineno-0-637" name="__codelineno-0-637"></a>
-<a id="__codelineno-0-638" name="__codelineno-0-638"></a>    <span class="nd">@classmethod</span>
-<a id="__codelineno-0-639" name="__codelineno-0-639"></a>    <span class="k">def</span> <span class="nf">_get_all_mvsh_in_commented_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dat_file</span><span class="p">:</span> <span class="n">DatFile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">MvsH</span><span class="p">]:</span>
-<a id="__codelineno-0-640" name="__codelineno-0-640"></a>        <span class="n">mvsh_objs</span> <span class="o">=</span> <span class="p">[]</span>
-<a id="__codelineno-0-641" name="__codelineno-0-641"></a>        <span class="k">for</span> <span class="n">comment_list</span> <span class="ow">in</span> <span class="n">dat_file</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-<a id="__codelineno-0-642" name="__codelineno-0-642"></a>            <span class="c1"># ignore other experiments</span>
-<a id="__codelineno-0-643" name="__codelineno-0-643"></a>            <span class="k">if</span> <span class="s2">&quot;mvsh&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">comment_list</span><span class="p">):</span>
-<a id="__codelineno-0-644" name="__codelineno-0-644"></a>                <span class="k">continue</span>
-<a id="__codelineno-0-645" name="__codelineno-0-645"></a>            <span class="c1"># one of the comments should be a number denoting the temperature</span>
-<a id="__codelineno-0-646" name="__codelineno-0-646"></a>            <span class="c1"># may also include a unit, e.g. &quot;300 K&quot;</span>
-<a id="__codelineno-0-647" name="__codelineno-0-647"></a>            <span class="k">for</span> <span class="n">comment</span> <span class="ow">in</span> <span class="n">comment_list</span><span class="p">:</span>
-<a id="__codelineno-0-648" name="__codelineno-0-648"></a>                <span class="k">if</span> <span class="n">match</span> <span class="o">:=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d+&quot;</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
-<a id="__codelineno-0-649" name="__codelineno-0-649"></a>                    <span class="n">temp</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">())</span>
-<a id="__codelineno-0-650" name="__codelineno-0-650"></a>                    <span class="c1"># check to see if the unit is C otherwise assume K</span>
-<a id="__codelineno-0-651" name="__codelineno-0-651"></a>                    <span class="k">if</span> <span class="s2">&quot;C&quot;</span> <span class="ow">in</span> <span class="n">comment</span><span class="p">:</span>
-<a id="__codelineno-0-652" name="__codelineno-0-652"></a>                        <span class="n">temp</span> <span class="o">+=</span> <span class="mi">273</span>
-<a id="__codelineno-0-653" name="__codelineno-0-653"></a>                    <span class="n">mvsh_objs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">cls</span><span class="p">(</span><span class="n">dat_file</span><span class="p">,</span> <span class="n">temp</span><span class="p">))</span>
-<a id="__codelineno-0-654" name="__codelineno-0-654"></a>        <span class="k">return</span> <span class="n">mvsh_objs</span>
-<a id="__codelineno-0-655" name="__codelineno-0-655"></a>
-<a id="__codelineno-0-656" name="__codelineno-0-656"></a>    <span class="nd">@classmethod</span>
-<a id="__codelineno-0-657" name="__codelineno-0-657"></a>    <span class="k">def</span> <span class="nf">_get_all_mvsh_in_uncommented_file</span><span class="p">(</span>
-<a id="__codelineno-0-658" name="__codelineno-0-658"></a>        <span class="bp">cls</span><span class="p">,</span>
-<a id="__codelineno-0-659" name="__codelineno-0-659"></a>        <span class="n">dat_file</span><span class="p">:</span> <span class="n">DatFile</span><span class="p">,</span>
-<a id="__codelineno-0-660" name="__codelineno-0-660"></a>        <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-<a id="__codelineno-0-661" name="__codelineno-0-661"></a>        <span class="n">min_samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-<a id="__codelineno-0-662" name="__codelineno-0-662"></a>        <span class="n">ndigits</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-<a id="__codelineno-0-663" name="__codelineno-0-663"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">MvsH</span><span class="p">]:</span>
-<a id="__codelineno-0-664" name="__codelineno-0-664"></a>        <span class="n">file_data</span> <span class="o">=</span> <span class="n">dat_file</span><span class="o">.</span><span class="n">data</span>
-<a id="__codelineno-0-665" name="__codelineno-0-665"></a>        <span class="n">file_data</span><span class="p">[</span><span class="s2">&quot;cluster&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label_clusters</span><span class="p">(</span>
-<a id="__codelineno-0-666" name="__codelineno-0-666"></a>            <span class="n">file_data</span><span class="p">[</span><span class="s2">&quot;Temperature (K)&quot;</span><span class="p">],</span> <span class="n">eps</span><span class="p">,</span> <span class="n">min_samples</span>
-<a id="__codelineno-0-667" name="__codelineno-0-667"></a>        <span class="p">)</span>
-<a id="__codelineno-0-668" name="__codelineno-0-668"></a>        <span class="n">temps</span> <span class="o">=</span> <span class="n">unique_values</span><span class="p">(</span><span class="n">file_data</span><span class="p">[</span><span class="s2">&quot;Temperature (K)&quot;</span><span class="p">],</span> <span class="n">eps</span><span class="p">,</span> <span class="n">min_samples</span><span class="p">,</span> <span class="n">ndigits</span><span class="p">)</span>
-<a id="__codelineno-0-669" name="__codelineno-0-669"></a>        <span class="n">mvsh_objs</span> <span class="o">=</span> <span class="p">[]</span>
-<a id="__codelineno-0-670" name="__codelineno-0-670"></a>        <span class="k">for</span> <span class="n">temp</span> <span class="ow">in</span> <span class="n">temps</span><span class="p">:</span>
-<a id="__codelineno-0-671" name="__codelineno-0-671"></a>            <span class="n">mvsh_objs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">cls</span><span class="p">(</span><span class="n">dat_file</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="n">min_samples</span><span class="p">))</span>
-<a id="__codelineno-0-672" name="__codelineno-0-672"></a>        <span class="k">return</span> <span class="n">mvsh_objs</span>
+<a id="__codelineno-0-585" name="__codelineno-0-585"></a>            <span class="s2">&quot;_class_&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+<a id="__codelineno-0-586" name="__codelineno-0-586"></a>            <span class="s2">&quot;origin_file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin_file</span><span class="p">,</span>
+<a id="__codelineno-0-587" name="__codelineno-0-587"></a>            <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">temperature</span><span class="p">,</span>
+<a id="__codelineno-0-588" name="__codelineno-0-588"></a>            <span class="s2">&quot;field_range&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_range</span><span class="p">,</span>
+<a id="__codelineno-0-589" name="__codelineno-0-589"></a>            <span class="s2">&quot;field_correction_file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_correction_file</span><span class="p">,</span>
+<a id="__codelineno-0-590" name="__codelineno-0-590"></a>            <span class="s2">&quot;scaling&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaling</span><span class="p">,</span>
+<a id="__codelineno-0-591" name="__codelineno-0-591"></a>        <span class="p">}</span>
+<a id="__codelineno-0-592" name="__codelineno-0-592"></a>
+<a id="__codelineno-0-593" name="__codelineno-0-593"></a>    <span class="nd">@classmethod</span>
+<a id="__codelineno-0-594" name="__codelineno-0-594"></a>    <span class="k">def</span> <span class="nf">get_all_in_file</span><span class="p">(</span>
+<a id="__codelineno-0-595" name="__codelineno-0-595"></a>        <span class="bp">cls</span><span class="p">,</span>
+<a id="__codelineno-0-596" name="__codelineno-0-596"></a>        <span class="n">dat_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="n">DatFile</span><span class="p">,</span>
+<a id="__codelineno-0-597" name="__codelineno-0-597"></a>        <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+<a id="__codelineno-0-598" name="__codelineno-0-598"></a>        <span class="n">min_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+<a id="__codelineno-0-599" name="__codelineno-0-599"></a>        <span class="n">ndigits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-0-600" name="__codelineno-0-600"></a>        <span class="n">parse_raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-0-601" name="__codelineno-0-601"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">MvsH</span><span class="p">]:</span>
+<a id="__codelineno-0-602" name="__codelineno-0-602"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Given a .dat file that contains one or more M vs. H experiments, returns a</span>
+<a id="__codelineno-0-603" name="__codelineno-0-603"></a><span class="sd">        list of `MvsH` objects, one for each experiment.</span>
+<a id="__codelineno-0-604" name="__codelineno-0-604"></a>
+<a id="__codelineno-0-605" name="__codelineno-0-605"></a><span class="sd">        Parameters</span>
+<a id="__codelineno-0-606" name="__codelineno-0-606"></a><span class="sd">        ----------</span>
+<a id="__codelineno-0-607" name="__codelineno-0-607"></a><span class="sd">        dat_file : str | Path | DatFile</span>
+<a id="__codelineno-0-608" name="__codelineno-0-608"></a><span class="sd">            The .dat file containing the data for the experiment.</span>
+<a id="__codelineno-0-609" name="__codelineno-0-609"></a><span class="sd">        eps : float, optional</span>
+<a id="__codelineno-0-610" name="__codelineno-0-610"></a><span class="sd">            See `magnetopy.parsing_utils.label_clusters` for details, by default 0.001</span>
+<a id="__codelineno-0-611" name="__codelineno-0-611"></a><span class="sd">        min_samples : int, optional</span>
+<a id="__codelineno-0-612" name="__codelineno-0-612"></a><span class="sd">            See `magnetopy.parsing_utils.label_clusters` for details, by default 10</span>
+<a id="__codelineno-0-613" name="__codelineno-0-613"></a><span class="sd">        ndigits : int, optional</span>
+<a id="__codelineno-0-614" name="__codelineno-0-614"></a><span class="sd">            See `magnetopy.parsing_utils.label_clusters` for details, by default 0</span>
+<a id="__codelineno-0-615" name="__codelineno-0-615"></a><span class="sd">        parse_raw : bool, optional</span>
+<a id="__codelineno-0-616" name="__codelineno-0-616"></a><span class="sd">            If `True` and there is a corresponding .rw.dat file, the raw data will be</span>
+<a id="__codelineno-0-617" name="__codelineno-0-617"></a><span class="sd">            parsed and added to the `data` attribute. Defaults to `False`.</span>
+<a id="__codelineno-0-618" name="__codelineno-0-618"></a>
+<a id="__codelineno-0-619" name="__codelineno-0-619"></a><span class="sd">        Returns</span>
+<a id="__codelineno-0-620" name="__codelineno-0-620"></a><span class="sd">        -------</span>
+<a id="__codelineno-0-621" name="__codelineno-0-621"></a><span class="sd">        list[MvsH]</span>
+<a id="__codelineno-0-622" name="__codelineno-0-622"></a><span class="sd">            A list of `MvsH` objects, one for each experiment in the .dat file, sorted</span>
+<a id="__codelineno-0-623" name="__codelineno-0-623"></a><span class="sd">            by increasing temperature.</span>
+<a id="__codelineno-0-624" name="__codelineno-0-624"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-0-625" name="__codelineno-0-625"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dat_file</span><span class="p">,</span> <span class="n">DatFile</span><span class="p">):</span>
+<a id="__codelineno-0-626" name="__codelineno-0-626"></a>            <span class="n">dat_file</span> <span class="o">=</span> <span class="n">DatFile</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">dat_file</span><span class="p">),</span> <span class="n">parse_raw</span><span class="p">)</span>
+<a id="__codelineno-0-627" name="__codelineno-0-627"></a>        <span class="k">if</span> <span class="n">dat_file</span><span class="o">.</span><span class="n">comments</span><span class="p">:</span>
+<a id="__codelineno-0-628" name="__codelineno-0-628"></a>            <span class="n">mvsh_objs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_all_mvsh_in_commented_file</span><span class="p">(</span><span class="n">dat_file</span><span class="p">)</span>
+<a id="__codelineno-0-629" name="__codelineno-0-629"></a>        <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-630" name="__codelineno-0-630"></a>            <span class="n">mvsh_objs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_all_mvsh_in_uncommented_file</span><span class="p">(</span>
+<a id="__codelineno-0-631" name="__codelineno-0-631"></a>                <span class="n">dat_file</span><span class="p">,</span>
+<a id="__codelineno-0-632" name="__codelineno-0-632"></a>                <span class="n">eps</span><span class="p">,</span>
+<a id="__codelineno-0-633" name="__codelineno-0-633"></a>                <span class="n">min_samples</span><span class="p">,</span>
+<a id="__codelineno-0-634" name="__codelineno-0-634"></a>                <span class="n">ndigits</span><span class="p">,</span>
+<a id="__codelineno-0-635" name="__codelineno-0-635"></a>            <span class="p">)</span>
+<a id="__codelineno-0-636" name="__codelineno-0-636"></a>        <span class="n">mvsh_objs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">temperature</span><span class="p">)</span>
+<a id="__codelineno-0-637" name="__codelineno-0-637"></a>        <span class="k">return</span> <span class="n">mvsh_objs</span>
+<a id="__codelineno-0-638" name="__codelineno-0-638"></a>
+<a id="__codelineno-0-639" name="__codelineno-0-639"></a>    <span class="nd">@classmethod</span>
+<a id="__codelineno-0-640" name="__codelineno-0-640"></a>    <span class="k">def</span> <span class="nf">_get_all_mvsh_in_commented_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dat_file</span><span class="p">:</span> <span class="n">DatFile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">MvsH</span><span class="p">]:</span>
+<a id="__codelineno-0-641" name="__codelineno-0-641"></a>        <span class="n">mvsh_objs</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-642" name="__codelineno-0-642"></a>        <span class="k">for</span> <span class="n">comment_list</span> <span class="ow">in</span> <span class="n">dat_file</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+<a id="__codelineno-0-643" name="__codelineno-0-643"></a>            <span class="c1"># ignore other experiments</span>
+<a id="__codelineno-0-644" name="__codelineno-0-644"></a>            <span class="k">if</span> <span class="s2">&quot;mvsh&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">comment_list</span><span class="p">):</span>
+<a id="__codelineno-0-645" name="__codelineno-0-645"></a>                <span class="k">continue</span>
+<a id="__codelineno-0-646" name="__codelineno-0-646"></a>            <span class="c1"># one of the comments should be a number denoting the temperature</span>
+<a id="__codelineno-0-647" name="__codelineno-0-647"></a>            <span class="c1"># may also include a unit, e.g. &quot;300 K&quot;</span>
+<a id="__codelineno-0-648" name="__codelineno-0-648"></a>            <span class="k">for</span> <span class="n">comment</span> <span class="ow">in</span> <span class="n">comment_list</span><span class="p">:</span>
+<a id="__codelineno-0-649" name="__codelineno-0-649"></a>                <span class="k">if</span> <span class="n">match</span> <span class="o">:=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d+&quot;</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
+<a id="__codelineno-0-650" name="__codelineno-0-650"></a>                    <span class="n">temp</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">())</span>
+<a id="__codelineno-0-651" name="__codelineno-0-651"></a>                    <span class="c1"># check to see if the unit is C otherwise assume K</span>
+<a id="__codelineno-0-652" name="__codelineno-0-652"></a>                    <span class="k">if</span> <span class="s2">&quot;C&quot;</span> <span class="ow">in</span> <span class="n">comment</span><span class="p">:</span>
+<a id="__codelineno-0-653" name="__codelineno-0-653"></a>                        <span class="n">temp</span> <span class="o">+=</span> <span class="mi">273</span>
+<a id="__codelineno-0-654" name="__codelineno-0-654"></a>                    <span class="n">mvsh_objs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">cls</span><span class="p">(</span><span class="n">dat_file</span><span class="p">,</span> <span class="n">temp</span><span class="p">))</span>
+<a id="__codelineno-0-655" name="__codelineno-0-655"></a>        <span class="k">return</span> <span class="n">mvsh_objs</span>
+<a id="__codelineno-0-656" name="__codelineno-0-656"></a>
+<a id="__codelineno-0-657" name="__codelineno-0-657"></a>    <span class="nd">@classmethod</span>
+<a id="__codelineno-0-658" name="__codelineno-0-658"></a>    <span class="k">def</span> <span class="nf">_get_all_mvsh_in_uncommented_file</span><span class="p">(</span>
+<a id="__codelineno-0-659" name="__codelineno-0-659"></a>        <span class="bp">cls</span><span class="p">,</span>
+<a id="__codelineno-0-660" name="__codelineno-0-660"></a>        <span class="n">dat_file</span><span class="p">:</span> <span class="n">DatFile</span><span class="p">,</span>
+<a id="__codelineno-0-661" name="__codelineno-0-661"></a>        <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<a id="__codelineno-0-662" name="__codelineno-0-662"></a>        <span class="n">min_samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<a id="__codelineno-0-663" name="__codelineno-0-663"></a>        <span class="n">ndigits</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<a id="__codelineno-0-664" name="__codelineno-0-664"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">MvsH</span><span class="p">]:</span>
+<a id="__codelineno-0-665" name="__codelineno-0-665"></a>        <span class="n">file_data</span> <span class="o">=</span> <span class="n">dat_file</span><span class="o">.</span><span class="n">data</span>
+<a id="__codelineno-0-666" name="__codelineno-0-666"></a>        <span class="n">file_data</span><span class="p">[</span><span class="s2">&quot;cluster&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label_clusters</span><span class="p">(</span>
+<a id="__codelineno-0-667" name="__codelineno-0-667"></a>            <span class="n">file_data</span><span class="p">[</span><span class="s2">&quot;Temperature (K)&quot;</span><span class="p">],</span> <span class="n">eps</span><span class="p">,</span> <span class="n">min_samples</span>
+<a id="__codelineno-0-668" name="__codelineno-0-668"></a>        <span class="p">)</span>
+<a id="__codelineno-0-669" name="__codelineno-0-669"></a>        <span class="n">temps</span> <span class="o">=</span> <span class="n">unique_values</span><span class="p">(</span><span class="n">file_data</span><span class="p">[</span><span class="s2">&quot;Temperature (K)&quot;</span><span class="p">],</span> <span class="n">eps</span><span class="p">,</span> <span class="n">min_samples</span><span class="p">,</span> <span class="n">ndigits</span><span class="p">)</span>
+<a id="__codelineno-0-670" name="__codelineno-0-670"></a>        <span class="n">mvsh_objs</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-671" name="__codelineno-0-671"></a>        <span class="k">for</span> <span class="n">temp</span> <span class="ow">in</span> <span class="n">temps</span><span class="p">:</span>
+<a id="__codelineno-0-672" name="__codelineno-0-672"></a>            <span class="n">mvsh_objs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">cls</span><span class="p">(</span><span class="n">dat_file</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="n">min_samples</span><span class="p">))</span>
+<a id="__codelineno-0-673" name="__codelineno-0-673"></a>        <span class="k">return</span> <span class="n">mvsh_objs</span>
 </code></pre></div></td></tr></table></div>
             </details>
 
@@ -2813,7 +2815,7 @@ data (see <code>scaling</code> attribute).</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>magnetopy/experiments/mvsh.py</code></summary>
+            <summary>Source code in <code>magnetopy\experiments\mvsh.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-194">194</a></span>
 <span class="normal"><a href="#__codelineno-0-195">195</a></span>
 <span class="normal"><a href="#__codelineno-0-196">196</a></span>
@@ -3013,7 +3015,7 @@ data (see <code>scaling</code> attribute).</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>magnetopy/experiments/mvsh.py</code></summary>
+            <summary>Source code in <code>magnetopy\experiments\mvsh.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-246">246</a></span>
 <span class="normal"><a href="#__codelineno-0-247">247</a></span>
 <span class="normal"><a href="#__codelineno-0-248">248</a></span>
@@ -3177,7 +3179,7 @@ standard is applied to the sample data.</p>
 <p>[1] <a href="https://qdusa.com/siteDocs/appNotes/1500-021.pdf">Correcting for the Absolute Field Error using the Pd Standard</a></p>
 
           <details class="quote">
-            <summary>Source code in <code>magnetopy/experiments/mvsh.py</code></summary>
+            <summary>Source code in <code>magnetopy\experiments\mvsh.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-279">279</a></span>
 <span class="normal"><a href="#__codelineno-0-280">280</a></span>
 <span class="normal"><a href="#__codelineno-0-281">281</a></span>
@@ -3382,7 +3384,7 @@ of the forward and reverse scans.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>magnetopy/experiments/mvsh.py</code></summary>
+            <summary>Source code in <code>magnetopy\experiments\mvsh.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-352">352</a></span>
 <span class="normal"><a href="#__codelineno-0-353">353</a></span>
 <span class="normal"><a href="#__codelineno-0-354">354</a></span>
@@ -3720,7 +3722,7 @@ If "auto", the label will be the <code>temperature</code> of the <code>MvsH</cod
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>magnetopy/experiments/mvsh.py</code></summary>
+            <summary>Source code in <code>magnetopy\experiments\mvsh.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-448">448</a></span>
 <span class="normal"><a href="#__codelineno-0-449">449</a></span>
 <span class="normal"><a href="#__codelineno-0-450">450</a></span>
@@ -3946,7 +3948,7 @@ scans.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>magnetopy/experiments/mvsh.py</code></summary>
+            <summary>Source code in <code>magnetopy\experiments\mvsh.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-485">485</a></span>
 <span class="normal"><a href="#__codelineno-0-486">486</a></span>
 <span class="normal"><a href="#__codelineno-0-487">487</a></span>
@@ -4197,7 +4199,7 @@ scans.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>magnetopy/experiments/mvsh.py</code></summary>
+            <summary>Source code in <code>magnetopy\experiments\mvsh.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-536">536</a></span>
 <span class="normal"><a href="#__codelineno-0-537">537</a></span>
 <span class="normal"><a href="#__codelineno-0-538">538</a></span>
@@ -4320,7 +4322,7 @@ scans.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>magnetopy/experiments/mvsh.py</code></summary>
+            <summary>Source code in <code>magnetopy\experiments\mvsh.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-575">575</a></span>
 <span class="normal"><a href="#__codelineno-0-576">576</a></span>
 <span class="normal"><a href="#__codelineno-0-577">577</a></span>
@@ -4336,7 +4338,8 @@ scans.</p>
 <span class="normal"><a href="#__codelineno-0-587">587</a></span>
 <span class="normal"><a href="#__codelineno-0-588">588</a></span>
 <span class="normal"><a href="#__codelineno-0-589">589</a></span>
-<span class="normal"><a href="#__codelineno-0-590">590</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-575" name="__codelineno-0-575"></a><span class="k">def</span> <span class="nf">as_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="normal"><a href="#__codelineno-0-590">590</a></span>
+<span class="normal"><a href="#__codelineno-0-591">591</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-575" name="__codelineno-0-575"></a><span class="k">def</span> <span class="nf">as_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <a id="__codelineno-0-576" name="__codelineno-0-576"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a dictionary representation of the `MvsH` object.</span>
 <a id="__codelineno-0-577" name="__codelineno-0-577"></a>
 <a id="__codelineno-0-578" name="__codelineno-0-578"></a><span class="sd">    Returns</span>
@@ -4346,12 +4349,13 @@ scans.</p>
 <a id="__codelineno-0-582" name="__codelineno-0-582"></a><span class="sd">        `&quot;field_correction_file&quot;`, and `&quot;scaling&quot;`.</span>
 <a id="__codelineno-0-583" name="__codelineno-0-583"></a><span class="sd">    &quot;&quot;&quot;</span>
 <a id="__codelineno-0-584" name="__codelineno-0-584"></a>    <span class="k">return</span> <span class="p">{</span>
-<a id="__codelineno-0-585" name="__codelineno-0-585"></a>        <span class="s2">&quot;origin_file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin_file</span><span class="p">,</span>
-<a id="__codelineno-0-586" name="__codelineno-0-586"></a>        <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">temperature</span><span class="p">,</span>
-<a id="__codelineno-0-587" name="__codelineno-0-587"></a>        <span class="s2">&quot;field_range&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_range</span><span class="p">,</span>
-<a id="__codelineno-0-588" name="__codelineno-0-588"></a>        <span class="s2">&quot;field_correction_file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_correction_file</span><span class="p">,</span>
-<a id="__codelineno-0-589" name="__codelineno-0-589"></a>        <span class="s2">&quot;scaling&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaling</span><span class="p">,</span>
-<a id="__codelineno-0-590" name="__codelineno-0-590"></a>    <span class="p">}</span>
+<a id="__codelineno-0-585" name="__codelineno-0-585"></a>        <span class="s2">&quot;_class_&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+<a id="__codelineno-0-586" name="__codelineno-0-586"></a>        <span class="s2">&quot;origin_file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin_file</span><span class="p">,</span>
+<a id="__codelineno-0-587" name="__codelineno-0-587"></a>        <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">temperature</span><span class="p">,</span>
+<a id="__codelineno-0-588" name="__codelineno-0-588"></a>        <span class="s2">&quot;field_range&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_range</span><span class="p">,</span>
+<a id="__codelineno-0-589" name="__codelineno-0-589"></a>        <span class="s2">&quot;field_correction_file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_correction_file</span><span class="p">,</span>
+<a id="__codelineno-0-590" name="__codelineno-0-590"></a>        <span class="s2">&quot;scaling&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaling</span><span class="p">,</span>
+<a id="__codelineno-0-591" name="__codelineno-0-591"></a>    <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -4491,9 +4495,8 @@ by increasing temperature.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>magnetopy/experiments/mvsh.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-592">592</a></span>
-<span class="normal"><a href="#__codelineno-0-593">593</a></span>
+            <summary>Source code in <code>magnetopy\experiments\mvsh.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-593">593</a></span>
 <span class="normal"><a href="#__codelineno-0-594">594</a></span>
 <span class="normal"><a href="#__codelineno-0-595">595</a></span>
 <span class="normal"><a href="#__codelineno-0-596">596</a></span>
@@ -4536,51 +4539,52 @@ by increasing temperature.</p>
 <span class="normal"><a href="#__codelineno-0-633">633</a></span>
 <span class="normal"><a href="#__codelineno-0-634">634</a></span>
 <span class="normal"><a href="#__codelineno-0-635">635</a></span>
-<span class="normal"><a href="#__codelineno-0-636">636</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-592" name="__codelineno-0-592"></a><span class="nd">@classmethod</span>
-<a id="__codelineno-0-593" name="__codelineno-0-593"></a><span class="k">def</span> <span class="nf">get_all_in_file</span><span class="p">(</span>
-<a id="__codelineno-0-594" name="__codelineno-0-594"></a>    <span class="bp">cls</span><span class="p">,</span>
-<a id="__codelineno-0-595" name="__codelineno-0-595"></a>    <span class="n">dat_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="n">DatFile</span><span class="p">,</span>
-<a id="__codelineno-0-596" name="__codelineno-0-596"></a>    <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
-<a id="__codelineno-0-597" name="__codelineno-0-597"></a>    <span class="n">min_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-<a id="__codelineno-0-598" name="__codelineno-0-598"></a>    <span class="n">ndigits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-<a id="__codelineno-0-599" name="__codelineno-0-599"></a>    <span class="n">parse_raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-<a id="__codelineno-0-600" name="__codelineno-0-600"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">MvsH</span><span class="p">]:</span>
-<a id="__codelineno-0-601" name="__codelineno-0-601"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a .dat file that contains one or more M vs. H experiments, returns a</span>
-<a id="__codelineno-0-602" name="__codelineno-0-602"></a><span class="sd">    list of `MvsH` objects, one for each experiment.</span>
-<a id="__codelineno-0-603" name="__codelineno-0-603"></a>
-<a id="__codelineno-0-604" name="__codelineno-0-604"></a><span class="sd">    Parameters</span>
-<a id="__codelineno-0-605" name="__codelineno-0-605"></a><span class="sd">    ----------</span>
-<a id="__codelineno-0-606" name="__codelineno-0-606"></a><span class="sd">    dat_file : str | Path | DatFile</span>
-<a id="__codelineno-0-607" name="__codelineno-0-607"></a><span class="sd">        The .dat file containing the data for the experiment.</span>
-<a id="__codelineno-0-608" name="__codelineno-0-608"></a><span class="sd">    eps : float, optional</span>
-<a id="__codelineno-0-609" name="__codelineno-0-609"></a><span class="sd">        See `magnetopy.parsing_utils.label_clusters` for details, by default 0.001</span>
-<a id="__codelineno-0-610" name="__codelineno-0-610"></a><span class="sd">    min_samples : int, optional</span>
-<a id="__codelineno-0-611" name="__codelineno-0-611"></a><span class="sd">        See `magnetopy.parsing_utils.label_clusters` for details, by default 10</span>
-<a id="__codelineno-0-612" name="__codelineno-0-612"></a><span class="sd">    ndigits : int, optional</span>
-<a id="__codelineno-0-613" name="__codelineno-0-613"></a><span class="sd">        See `magnetopy.parsing_utils.label_clusters` for details, by default 0</span>
-<a id="__codelineno-0-614" name="__codelineno-0-614"></a><span class="sd">    parse_raw : bool, optional</span>
-<a id="__codelineno-0-615" name="__codelineno-0-615"></a><span class="sd">        If `True` and there is a corresponding .rw.dat file, the raw data will be</span>
-<a id="__codelineno-0-616" name="__codelineno-0-616"></a><span class="sd">        parsed and added to the `data` attribute. Defaults to `False`.</span>
-<a id="__codelineno-0-617" name="__codelineno-0-617"></a>
-<a id="__codelineno-0-618" name="__codelineno-0-618"></a><span class="sd">    Returns</span>
-<a id="__codelineno-0-619" name="__codelineno-0-619"></a><span class="sd">    -------</span>
-<a id="__codelineno-0-620" name="__codelineno-0-620"></a><span class="sd">    list[MvsH]</span>
-<a id="__codelineno-0-621" name="__codelineno-0-621"></a><span class="sd">        A list of `MvsH` objects, one for each experiment in the .dat file, sorted</span>
-<a id="__codelineno-0-622" name="__codelineno-0-622"></a><span class="sd">        by increasing temperature.</span>
-<a id="__codelineno-0-623" name="__codelineno-0-623"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-624" name="__codelineno-0-624"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dat_file</span><span class="p">,</span> <span class="n">DatFile</span><span class="p">):</span>
-<a id="__codelineno-0-625" name="__codelineno-0-625"></a>        <span class="n">dat_file</span> <span class="o">=</span> <span class="n">DatFile</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">dat_file</span><span class="p">),</span> <span class="n">parse_raw</span><span class="p">)</span>
-<a id="__codelineno-0-626" name="__codelineno-0-626"></a>    <span class="k">if</span> <span class="n">dat_file</span><span class="o">.</span><span class="n">comments</span><span class="p">:</span>
-<a id="__codelineno-0-627" name="__codelineno-0-627"></a>        <span class="n">mvsh_objs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_all_mvsh_in_commented_file</span><span class="p">(</span><span class="n">dat_file</span><span class="p">)</span>
-<a id="__codelineno-0-628" name="__codelineno-0-628"></a>    <span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-0-629" name="__codelineno-0-629"></a>        <span class="n">mvsh_objs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_all_mvsh_in_uncommented_file</span><span class="p">(</span>
-<a id="__codelineno-0-630" name="__codelineno-0-630"></a>            <span class="n">dat_file</span><span class="p">,</span>
-<a id="__codelineno-0-631" name="__codelineno-0-631"></a>            <span class="n">eps</span><span class="p">,</span>
-<a id="__codelineno-0-632" name="__codelineno-0-632"></a>            <span class="n">min_samples</span><span class="p">,</span>
-<a id="__codelineno-0-633" name="__codelineno-0-633"></a>            <span class="n">ndigits</span><span class="p">,</span>
-<a id="__codelineno-0-634" name="__codelineno-0-634"></a>        <span class="p">)</span>
-<a id="__codelineno-0-635" name="__codelineno-0-635"></a>    <span class="n">mvsh_objs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">temperature</span><span class="p">)</span>
-<a id="__codelineno-0-636" name="__codelineno-0-636"></a>    <span class="k">return</span> <span class="n">mvsh_objs</span>
+<span class="normal"><a href="#__codelineno-0-636">636</a></span>
+<span class="normal"><a href="#__codelineno-0-637">637</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-593" name="__codelineno-0-593"></a><span class="nd">@classmethod</span>
+<a id="__codelineno-0-594" name="__codelineno-0-594"></a><span class="k">def</span> <span class="nf">get_all_in_file</span><span class="p">(</span>
+<a id="__codelineno-0-595" name="__codelineno-0-595"></a>    <span class="bp">cls</span><span class="p">,</span>
+<a id="__codelineno-0-596" name="__codelineno-0-596"></a>    <span class="n">dat_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="n">DatFile</span><span class="p">,</span>
+<a id="__codelineno-0-597" name="__codelineno-0-597"></a>    <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+<a id="__codelineno-0-598" name="__codelineno-0-598"></a>    <span class="n">min_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+<a id="__codelineno-0-599" name="__codelineno-0-599"></a>    <span class="n">ndigits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-0-600" name="__codelineno-0-600"></a>    <span class="n">parse_raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-0-601" name="__codelineno-0-601"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">MvsH</span><span class="p">]:</span>
+<a id="__codelineno-0-602" name="__codelineno-0-602"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a .dat file that contains one or more M vs. H experiments, returns a</span>
+<a id="__codelineno-0-603" name="__codelineno-0-603"></a><span class="sd">    list of `MvsH` objects, one for each experiment.</span>
+<a id="__codelineno-0-604" name="__codelineno-0-604"></a>
+<a id="__codelineno-0-605" name="__codelineno-0-605"></a><span class="sd">    Parameters</span>
+<a id="__codelineno-0-606" name="__codelineno-0-606"></a><span class="sd">    ----------</span>
+<a id="__codelineno-0-607" name="__codelineno-0-607"></a><span class="sd">    dat_file : str | Path | DatFile</span>
+<a id="__codelineno-0-608" name="__codelineno-0-608"></a><span class="sd">        The .dat file containing the data for the experiment.</span>
+<a id="__codelineno-0-609" name="__codelineno-0-609"></a><span class="sd">    eps : float, optional</span>
+<a id="__codelineno-0-610" name="__codelineno-0-610"></a><span class="sd">        See `magnetopy.parsing_utils.label_clusters` for details, by default 0.001</span>
+<a id="__codelineno-0-611" name="__codelineno-0-611"></a><span class="sd">    min_samples : int, optional</span>
+<a id="__codelineno-0-612" name="__codelineno-0-612"></a><span class="sd">        See `magnetopy.parsing_utils.label_clusters` for details, by default 10</span>
+<a id="__codelineno-0-613" name="__codelineno-0-613"></a><span class="sd">    ndigits : int, optional</span>
+<a id="__codelineno-0-614" name="__codelineno-0-614"></a><span class="sd">        See `magnetopy.parsing_utils.label_clusters` for details, by default 0</span>
+<a id="__codelineno-0-615" name="__codelineno-0-615"></a><span class="sd">    parse_raw : bool, optional</span>
+<a id="__codelineno-0-616" name="__codelineno-0-616"></a><span class="sd">        If `True` and there is a corresponding .rw.dat file, the raw data will be</span>
+<a id="__codelineno-0-617" name="__codelineno-0-617"></a><span class="sd">        parsed and added to the `data` attribute. Defaults to `False`.</span>
+<a id="__codelineno-0-618" name="__codelineno-0-618"></a>
+<a id="__codelineno-0-619" name="__codelineno-0-619"></a><span class="sd">    Returns</span>
+<a id="__codelineno-0-620" name="__codelineno-0-620"></a><span class="sd">    -------</span>
+<a id="__codelineno-0-621" name="__codelineno-0-621"></a><span class="sd">    list[MvsH]</span>
+<a id="__codelineno-0-622" name="__codelineno-0-622"></a><span class="sd">        A list of `MvsH` objects, one for each experiment in the .dat file, sorted</span>
+<a id="__codelineno-0-623" name="__codelineno-0-623"></a><span class="sd">        by increasing temperature.</span>
+<a id="__codelineno-0-624" name="__codelineno-0-624"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-625" name="__codelineno-0-625"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dat_file</span><span class="p">,</span> <span class="n">DatFile</span><span class="p">):</span>
+<a id="__codelineno-0-626" name="__codelineno-0-626"></a>        <span class="n">dat_file</span> <span class="o">=</span> <span class="n">DatFile</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">dat_file</span><span class="p">),</span> <span class="n">parse_raw</span><span class="p">)</span>
+<a id="__codelineno-0-627" name="__codelineno-0-627"></a>    <span class="k">if</span> <span class="n">dat_file</span><span class="o">.</span><span class="n">comments</span><span class="p">:</span>
+<a id="__codelineno-0-628" name="__codelineno-0-628"></a>        <span class="n">mvsh_objs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_all_mvsh_in_commented_file</span><span class="p">(</span><span class="n">dat_file</span><span class="p">)</span>
+<a id="__codelineno-0-629" name="__codelineno-0-629"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-630" name="__codelineno-0-630"></a>        <span class="n">mvsh_objs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_all_mvsh_in_uncommented_file</span><span class="p">(</span>
+<a id="__codelineno-0-631" name="__codelineno-0-631"></a>            <span class="n">dat_file</span><span class="p">,</span>
+<a id="__codelineno-0-632" name="__codelineno-0-632"></a>            <span class="n">eps</span><span class="p">,</span>
+<a id="__codelineno-0-633" name="__codelineno-0-633"></a>            <span class="n">min_samples</span><span class="p">,</span>
+<a id="__codelineno-0-634" name="__codelineno-0-634"></a>            <span class="n">ndigits</span><span class="p">,</span>
+<a id="__codelineno-0-635" name="__codelineno-0-635"></a>        <span class="p">)</span>
+<a id="__codelineno-0-636" name="__codelineno-0-636"></a>    <span class="n">mvsh_objs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">temperature</span><span class="p">)</span>
+<a id="__codelineno-0-637" name="__codelineno-0-637"></a>    <span class="k">return</span> <span class="n">mvsh_objs</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -4666,9 +4670,8 @@ standard is applied to the sample data.</p>
 <p>[1] <a href="https://qdusa.com/siteDocs/appNotes/1500-021.pdf">Correcting for the Absolute Field Error using the Pd Standard</a></p>
 
             <details class="quote">
-              <summary>Source code in <code>magnetopy/experiments/mvsh.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-675">675</a></span>
-<span class="normal"><a href="#__codelineno-0-676">676</a></span>
+              <summary>Source code in <code>magnetopy\experiments\mvsh.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-676">676</a></span>
 <span class="normal"><a href="#__codelineno-0-677">677</a></span>
 <span class="normal"><a href="#__codelineno-0-678">678</a></span>
 <span class="normal"><a href="#__codelineno-0-679">679</a></span>
@@ -4746,86 +4749,87 @@ standard is applied to the sample data.</p>
 <span class="normal"><a href="#__codelineno-0-751">751</a></span>
 <span class="normal"><a href="#__codelineno-0-752">752</a></span>
 <span class="normal"><a href="#__codelineno-0-753">753</a></span>
-<span class="normal"><a href="#__codelineno-0-754">754</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-675" name="__codelineno-0-675"></a><span class="k">class</span> <span class="nc">TrueFieldCorrection</span><span class="p">(</span><span class="n">MvsH</span><span class="p">):</span>
-<a id="__codelineno-0-676" name="__codelineno-0-676"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A special `MvsH` class for handling the palladium standard calibration data</span>
-<a id="__codelineno-0-677" name="__codelineno-0-677"></a><span class="sd">    used to correct the magnetic field for flux trapping. Unlikely to be used directly</span>
-<a id="__codelineno-0-678" name="__codelineno-0-678"></a><span class="sd">    by the user, and instead will be called from the `correct_field` method of the</span>
-<a id="__codelineno-0-679" name="__codelineno-0-679"></a><span class="sd">    `MvsH` class.</span>
-<a id="__codelineno-0-680" name="__codelineno-0-680"></a>
-<a id="__codelineno-0-681" name="__codelineno-0-681"></a><span class="sd">    Parameters</span>
-<a id="__codelineno-0-682" name="__codelineno-0-682"></a><span class="sd">    ----------</span>
-<a id="__codelineno-0-683" name="__codelineno-0-683"></a><span class="sd">    sequence : str | Path</span>
-<a id="__codelineno-0-684" name="__codelineno-0-684"></a><span class="sd">        This could be a path to a .dat file containing the Pd standard sequence, or if</span>
-<a id="__codelineno-0-685" name="__codelineno-0-685"></a><span class="sd">        a configuration file containing calibration data is present, the name of the</span>
-<a id="__codelineno-0-686" name="__codelineno-0-686"></a><span class="sd">        sequence in the configuration file.</span>
-<a id="__codelineno-0-687" name="__codelineno-0-687"></a>
-<a id="__codelineno-0-688" name="__codelineno-0-688"></a><span class="sd">    See Also</span>
-<a id="__codelineno-0-689" name="__codelineno-0-689"></a><span class="sd">    --------</span>
-<a id="__codelineno-0-690" name="__codelineno-0-690"></a><span class="sd">    magnetopy.cli.calibration_install</span>
-<a id="__codelineno-0-691" name="__codelineno-0-691"></a>
-<a id="__codelineno-0-692" name="__codelineno-0-692"></a><span class="sd">    Notes</span>
-<a id="__codelineno-0-693" name="__codelineno-0-693"></a><span class="sd">    -----</span>
-<a id="__codelineno-0-694" name="__codelineno-0-694"></a><span class="sd">    As described in the Quantum Design application note[1], the magnetic field</span>
-<a id="__codelineno-0-695" name="__codelineno-0-695"></a><span class="sd">    reported by the magnetometer is determined by current from the magnet power</span>
-<a id="__codelineno-0-696" name="__codelineno-0-696"></a><span class="sd">    supply and not by direct measurement. Flux trapping in the magnet can cause</span>
-<a id="__codelineno-0-697" name="__codelineno-0-697"></a><span class="sd">    the reported field to be different from the actual field. While always present,</span>
-<a id="__codelineno-0-698" name="__codelineno-0-698"></a><span class="sd">    it is most obvious in hysteresis curves of soft, non-hysteretic materials. In</span>
-<a id="__codelineno-0-699" name="__codelineno-0-699"></a><span class="sd">    some cases the forward and reverse scans can have negative and postive</span>
-<a id="__codelineno-0-700" name="__codelineno-0-700"></a><span class="sd">    coercivities, respectively, which is not physically possible.</span>
-<a id="__codelineno-0-701" name="__codelineno-0-701"></a>
-<a id="__codelineno-0-702" name="__codelineno-0-702"></a><span class="sd">    The true field correction remedies this by using a Pd standard to determine the</span>
-<a id="__codelineno-0-703" name="__codelineno-0-703"></a><span class="sd">    actual field applied to the sample. Provided the calibration and sample</span>
-<a id="__codelineno-0-704" name="__codelineno-0-704"></a><span class="sd">    sequences are the same, it is assumed that the flux trapping is the same for</span>
-<a id="__codelineno-0-705" name="__codelineno-0-705"></a><span class="sd">    both sequences, and the calculated field from the measurement on the Pd</span>
-<a id="__codelineno-0-706" name="__codelineno-0-706"></a><span class="sd">    standard is applied to the sample data.</span>
-<a id="__codelineno-0-707" name="__codelineno-0-707"></a>
-<a id="__codelineno-0-708" name="__codelineno-0-708"></a><span class="sd">    References</span>
-<a id="__codelineno-0-709" name="__codelineno-0-709"></a><span class="sd">    ----------</span>
-<a id="__codelineno-0-710" name="__codelineno-0-710"></a><span class="sd">    [1] [Correcting for the Absolute Field Error using the Pd Standard](https://qdusa.com/siteDocs/appNotes/1500-021.pdf)</span>
-<a id="__codelineno-0-711" name="__codelineno-0-711"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-712" name="__codelineno-0-712"></a>
-<a id="__codelineno-0-713" name="__codelineno-0-713"></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">):</span>
-<a id="__codelineno-0-714" name="__codelineno-0-714"></a>        <span class="n">dat_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_dat_file</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
-<a id="__codelineno-0-715" name="__codelineno-0-715"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">dat_file</span><span class="p">)</span>
-<a id="__codelineno-0-716" name="__codelineno-0-716"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">pd_mass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_mass</span><span class="p">(</span><span class="n">dat_file</span><span class="p">)</span>  <span class="c1"># mass of the Pd standard in mg</span>
-<a id="__codelineno-0-717" name="__codelineno-0-717"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_add_true_field</span><span class="p">()</span>
-<a id="__codelineno-0-718" name="__codelineno-0-718"></a>
-<a id="__codelineno-0-719" name="__codelineno-0-719"></a>    <span class="k">def</span> <span class="nf">_get_dat_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatFile</span><span class="p">:</span>
-<a id="__codelineno-0-720" name="__codelineno-0-720"></a>        <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-<a id="__codelineno-0-721" name="__codelineno-0-721"></a>            <span class="k">return</span> <span class="n">DatFile</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
-<a id="__codelineno-0-722" name="__codelineno-0-722"></a>        <span class="n">mp_cal</span> <span class="o">=</span> <span class="n">Path</span><span class="p">()</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;.magnetopy/calibration&quot;</span>
-<a id="__codelineno-0-723" name="__codelineno-0-723"></a>        <span class="k">if</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.dat&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
-<a id="__codelineno-0-724" name="__codelineno-0-724"></a>            <span class="n">mp_cal</span> <span class="o">/</span> <span class="s2">&quot;calibration_files&quot;</span> <span class="o">/</span> <span class="n">sequence</span>
-<a id="__codelineno-0-725" name="__codelineno-0-725"></a>        <span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-<a id="__codelineno-0-726" name="__codelineno-0-726"></a>            <span class="k">return</span> <span class="n">DatFile</span><span class="p">(</span><span class="n">mp_cal</span> <span class="o">/</span> <span class="s2">&quot;calibration_files&quot;</span> <span class="o">/</span> <span class="n">sequence</span><span class="p">)</span>
-<a id="__codelineno-0-727" name="__codelineno-0-727"></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mp_cal</span> <span class="o">/</span> <span class="s2">&quot;calibration.json&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<a id="__codelineno-0-728" name="__codelineno-0-728"></a>            <span class="n">cal_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-<a id="__codelineno-0-729" name="__codelineno-0-729"></a>        <span class="k">if</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="n">cal_json</span><span class="p">[</span><span class="s2">&quot;mvsh&quot;</span><span class="p">]:</span>
-<a id="__codelineno-0-730" name="__codelineno-0-730"></a>            <span class="n">seq_dat</span> <span class="o">=</span> <span class="n">cal_json</span><span class="p">[</span><span class="s2">&quot;mvsh&quot;</span><span class="p">][</span><span class="n">sequence</span><span class="p">]</span>
-<a id="__codelineno-0-731" name="__codelineno-0-731"></a>            <span class="k">return</span> <span class="n">DatFile</span><span class="p">(</span><span class="n">mp_cal</span> <span class="o">/</span> <span class="s2">&quot;calibration_files&quot;</span> <span class="o">/</span> <span class="n">seq_dat</span><span class="p">)</span>
-<a id="__codelineno-0-732" name="__codelineno-0-732"></a>        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
-<a id="__codelineno-0-733" name="__codelineno-0-733"></a>            <span class="sa">f</span><span class="s2">&quot;Could not find the requested sequence: </span><span class="si">{</span><span class="n">sequence</span><span class="si">}</span><span class="s2">. &quot;</span>
-<a id="__codelineno-0-734" name="__codelineno-0-734"></a>            <span class="s2">&quot;TrueFieldCorrection requires either the name of a sequence listed in &quot;</span>
-<a id="__codelineno-0-735" name="__codelineno-0-735"></a>            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mp_cal</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s1">&#39;calibration.json&#39;</span><span class="si">}</span><span class="s2">, the name of a .dat file in &quot;</span>
-<a id="__codelineno-0-736" name="__codelineno-0-736"></a>            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mp_cal</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s1">&#39;calibration_files&#39;</span><span class="si">}</span><span class="s2">, or the path to a .dat file.&quot;</span>
-<a id="__codelineno-0-737" name="__codelineno-0-737"></a>        <span class="p">)</span>
-<a id="__codelineno-0-738" name="__codelineno-0-738"></a>
-<a id="__codelineno-0-739" name="__codelineno-0-739"></a>    <span class="nd">@staticmethod</span>
-<a id="__codelineno-0-740" name="__codelineno-0-740"></a>    <span class="k">def</span> <span class="nf">_get_mass</span><span class="p">(</span><span class="n">dat_file</span><span class="p">:</span> <span class="n">DatFile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<a id="__codelineno-0-741" name="__codelineno-0-741"></a>        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">dat_file</span><span class="o">.</span><span class="n">header</span><span class="p">:</span>
-<a id="__codelineno-0-742" name="__codelineno-0-742"></a>            <span class="n">category</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<a id="__codelineno-0-743" name="__codelineno-0-743"></a>            <span class="k">if</span> <span class="n">category</span> <span class="o">!=</span> <span class="s2">&quot;INFO&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-744" name="__codelineno-0-744"></a>                <span class="k">continue</span>
-<a id="__codelineno-0-745" name="__codelineno-0-745"></a>            <span class="n">info</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-<a id="__codelineno-0-746" name="__codelineno-0-746"></a>            <span class="k">if</span> <span class="n">info</span> <span class="o">==</span> <span class="s2">&quot;SAMPLE_MASS&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-747" name="__codelineno-0-747"></a>                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<a id="__codelineno-0-748" name="__codelineno-0-748"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not find the sample mass in the .dat file header.&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-749" name="__codelineno-0-749"></a>
-<a id="__codelineno-0-750" name="__codelineno-0-750"></a>    <span class="k">def</span> <span class="nf">_add_true_field</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<a id="__codelineno-0-751" name="__codelineno-0-751"></a>        <span class="n">chi_g</span> <span class="o">=</span> <span class="mf">5.25e-6</span>  <span class="c1"># emu Oe / g</span>
-<a id="__codelineno-0-752" name="__codelineno-0-752"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;true_field&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;uncorrected_moment&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span>
-<a id="__codelineno-0-753" name="__codelineno-0-753"></a>            <span class="n">chi_g</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pd_mass</span> <span class="o">*</span> <span class="mf">1e-3</span>
-<a id="__codelineno-0-754" name="__codelineno-0-754"></a>        <span class="p">)</span>
+<span class="normal"><a href="#__codelineno-0-754">754</a></span>
+<span class="normal"><a href="#__codelineno-0-755">755</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-676" name="__codelineno-0-676"></a><span class="k">class</span> <span class="nc">TrueFieldCorrection</span><span class="p">(</span><span class="n">MvsH</span><span class="p">):</span>
+<a id="__codelineno-0-677" name="__codelineno-0-677"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A special `MvsH` class for handling the palladium standard calibration data</span>
+<a id="__codelineno-0-678" name="__codelineno-0-678"></a><span class="sd">    used to correct the magnetic field for flux trapping. Unlikely to be used directly</span>
+<a id="__codelineno-0-679" name="__codelineno-0-679"></a><span class="sd">    by the user, and instead will be called from the `correct_field` method of the</span>
+<a id="__codelineno-0-680" name="__codelineno-0-680"></a><span class="sd">    `MvsH` class.</span>
+<a id="__codelineno-0-681" name="__codelineno-0-681"></a>
+<a id="__codelineno-0-682" name="__codelineno-0-682"></a><span class="sd">    Parameters</span>
+<a id="__codelineno-0-683" name="__codelineno-0-683"></a><span class="sd">    ----------</span>
+<a id="__codelineno-0-684" name="__codelineno-0-684"></a><span class="sd">    sequence : str | Path</span>
+<a id="__codelineno-0-685" name="__codelineno-0-685"></a><span class="sd">        This could be a path to a .dat file containing the Pd standard sequence, or if</span>
+<a id="__codelineno-0-686" name="__codelineno-0-686"></a><span class="sd">        a configuration file containing calibration data is present, the name of the</span>
+<a id="__codelineno-0-687" name="__codelineno-0-687"></a><span class="sd">        sequence in the configuration file.</span>
+<a id="__codelineno-0-688" name="__codelineno-0-688"></a>
+<a id="__codelineno-0-689" name="__codelineno-0-689"></a><span class="sd">    See Also</span>
+<a id="__codelineno-0-690" name="__codelineno-0-690"></a><span class="sd">    --------</span>
+<a id="__codelineno-0-691" name="__codelineno-0-691"></a><span class="sd">    magnetopy.cli.calibration_install</span>
+<a id="__codelineno-0-692" name="__codelineno-0-692"></a>
+<a id="__codelineno-0-693" name="__codelineno-0-693"></a><span class="sd">    Notes</span>
+<a id="__codelineno-0-694" name="__codelineno-0-694"></a><span class="sd">    -----</span>
+<a id="__codelineno-0-695" name="__codelineno-0-695"></a><span class="sd">    As described in the Quantum Design application note[1], the magnetic field</span>
+<a id="__codelineno-0-696" name="__codelineno-0-696"></a><span class="sd">    reported by the magnetometer is determined by current from the magnet power</span>
+<a id="__codelineno-0-697" name="__codelineno-0-697"></a><span class="sd">    supply and not by direct measurement. Flux trapping in the magnet can cause</span>
+<a id="__codelineno-0-698" name="__codelineno-0-698"></a><span class="sd">    the reported field to be different from the actual field. While always present,</span>
+<a id="__codelineno-0-699" name="__codelineno-0-699"></a><span class="sd">    it is most obvious in hysteresis curves of soft, non-hysteretic materials. In</span>
+<a id="__codelineno-0-700" name="__codelineno-0-700"></a><span class="sd">    some cases the forward and reverse scans can have negative and postive</span>
+<a id="__codelineno-0-701" name="__codelineno-0-701"></a><span class="sd">    coercivities, respectively, which is not physically possible.</span>
+<a id="__codelineno-0-702" name="__codelineno-0-702"></a>
+<a id="__codelineno-0-703" name="__codelineno-0-703"></a><span class="sd">    The true field correction remedies this by using a Pd standard to determine the</span>
+<a id="__codelineno-0-704" name="__codelineno-0-704"></a><span class="sd">    actual field applied to the sample. Provided the calibration and sample</span>
+<a id="__codelineno-0-705" name="__codelineno-0-705"></a><span class="sd">    sequences are the same, it is assumed that the flux trapping is the same for</span>
+<a id="__codelineno-0-706" name="__codelineno-0-706"></a><span class="sd">    both sequences, and the calculated field from the measurement on the Pd</span>
+<a id="__codelineno-0-707" name="__codelineno-0-707"></a><span class="sd">    standard is applied to the sample data.</span>
+<a id="__codelineno-0-708" name="__codelineno-0-708"></a>
+<a id="__codelineno-0-709" name="__codelineno-0-709"></a><span class="sd">    References</span>
+<a id="__codelineno-0-710" name="__codelineno-0-710"></a><span class="sd">    ----------</span>
+<a id="__codelineno-0-711" name="__codelineno-0-711"></a><span class="sd">    [1] [Correcting for the Absolute Field Error using the Pd Standard](https://qdusa.com/siteDocs/appNotes/1500-021.pdf)</span>
+<a id="__codelineno-0-712" name="__codelineno-0-712"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-713" name="__codelineno-0-713"></a>
+<a id="__codelineno-0-714" name="__codelineno-0-714"></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">):</span>
+<a id="__codelineno-0-715" name="__codelineno-0-715"></a>        <span class="n">dat_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_dat_file</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+<a id="__codelineno-0-716" name="__codelineno-0-716"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">dat_file</span><span class="p">)</span>
+<a id="__codelineno-0-717" name="__codelineno-0-717"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">pd_mass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_mass</span><span class="p">(</span><span class="n">dat_file</span><span class="p">)</span>  <span class="c1"># mass of the Pd standard in mg</span>
+<a id="__codelineno-0-718" name="__codelineno-0-718"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_add_true_field</span><span class="p">()</span>
+<a id="__codelineno-0-719" name="__codelineno-0-719"></a>
+<a id="__codelineno-0-720" name="__codelineno-0-720"></a>    <span class="k">def</span> <span class="nf">_get_dat_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatFile</span><span class="p">:</span>
+<a id="__codelineno-0-721" name="__codelineno-0-721"></a>        <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+<a id="__codelineno-0-722" name="__codelineno-0-722"></a>            <span class="k">return</span> <span class="n">DatFile</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+<a id="__codelineno-0-723" name="__codelineno-0-723"></a>        <span class="n">mp_cal</span> <span class="o">=</span> <span class="n">Path</span><span class="p">()</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;.magnetopy/calibration&quot;</span>
+<a id="__codelineno-0-724" name="__codelineno-0-724"></a>        <span class="k">if</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.dat&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+<a id="__codelineno-0-725" name="__codelineno-0-725"></a>            <span class="n">mp_cal</span> <span class="o">/</span> <span class="s2">&quot;calibration_files&quot;</span> <span class="o">/</span> <span class="n">sequence</span>
+<a id="__codelineno-0-726" name="__codelineno-0-726"></a>        <span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+<a id="__codelineno-0-727" name="__codelineno-0-727"></a>            <span class="k">return</span> <span class="n">DatFile</span><span class="p">(</span><span class="n">mp_cal</span> <span class="o">/</span> <span class="s2">&quot;calibration_files&quot;</span> <span class="o">/</span> <span class="n">sequence</span><span class="p">)</span>
+<a id="__codelineno-0-728" name="__codelineno-0-728"></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mp_cal</span> <span class="o">/</span> <span class="s2">&quot;calibration.json&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-0-729" name="__codelineno-0-729"></a>            <span class="n">cal_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<a id="__codelineno-0-730" name="__codelineno-0-730"></a>        <span class="k">if</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="n">cal_json</span><span class="p">[</span><span class="s2">&quot;mvsh&quot;</span><span class="p">]:</span>
+<a id="__codelineno-0-731" name="__codelineno-0-731"></a>            <span class="n">seq_dat</span> <span class="o">=</span> <span class="n">cal_json</span><span class="p">[</span><span class="s2">&quot;mvsh&quot;</span><span class="p">][</span><span class="n">sequence</span><span class="p">]</span>
+<a id="__codelineno-0-732" name="__codelineno-0-732"></a>            <span class="k">return</span> <span class="n">DatFile</span><span class="p">(</span><span class="n">mp_cal</span> <span class="o">/</span> <span class="s2">&quot;calibration_files&quot;</span> <span class="o">/</span> <span class="n">seq_dat</span><span class="p">)</span>
+<a id="__codelineno-0-733" name="__codelineno-0-733"></a>        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
+<a id="__codelineno-0-734" name="__codelineno-0-734"></a>            <span class="sa">f</span><span class="s2">&quot;Could not find the requested sequence: </span><span class="si">{</span><span class="n">sequence</span><span class="si">}</span><span class="s2">. &quot;</span>
+<a id="__codelineno-0-735" name="__codelineno-0-735"></a>            <span class="s2">&quot;TrueFieldCorrection requires either the name of a sequence listed in &quot;</span>
+<a id="__codelineno-0-736" name="__codelineno-0-736"></a>            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mp_cal</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s1">&#39;calibration.json&#39;</span><span class="si">}</span><span class="s2">, the name of a .dat file in &quot;</span>
+<a id="__codelineno-0-737" name="__codelineno-0-737"></a>            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mp_cal</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s1">&#39;calibration_files&#39;</span><span class="si">}</span><span class="s2">, or the path to a .dat file.&quot;</span>
+<a id="__codelineno-0-738" name="__codelineno-0-738"></a>        <span class="p">)</span>
+<a id="__codelineno-0-739" name="__codelineno-0-739"></a>
+<a id="__codelineno-0-740" name="__codelineno-0-740"></a>    <span class="nd">@staticmethod</span>
+<a id="__codelineno-0-741" name="__codelineno-0-741"></a>    <span class="k">def</span> <span class="nf">_get_mass</span><span class="p">(</span><span class="n">dat_file</span><span class="p">:</span> <span class="n">DatFile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<a id="__codelineno-0-742" name="__codelineno-0-742"></a>        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">dat_file</span><span class="o">.</span><span class="n">header</span><span class="p">:</span>
+<a id="__codelineno-0-743" name="__codelineno-0-743"></a>            <span class="n">category</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<a id="__codelineno-0-744" name="__codelineno-0-744"></a>            <span class="k">if</span> <span class="n">category</span> <span class="o">!=</span> <span class="s2">&quot;INFO&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-745" name="__codelineno-0-745"></a>                <span class="k">continue</span>
+<a id="__codelineno-0-746" name="__codelineno-0-746"></a>            <span class="n">info</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<a id="__codelineno-0-747" name="__codelineno-0-747"></a>            <span class="k">if</span> <span class="n">info</span> <span class="o">==</span> <span class="s2">&quot;SAMPLE_MASS&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-748" name="__codelineno-0-748"></a>                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<a id="__codelineno-0-749" name="__codelineno-0-749"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not find the sample mass in the .dat file header.&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-750" name="__codelineno-0-750"></a>
+<a id="__codelineno-0-751" name="__codelineno-0-751"></a>    <span class="k">def</span> <span class="nf">_add_true_field</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-0-752" name="__codelineno-0-752"></a>        <span class="n">chi_g</span> <span class="o">=</span> <span class="mf">5.25e-6</span>  <span class="c1"># emu Oe / g</span>
+<a id="__codelineno-0-753" name="__codelineno-0-753"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;true_field&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;uncorrected_moment&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span>
+<a id="__codelineno-0-754" name="__codelineno-0-754"></a>            <span class="n">chi_g</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pd_mass</span> <span class="o">*</span> <span class="mf">1e-3</span>
+<a id="__codelineno-0-755" name="__codelineno-0-755"></a>        <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
 
@@ -5010,9 +5014,8 @@ If "auto", the labels will be the <code>temperature</code> of the <code>MvsH</co
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>magnetopy/experiments/mvsh.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-799">799</a></span>
-<span class="normal"><a href="#__codelineno-0-800">800</a></span>
+            <summary>Source code in <code>magnetopy\experiments\mvsh.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-800">800</a></span>
 <span class="normal"><a href="#__codelineno-0-801">801</a></span>
 <span class="normal"><a href="#__codelineno-0-802">802</a></span>
 <span class="normal"><a href="#__codelineno-0-803">803</a></span>
@@ -5083,79 +5086,80 @@ If "auto", the labels will be the <code>temperature</code> of the <code>MvsH</co
 <span class="normal"><a href="#__codelineno-0-868">868</a></span>
 <span class="normal"><a href="#__codelineno-0-869">869</a></span>
 <span class="normal"><a href="#__codelineno-0-870">870</a></span>
-<span class="normal"><a href="#__codelineno-0-871">871</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-799" name="__codelineno-0-799"></a><span class="k">def</span> <span class="nf">plot_mvsh</span><span class="p">(</span>
-<a id="__codelineno-0-800" name="__codelineno-0-800"></a>    <span class="n">mvsh</span><span class="p">:</span> <span class="n">MvsH</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">MvsH</span><span class="p">],</span>
-<a id="__codelineno-0-801" name="__codelineno-0-801"></a>    <span class="n">normalized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-<a id="__codelineno-0-802" name="__codelineno-0-802"></a>    <span class="n">segment</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;virgin&quot;</span><span class="p">,</span> <span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="s2">&quot;reverse&quot;</span><span class="p">,</span> <span class="s2">&quot;loop&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-803" name="__codelineno-0-803"></a>    <span class="n">colors</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-804" name="__codelineno-0-804"></a>    <span class="n">labels</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-805" name="__codelineno-0-805"></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-806" name="__codelineno-0-806"></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<a id="__codelineno-0-807" name="__codelineno-0-807"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">,</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]:</span>
-<a id="__codelineno-0-808" name="__codelineno-0-808"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Plots either a single M vs. H experiment or several on the same axes.</span>
-<a id="__codelineno-0-809" name="__codelineno-0-809"></a>
-<a id="__codelineno-0-810" name="__codelineno-0-810"></a><span class="sd">    Parameters</span>
-<a id="__codelineno-0-811" name="__codelineno-0-811"></a><span class="sd">    ----------</span>
-<a id="__codelineno-0-812" name="__codelineno-0-812"></a><span class="sd">    mvsh : MvsH | list[MvsH]</span>
-<a id="__codelineno-0-813" name="__codelineno-0-813"></a><span class="sd">        The data to plot given as a single or list of `MvsH` objects.</span>
-<a id="__codelineno-0-814" name="__codelineno-0-814"></a><span class="sd">    normalized : bool, optional</span>
-<a id="__codelineno-0-815" name="__codelineno-0-815"></a><span class="sd">        If `True`, the magnetization will be normalized to the maximum value, by</span>
-<a id="__codelineno-0-816" name="__codelineno-0-816"></a><span class="sd">        default False.</span>
-<a id="__codelineno-0-817" name="__codelineno-0-817"></a><span class="sd">    segment : {&quot;&quot;, &quot;virgin&quot;, &quot;forward&quot;, &quot;reverse&quot;, &quot;loop&quot;}, optional</span>
-<a id="__codelineno-0-818" name="__codelineno-0-818"></a><span class="sd">        If a segment is given, only that segment will be plotted, by default &quot;&quot;.</span>
-<a id="__codelineno-0-819" name="__codelineno-0-819"></a><span class="sd">    colors : str | list[str], optional</span>
-<a id="__codelineno-0-820" name="__codelineno-0-820"></a><span class="sd">        A list of colors corresponding to the `MvsH` objects in `mvsh`, by default</span>
-<a id="__codelineno-0-821" name="__codelineno-0-821"></a><span class="sd">        &quot;auto&quot;. If &quot;auto&quot; and `mvsh` is a single `MvsH` object, the color will be</span>
-<a id="__codelineno-0-822" name="__codelineno-0-822"></a><span class="sd">        black. If &quot;auto&quot; and `mvsh` is a list of `MvsH` objects with different</span>
-<a id="__codelineno-0-823" name="__codelineno-0-823"></a><span class="sd">        temperatures, the colors will be a linear gradient from blue to red. If</span>
-<a id="__codelineno-0-824" name="__codelineno-0-824"></a><span class="sd">        &quot;auto&quot; and `mvsh` is a list of `MvsH` objects with the same temperature, the</span>
-<a id="__codelineno-0-825" name="__codelineno-0-825"></a><span class="sd">        colors will be the default `matplotlib` colors.</span>
-<a id="__codelineno-0-826" name="__codelineno-0-826"></a><span class="sd">    labels : str | list[str] | None, optional</span>
-<a id="__codelineno-0-827" name="__codelineno-0-827"></a><span class="sd">        The labels to assign the `MvsH` objects in the axes legend, by default &quot;auto&quot;.</span>
-<a id="__codelineno-0-828" name="__codelineno-0-828"></a><span class="sd">        If &quot;auto&quot;, the labels will be the `temperature` of the `MvsH` objects.</span>
-<a id="__codelineno-0-829" name="__codelineno-0-829"></a><span class="sd">    title : str, optional</span>
-<a id="__codelineno-0-830" name="__codelineno-0-830"></a><span class="sd">        The title of the plot, by default &quot;&quot;.</span>
-<a id="__codelineno-0-831" name="__codelineno-0-831"></a><span class="sd">    **kwargs</span>
-<a id="__codelineno-0-832" name="__codelineno-0-832"></a><span class="sd">        Keyword arguments mostly meant to affect the plot style. See</span>
-<a id="__codelineno-0-833" name="__codelineno-0-833"></a><span class="sd">        `magnetopy.experiments.plot_utils.handle_options` for details.</span>
-<a id="__codelineno-0-834" name="__codelineno-0-834"></a>
-<a id="__codelineno-0-835" name="__codelineno-0-835"></a><span class="sd">    Returns</span>
-<a id="__codelineno-0-836" name="__codelineno-0-836"></a><span class="sd">    -------</span>
-<a id="__codelineno-0-837" name="__codelineno-0-837"></a><span class="sd">    tuple[plt.Figure, plt.Axes]</span>
-<a id="__codelineno-0-838" name="__codelineno-0-838"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-839" name="__codelineno-0-839"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mvsh</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">mvsh</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-<a id="__codelineno-0-840" name="__codelineno-0-840"></a>        <span class="n">mvsh</span> <span class="o">=</span> <span class="n">mvsh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<a id="__codelineno-0-841" name="__codelineno-0-841"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mvsh</span><span class="p">,</span> <span class="n">MvsH</span><span class="p">):</span>
-<a id="__codelineno-0-842" name="__codelineno-0-842"></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-<a id="__codelineno-0-843" name="__codelineno-0-843"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-<a id="__codelineno-0-844" name="__codelineno-0-844"></a>                <span class="s2">&quot;If plotting a single MvsH, `colors` and `labels` must be a single value&quot;</span>
-<a id="__codelineno-0-845" name="__codelineno-0-845"></a>            <span class="p">)</span>
-<a id="__codelineno-0-846" name="__codelineno-0-846"></a>        <span class="k">return</span> <span class="n">plot_single_mvsh</span><span class="p">(</span>
-<a id="__codelineno-0-847" name="__codelineno-0-847"></a>            <span class="n">mvsh</span><span class="o">=</span><span class="n">mvsh</span><span class="p">,</span>
-<a id="__codelineno-0-848" name="__codelineno-0-848"></a>            <span class="n">normalized</span><span class="o">=</span><span class="n">normalized</span><span class="p">,</span>
-<a id="__codelineno-0-849" name="__codelineno-0-849"></a>            <span class="n">segment</span><span class="o">=</span><span class="n">segment</span><span class="p">,</span>
-<a id="__codelineno-0-850" name="__codelineno-0-850"></a>            <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span>
-<a id="__codelineno-0-851" name="__codelineno-0-851"></a>            <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
-<a id="__codelineno-0-852" name="__codelineno-0-852"></a>            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
-<a id="__codelineno-0-853" name="__codelineno-0-853"></a>            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<a id="__codelineno-0-854" name="__codelineno-0-854"></a>        <span class="p">)</span>
-<a id="__codelineno-0-855" name="__codelineno-0-855"></a>    <span class="k">if</span> <span class="n">colors</span> <span class="o">!=</span> <span class="s2">&quot;auto&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-<a id="__codelineno-0-856" name="__codelineno-0-856"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-<a id="__codelineno-0-857" name="__codelineno-0-857"></a>            <span class="s2">&quot;If plotting multiple MvsH, `colors` must be a list or &#39;auto&#39;.&quot;</span>
-<a id="__codelineno-0-858" name="__codelineno-0-858"></a>        <span class="p">)</span>
-<a id="__codelineno-0-859" name="__codelineno-0-859"></a>    <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">labels</span> <span class="o">!=</span> <span class="s2">&quot;auto&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-<a id="__codelineno-0-860" name="__codelineno-0-860"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-<a id="__codelineno-0-861" name="__codelineno-0-861"></a>            <span class="s2">&quot;If plotting multiple MvsH, `labels` must be a list or &#39;auto&#39; or `None`.&quot;</span>
-<a id="__codelineno-0-862" name="__codelineno-0-862"></a>        <span class="p">)</span>
-<a id="__codelineno-0-863" name="__codelineno-0-863"></a>    <span class="k">return</span> <span class="n">plot_multiple_mvsh</span><span class="p">(</span>
-<a id="__codelineno-0-864" name="__codelineno-0-864"></a>        <span class="n">mvsh</span><span class="p">,</span>
-<a id="__codelineno-0-865" name="__codelineno-0-865"></a>        <span class="n">normalized</span><span class="o">=</span><span class="n">normalized</span><span class="p">,</span>
-<a id="__codelineno-0-866" name="__codelineno-0-866"></a>        <span class="n">segment</span><span class="o">=</span><span class="n">segment</span><span class="p">,</span>
-<a id="__codelineno-0-867" name="__codelineno-0-867"></a>        <span class="n">colors</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span>
-<a id="__codelineno-0-868" name="__codelineno-0-868"></a>        <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
-<a id="__codelineno-0-869" name="__codelineno-0-869"></a>        <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
-<a id="__codelineno-0-870" name="__codelineno-0-870"></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<a id="__codelineno-0-871" name="__codelineno-0-871"></a>    <span class="p">)</span>
+<span class="normal"><a href="#__codelineno-0-871">871</a></span>
+<span class="normal"><a href="#__codelineno-0-872">872</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-800" name="__codelineno-0-800"></a><span class="k">def</span> <span class="nf">plot_mvsh</span><span class="p">(</span>
+<a id="__codelineno-0-801" name="__codelineno-0-801"></a>    <span class="n">mvsh</span><span class="p">:</span> <span class="n">MvsH</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">MvsH</span><span class="p">],</span>
+<a id="__codelineno-0-802" name="__codelineno-0-802"></a>    <span class="n">normalized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-0-803" name="__codelineno-0-803"></a>    <span class="n">segment</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;virgin&quot;</span><span class="p">,</span> <span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="s2">&quot;reverse&quot;</span><span class="p">,</span> <span class="s2">&quot;loop&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-804" name="__codelineno-0-804"></a>    <span class="n">colors</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-805" name="__codelineno-0-805"></a>    <span class="n">labels</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-806" name="__codelineno-0-806"></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-807" name="__codelineno-0-807"></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<a id="__codelineno-0-808" name="__codelineno-0-808"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">,</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]:</span>
+<a id="__codelineno-0-809" name="__codelineno-0-809"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Plots either a single M vs. H experiment or several on the same axes.</span>
+<a id="__codelineno-0-810" name="__codelineno-0-810"></a>
+<a id="__codelineno-0-811" name="__codelineno-0-811"></a><span class="sd">    Parameters</span>
+<a id="__codelineno-0-812" name="__codelineno-0-812"></a><span class="sd">    ----------</span>
+<a id="__codelineno-0-813" name="__codelineno-0-813"></a><span class="sd">    mvsh : MvsH | list[MvsH]</span>
+<a id="__codelineno-0-814" name="__codelineno-0-814"></a><span class="sd">        The data to plot given as a single or list of `MvsH` objects.</span>
+<a id="__codelineno-0-815" name="__codelineno-0-815"></a><span class="sd">    normalized : bool, optional</span>
+<a id="__codelineno-0-816" name="__codelineno-0-816"></a><span class="sd">        If `True`, the magnetization will be normalized to the maximum value, by</span>
+<a id="__codelineno-0-817" name="__codelineno-0-817"></a><span class="sd">        default False.</span>
+<a id="__codelineno-0-818" name="__codelineno-0-818"></a><span class="sd">    segment : {&quot;&quot;, &quot;virgin&quot;, &quot;forward&quot;, &quot;reverse&quot;, &quot;loop&quot;}, optional</span>
+<a id="__codelineno-0-819" name="__codelineno-0-819"></a><span class="sd">        If a segment is given, only that segment will be plotted, by default &quot;&quot;.</span>
+<a id="__codelineno-0-820" name="__codelineno-0-820"></a><span class="sd">    colors : str | list[str], optional</span>
+<a id="__codelineno-0-821" name="__codelineno-0-821"></a><span class="sd">        A list of colors corresponding to the `MvsH` objects in `mvsh`, by default</span>
+<a id="__codelineno-0-822" name="__codelineno-0-822"></a><span class="sd">        &quot;auto&quot;. If &quot;auto&quot; and `mvsh` is a single `MvsH` object, the color will be</span>
+<a id="__codelineno-0-823" name="__codelineno-0-823"></a><span class="sd">        black. If &quot;auto&quot; and `mvsh` is a list of `MvsH` objects with different</span>
+<a id="__codelineno-0-824" name="__codelineno-0-824"></a><span class="sd">        temperatures, the colors will be a linear gradient from blue to red. If</span>
+<a id="__codelineno-0-825" name="__codelineno-0-825"></a><span class="sd">        &quot;auto&quot; and `mvsh` is a list of `MvsH` objects with the same temperature, the</span>
+<a id="__codelineno-0-826" name="__codelineno-0-826"></a><span class="sd">        colors will be the default `matplotlib` colors.</span>
+<a id="__codelineno-0-827" name="__codelineno-0-827"></a><span class="sd">    labels : str | list[str] | None, optional</span>
+<a id="__codelineno-0-828" name="__codelineno-0-828"></a><span class="sd">        The labels to assign the `MvsH` objects in the axes legend, by default &quot;auto&quot;.</span>
+<a id="__codelineno-0-829" name="__codelineno-0-829"></a><span class="sd">        If &quot;auto&quot;, the labels will be the `temperature` of the `MvsH` objects.</span>
+<a id="__codelineno-0-830" name="__codelineno-0-830"></a><span class="sd">    title : str, optional</span>
+<a id="__codelineno-0-831" name="__codelineno-0-831"></a><span class="sd">        The title of the plot, by default &quot;&quot;.</span>
+<a id="__codelineno-0-832" name="__codelineno-0-832"></a><span class="sd">    **kwargs</span>
+<a id="__codelineno-0-833" name="__codelineno-0-833"></a><span class="sd">        Keyword arguments mostly meant to affect the plot style. See</span>
+<a id="__codelineno-0-834" name="__codelineno-0-834"></a><span class="sd">        `magnetopy.experiments.plot_utils.handle_options` for details.</span>
+<a id="__codelineno-0-835" name="__codelineno-0-835"></a>
+<a id="__codelineno-0-836" name="__codelineno-0-836"></a><span class="sd">    Returns</span>
+<a id="__codelineno-0-837" name="__codelineno-0-837"></a><span class="sd">    -------</span>
+<a id="__codelineno-0-838" name="__codelineno-0-838"></a><span class="sd">    tuple[plt.Figure, plt.Axes]</span>
+<a id="__codelineno-0-839" name="__codelineno-0-839"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-840" name="__codelineno-0-840"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mvsh</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">mvsh</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<a id="__codelineno-0-841" name="__codelineno-0-841"></a>        <span class="n">mvsh</span> <span class="o">=</span> <span class="n">mvsh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<a id="__codelineno-0-842" name="__codelineno-0-842"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mvsh</span><span class="p">,</span> <span class="n">MvsH</span><span class="p">):</span>
+<a id="__codelineno-0-843" name="__codelineno-0-843"></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+<a id="__codelineno-0-844" name="__codelineno-0-844"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<a id="__codelineno-0-845" name="__codelineno-0-845"></a>                <span class="s2">&quot;If plotting a single MvsH, `colors` and `labels` must be a single value&quot;</span>
+<a id="__codelineno-0-846" name="__codelineno-0-846"></a>            <span class="p">)</span>
+<a id="__codelineno-0-847" name="__codelineno-0-847"></a>        <span class="k">return</span> <span class="n">plot_single_mvsh</span><span class="p">(</span>
+<a id="__codelineno-0-848" name="__codelineno-0-848"></a>            <span class="n">mvsh</span><span class="o">=</span><span class="n">mvsh</span><span class="p">,</span>
+<a id="__codelineno-0-849" name="__codelineno-0-849"></a>            <span class="n">normalized</span><span class="o">=</span><span class="n">normalized</span><span class="p">,</span>
+<a id="__codelineno-0-850" name="__codelineno-0-850"></a>            <span class="n">segment</span><span class="o">=</span><span class="n">segment</span><span class="p">,</span>
+<a id="__codelineno-0-851" name="__codelineno-0-851"></a>            <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span>
+<a id="__codelineno-0-852" name="__codelineno-0-852"></a>            <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+<a id="__codelineno-0-853" name="__codelineno-0-853"></a>            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+<a id="__codelineno-0-854" name="__codelineno-0-854"></a>            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<a id="__codelineno-0-855" name="__codelineno-0-855"></a>        <span class="p">)</span>
+<a id="__codelineno-0-856" name="__codelineno-0-856"></a>    <span class="k">if</span> <span class="n">colors</span> <span class="o">!=</span> <span class="s2">&quot;auto&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+<a id="__codelineno-0-857" name="__codelineno-0-857"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<a id="__codelineno-0-858" name="__codelineno-0-858"></a>            <span class="s2">&quot;If plotting multiple MvsH, `colors` must be a list or &#39;auto&#39;.&quot;</span>
+<a id="__codelineno-0-859" name="__codelineno-0-859"></a>        <span class="p">)</span>
+<a id="__codelineno-0-860" name="__codelineno-0-860"></a>    <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">labels</span> <span class="o">!=</span> <span class="s2">&quot;auto&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+<a id="__codelineno-0-861" name="__codelineno-0-861"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<a id="__codelineno-0-862" name="__codelineno-0-862"></a>            <span class="s2">&quot;If plotting multiple MvsH, `labels` must be a list or &#39;auto&#39; or `None`.&quot;</span>
+<a id="__codelineno-0-863" name="__codelineno-0-863"></a>        <span class="p">)</span>
+<a id="__codelineno-0-864" name="__codelineno-0-864"></a>    <span class="k">return</span> <span class="n">plot_multiple_mvsh</span><span class="p">(</span>
+<a id="__codelineno-0-865" name="__codelineno-0-865"></a>        <span class="n">mvsh</span><span class="p">,</span>
+<a id="__codelineno-0-866" name="__codelineno-0-866"></a>        <span class="n">normalized</span><span class="o">=</span><span class="n">normalized</span><span class="p">,</span>
+<a id="__codelineno-0-867" name="__codelineno-0-867"></a>        <span class="n">segment</span><span class="o">=</span><span class="n">segment</span><span class="p">,</span>
+<a id="__codelineno-0-868" name="__codelineno-0-868"></a>        <span class="n">colors</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span>
+<a id="__codelineno-0-869" name="__codelineno-0-869"></a>        <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+<a id="__codelineno-0-870" name="__codelineno-0-870"></a>        <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+<a id="__codelineno-0-871" name="__codelineno-0-871"></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<a id="__codelineno-0-872" name="__codelineno-0-872"></a>    <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -5318,9 +5322,8 @@ If "auto", the label will be the <code>temperature</code> of the <code>MvsH</cod
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>magnetopy/experiments/mvsh.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-874">874</a></span>
-<span class="normal"><a href="#__codelineno-0-875">875</a></span>
+            <summary>Source code in <code>magnetopy\experiments\mvsh.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-875">875</a></span>
 <span class="normal"><a href="#__codelineno-0-876">876</a></span>
 <span class="normal"><a href="#__codelineno-0-877">877</a></span>
 <span class="normal"><a href="#__codelineno-0-878">878</a></span>
@@ -5383,71 +5386,72 @@ If "auto", the label will be the <code>temperature</code> of the <code>MvsH</cod
 <span class="normal"><a href="#__codelineno-0-935">935</a></span>
 <span class="normal"><a href="#__codelineno-0-936">936</a></span>
 <span class="normal"><a href="#__codelineno-0-937">937</a></span>
-<span class="normal"><a href="#__codelineno-0-938">938</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-874" name="__codelineno-0-874"></a><span class="k">def</span> <span class="nf">plot_single_mvsh</span><span class="p">(</span>
-<a id="__codelineno-0-875" name="__codelineno-0-875"></a>    <span class="n">mvsh</span><span class="p">:</span> <span class="n">MvsH</span><span class="p">,</span>
-<a id="__codelineno-0-876" name="__codelineno-0-876"></a>    <span class="n">normalized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-<a id="__codelineno-0-877" name="__codelineno-0-877"></a>    <span class="n">segment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-878" name="__codelineno-0-878"></a>    <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-879" name="__codelineno-0-879"></a>    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-880" name="__codelineno-0-880"></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-881" name="__codelineno-0-881"></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<a id="__codelineno-0-882" name="__codelineno-0-882"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">,</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]:</span>
-<a id="__codelineno-0-883" name="__codelineno-0-883"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Plots a single M vs. H experiment.</span>
-<a id="__codelineno-0-884" name="__codelineno-0-884"></a>
-<a id="__codelineno-0-885" name="__codelineno-0-885"></a><span class="sd">    Parameters</span>
-<a id="__codelineno-0-886" name="__codelineno-0-886"></a><span class="sd">    ----------</span>
-<a id="__codelineno-0-887" name="__codelineno-0-887"></a><span class="sd">    mvsh : MvsH</span>
-<a id="__codelineno-0-888" name="__codelineno-0-888"></a><span class="sd">        The data to plot given as a single `MvsH` object.</span>
-<a id="__codelineno-0-889" name="__codelineno-0-889"></a><span class="sd">    normalized : bool, optional</span>
-<a id="__codelineno-0-890" name="__codelineno-0-890"></a><span class="sd">        If `True`, the magnetization will be normalized to the maximum value, by</span>
-<a id="__codelineno-0-891" name="__codelineno-0-891"></a><span class="sd">        default False.</span>
-<a id="__codelineno-0-892" name="__codelineno-0-892"></a><span class="sd">    segment : {&quot;&quot;, &quot;virgin&quot;, &quot;forward&quot;, &quot;reverse&quot;, &quot;loop&quot;}, optional</span>
-<a id="__codelineno-0-893" name="__codelineno-0-893"></a><span class="sd">        If a segment is given, only that segment will be plotted, by default &quot;&quot;.</span>
-<a id="__codelineno-0-894" name="__codelineno-0-894"></a><span class="sd">    color : str | list[str], optional</span>
-<a id="__codelineno-0-895" name="__codelineno-0-895"></a><span class="sd">        The color of the plot, by default &quot;auto&quot;. If &quot;auto&quot;, the color will be black.</span>
-<a id="__codelineno-0-896" name="__codelineno-0-896"></a><span class="sd">    label : str | list[str] | None, optional</span>
-<a id="__codelineno-0-897" name="__codelineno-0-897"></a><span class="sd">        The labels to assign the `MvsH` object in the axes legend, by default &quot;auto&quot;.</span>
-<a id="__codelineno-0-898" name="__codelineno-0-898"></a><span class="sd">        If &quot;auto&quot;, the label will be the `temperature` of the `MvsH` object.</span>
-<a id="__codelineno-0-899" name="__codelineno-0-899"></a><span class="sd">    title : str, optional</span>
-<a id="__codelineno-0-900" name="__codelineno-0-900"></a><span class="sd">        The title of the plot, by default &quot;&quot;.</span>
-<a id="__codelineno-0-901" name="__codelineno-0-901"></a><span class="sd">    **kwargs</span>
-<a id="__codelineno-0-902" name="__codelineno-0-902"></a><span class="sd">        Keyword arguments mostly meant to affect the plot style. See</span>
-<a id="__codelineno-0-903" name="__codelineno-0-903"></a><span class="sd">        `magnetopy.experiments.plot_utils.handle_options` for details.</span>
-<a id="__codelineno-0-904" name="__codelineno-0-904"></a>
-<a id="__codelineno-0-905" name="__codelineno-0-905"></a><span class="sd">    Returns</span>
-<a id="__codelineno-0-906" name="__codelineno-0-906"></a><span class="sd">    -------</span>
-<a id="__codelineno-0-907" name="__codelineno-0-907"></a><span class="sd">    tuple[plt.Figure, plt.Axes]</span>
-<a id="__codelineno-0-908" name="__codelineno-0-908"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-909" name="__codelineno-0-909"></a>    <span class="n">options</span> <span class="o">=</span> <span class="n">handle_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<a id="__codelineno-0-910" name="__codelineno-0-910"></a>
-<a id="__codelineno-0-911" name="__codelineno-0-911"></a>    <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span> <span class="k">if</span> <span class="n">color</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span> <span class="k">else</span> <span class="n">color</span>
-<a id="__codelineno-0-912" name="__codelineno-0-912"></a>
-<a id="__codelineno-0-913" name="__codelineno-0-913"></a>    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
-<a id="__codelineno-0-914" name="__codelineno-0-914"></a>    <span class="n">x</span> <span class="o">=</span> <span class="n">mvsh</span><span class="o">.</span><span class="n">simplified_data</span><span class="p">(</span><span class="n">segment</span><span class="p">)[</span><span class="s2">&quot;field&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10000</span>
-<a id="__codelineno-0-915" name="__codelineno-0-915"></a>    <span class="n">y</span> <span class="o">=</span> <span class="n">mvsh</span><span class="o">.</span><span class="n">simplified_data</span><span class="p">(</span><span class="n">segment</span><span class="p">)[</span><span class="s2">&quot;moment&quot;</span><span class="p">]</span>
-<a id="__codelineno-0-916" name="__codelineno-0-916"></a>    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">/</span> <span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="k">if</span> <span class="n">normalized</span> <span class="k">else</span> <span class="n">y</span>
-<a id="__codelineno-0-917" name="__codelineno-0-917"></a>    <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-918" name="__codelineno-0-918"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
-<a id="__codelineno-0-919" name="__codelineno-0-919"></a>    <span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-0-920" name="__codelineno-0-920"></a>        <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-921" name="__codelineno-0-921"></a>            <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mvsh</span><span class="o">.</span><span class="n">temperature</span><span class="si">}</span><span class="s2"> K&quot;</span>
-<a id="__codelineno-0-922" name="__codelineno-0-922"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
-<a id="__codelineno-0-923" name="__codelineno-0-923"></a>
-<a id="__codelineno-0-924" name="__codelineno-0-924"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Field (T)&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-925" name="__codelineno-0-925"></a>    <span class="k">if</span> <span class="n">normalized</span><span class="p">:</span>
-<a id="__codelineno-0-926" name="__codelineno-0-926"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Normalized Magnetization&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-927" name="__codelineno-0-927"></a>    <span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-0-928" name="__codelineno-0-928"></a>        <span class="n">ylabel</span> <span class="o">=</span> <span class="n">get_ylabel</span><span class="p">(</span><span class="s2">&quot;moment&quot;</span><span class="p">,</span> <span class="n">mvsh</span><span class="o">.</span><span class="n">scaling</span><span class="p">)</span>
-<a id="__codelineno-0-929" name="__codelineno-0-929"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
-<a id="__codelineno-0-930" name="__codelineno-0-930"></a>
-<a id="__codelineno-0-931" name="__codelineno-0-931"></a>    <span class="n">handle_options</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
-<a id="__codelineno-0-932" name="__codelineno-0-932"></a>
-<a id="__codelineno-0-933" name="__codelineno-0-933"></a>    <span class="n">force_aspect</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-<a id="__codelineno-0-934" name="__codelineno-0-934"></a>    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;save&quot;</span><span class="p">]:</span>
-<a id="__codelineno-0-935" name="__codelineno-0-935"></a>        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-<a id="__codelineno-0-936" name="__codelineno-0-936"></a>            <span class="n">options</span><span class="p">[</span><span class="s2">&quot;save&quot;</span><span class="p">],</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;w&quot;</span>
-<a id="__codelineno-0-937" name="__codelineno-0-937"></a>        <span class="p">)</span>
-<a id="__codelineno-0-938" name="__codelineno-0-938"></a>    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span>
+<span class="normal"><a href="#__codelineno-0-938">938</a></span>
+<span class="normal"><a href="#__codelineno-0-939">939</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-875" name="__codelineno-0-875"></a><span class="k">def</span> <span class="nf">plot_single_mvsh</span><span class="p">(</span>
+<a id="__codelineno-0-876" name="__codelineno-0-876"></a>    <span class="n">mvsh</span><span class="p">:</span> <span class="n">MvsH</span><span class="p">,</span>
+<a id="__codelineno-0-877" name="__codelineno-0-877"></a>    <span class="n">normalized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-0-878" name="__codelineno-0-878"></a>    <span class="n">segment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-879" name="__codelineno-0-879"></a>    <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-880" name="__codelineno-0-880"></a>    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-881" name="__codelineno-0-881"></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-882" name="__codelineno-0-882"></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<a id="__codelineno-0-883" name="__codelineno-0-883"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">,</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]:</span>
+<a id="__codelineno-0-884" name="__codelineno-0-884"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Plots a single M vs. H experiment.</span>
+<a id="__codelineno-0-885" name="__codelineno-0-885"></a>
+<a id="__codelineno-0-886" name="__codelineno-0-886"></a><span class="sd">    Parameters</span>
+<a id="__codelineno-0-887" name="__codelineno-0-887"></a><span class="sd">    ----------</span>
+<a id="__codelineno-0-888" name="__codelineno-0-888"></a><span class="sd">    mvsh : MvsH</span>
+<a id="__codelineno-0-889" name="__codelineno-0-889"></a><span class="sd">        The data to plot given as a single `MvsH` object.</span>
+<a id="__codelineno-0-890" name="__codelineno-0-890"></a><span class="sd">    normalized : bool, optional</span>
+<a id="__codelineno-0-891" name="__codelineno-0-891"></a><span class="sd">        If `True`, the magnetization will be normalized to the maximum value, by</span>
+<a id="__codelineno-0-892" name="__codelineno-0-892"></a><span class="sd">        default False.</span>
+<a id="__codelineno-0-893" name="__codelineno-0-893"></a><span class="sd">    segment : {&quot;&quot;, &quot;virgin&quot;, &quot;forward&quot;, &quot;reverse&quot;, &quot;loop&quot;}, optional</span>
+<a id="__codelineno-0-894" name="__codelineno-0-894"></a><span class="sd">        If a segment is given, only that segment will be plotted, by default &quot;&quot;.</span>
+<a id="__codelineno-0-895" name="__codelineno-0-895"></a><span class="sd">    color : str | list[str], optional</span>
+<a id="__codelineno-0-896" name="__codelineno-0-896"></a><span class="sd">        The color of the plot, by default &quot;auto&quot;. If &quot;auto&quot;, the color will be black.</span>
+<a id="__codelineno-0-897" name="__codelineno-0-897"></a><span class="sd">    label : str | list[str] | None, optional</span>
+<a id="__codelineno-0-898" name="__codelineno-0-898"></a><span class="sd">        The labels to assign the `MvsH` object in the axes legend, by default &quot;auto&quot;.</span>
+<a id="__codelineno-0-899" name="__codelineno-0-899"></a><span class="sd">        If &quot;auto&quot;, the label will be the `temperature` of the `MvsH` object.</span>
+<a id="__codelineno-0-900" name="__codelineno-0-900"></a><span class="sd">    title : str, optional</span>
+<a id="__codelineno-0-901" name="__codelineno-0-901"></a><span class="sd">        The title of the plot, by default &quot;&quot;.</span>
+<a id="__codelineno-0-902" name="__codelineno-0-902"></a><span class="sd">    **kwargs</span>
+<a id="__codelineno-0-903" name="__codelineno-0-903"></a><span class="sd">        Keyword arguments mostly meant to affect the plot style. See</span>
+<a id="__codelineno-0-904" name="__codelineno-0-904"></a><span class="sd">        `magnetopy.experiments.plot_utils.handle_options` for details.</span>
+<a id="__codelineno-0-905" name="__codelineno-0-905"></a>
+<a id="__codelineno-0-906" name="__codelineno-0-906"></a><span class="sd">    Returns</span>
+<a id="__codelineno-0-907" name="__codelineno-0-907"></a><span class="sd">    -------</span>
+<a id="__codelineno-0-908" name="__codelineno-0-908"></a><span class="sd">    tuple[plt.Figure, plt.Axes]</span>
+<a id="__codelineno-0-909" name="__codelineno-0-909"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-910" name="__codelineno-0-910"></a>    <span class="n">options</span> <span class="o">=</span> <span class="n">handle_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<a id="__codelineno-0-911" name="__codelineno-0-911"></a>
+<a id="__codelineno-0-912" name="__codelineno-0-912"></a>    <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span> <span class="k">if</span> <span class="n">color</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span> <span class="k">else</span> <span class="n">color</span>
+<a id="__codelineno-0-913" name="__codelineno-0-913"></a>
+<a id="__codelineno-0-914" name="__codelineno-0-914"></a>    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<a id="__codelineno-0-915" name="__codelineno-0-915"></a>    <span class="n">x</span> <span class="o">=</span> <span class="n">mvsh</span><span class="o">.</span><span class="n">simplified_data</span><span class="p">(</span><span class="n">segment</span><span class="p">)[</span><span class="s2">&quot;field&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10000</span>
+<a id="__codelineno-0-916" name="__codelineno-0-916"></a>    <span class="n">y</span> <span class="o">=</span> <span class="n">mvsh</span><span class="o">.</span><span class="n">simplified_data</span><span class="p">(</span><span class="n">segment</span><span class="p">)[</span><span class="s2">&quot;moment&quot;</span><span class="p">]</span>
+<a id="__codelineno-0-917" name="__codelineno-0-917"></a>    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">/</span> <span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="k">if</span> <span class="n">normalized</span> <span class="k">else</span> <span class="n">y</span>
+<a id="__codelineno-0-918" name="__codelineno-0-918"></a>    <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-919" name="__codelineno-0-919"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+<a id="__codelineno-0-920" name="__codelineno-0-920"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-921" name="__codelineno-0-921"></a>        <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-922" name="__codelineno-0-922"></a>            <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mvsh</span><span class="o">.</span><span class="n">temperature</span><span class="si">}</span><span class="s2"> K&quot;</span>
+<a id="__codelineno-0-923" name="__codelineno-0-923"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+<a id="__codelineno-0-924" name="__codelineno-0-924"></a>
+<a id="__codelineno-0-925" name="__codelineno-0-925"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Field (T)&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-926" name="__codelineno-0-926"></a>    <span class="k">if</span> <span class="n">normalized</span><span class="p">:</span>
+<a id="__codelineno-0-927" name="__codelineno-0-927"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Normalized Magnetization&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-928" name="__codelineno-0-928"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-929" name="__codelineno-0-929"></a>        <span class="n">ylabel</span> <span class="o">=</span> <span class="n">get_ylabel</span><span class="p">(</span><span class="s2">&quot;moment&quot;</span><span class="p">,</span> <span class="n">mvsh</span><span class="o">.</span><span class="n">scaling</span><span class="p">)</span>
+<a id="__codelineno-0-930" name="__codelineno-0-930"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+<a id="__codelineno-0-931" name="__codelineno-0-931"></a>
+<a id="__codelineno-0-932" name="__codelineno-0-932"></a>    <span class="n">handle_options</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+<a id="__codelineno-0-933" name="__codelineno-0-933"></a>
+<a id="__codelineno-0-934" name="__codelineno-0-934"></a>    <span class="n">force_aspect</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+<a id="__codelineno-0-935" name="__codelineno-0-935"></a>    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;save&quot;</span><span class="p">]:</span>
+<a id="__codelineno-0-936" name="__codelineno-0-936"></a>        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+<a id="__codelineno-0-937" name="__codelineno-0-937"></a>            <span class="n">options</span><span class="p">[</span><span class="s2">&quot;save&quot;</span><span class="p">],</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;w&quot;</span>
+<a id="__codelineno-0-938" name="__codelineno-0-938"></a>        <span class="p">)</span>
+<a id="__codelineno-0-939" name="__codelineno-0-939"></a>    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -5614,9 +5618,8 @@ If "auto", the labels will be the <code>temperature</code> of the <code>MvsH</co
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>magnetopy/experiments/mvsh.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-941"> 941</a></span>
-<span class="normal"><a href="#__codelineno-0-942"> 942</a></span>
+            <summary>Source code in <code>magnetopy\experiments\mvsh.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-942"> 942</a></span>
 <span class="normal"><a href="#__codelineno-0-943"> 943</a></span>
 <span class="normal"><a href="#__codelineno-0-944"> 944</a></span>
 <span class="normal"><a href="#__codelineno-0-945"> 945</a></span>
@@ -5689,81 +5692,82 @@ If "auto", the labels will be the <code>temperature</code> of the <code>MvsH</co
 <span class="normal"><a href="#__codelineno-0-1012">1012</a></span>
 <span class="normal"><a href="#__codelineno-0-1013">1013</a></span>
 <span class="normal"><a href="#__codelineno-0-1014">1014</a></span>
-<span class="normal"><a href="#__codelineno-0-1015">1015</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-941" name="__codelineno-0-941"></a><span class="k">def</span> <span class="nf">plot_multiple_mvsh</span><span class="p">(</span>
-<a id="__codelineno-0-942" name="__codelineno-0-942"></a>    <span class="n">mvsh</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">MvsH</span><span class="p">],</span>
-<a id="__codelineno-0-943" name="__codelineno-0-943"></a>    <span class="n">normalized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-<a id="__codelineno-0-944" name="__codelineno-0-944"></a>    <span class="n">segment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-945" name="__codelineno-0-945"></a>    <span class="n">colors</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;auto&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-946" name="__codelineno-0-946"></a>    <span class="n">labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<a id="__codelineno-0-947" name="__codelineno-0-947"></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-948" name="__codelineno-0-948"></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<a id="__codelineno-0-949" name="__codelineno-0-949"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">,</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]:</span>
-<a id="__codelineno-0-950" name="__codelineno-0-950"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Plots several M vs. H experiment on the same axes.</span>
-<a id="__codelineno-0-951" name="__codelineno-0-951"></a>
-<a id="__codelineno-0-952" name="__codelineno-0-952"></a><span class="sd">    Parameters</span>
-<a id="__codelineno-0-953" name="__codelineno-0-953"></a><span class="sd">    ----------</span>
-<a id="__codelineno-0-954" name="__codelineno-0-954"></a><span class="sd">    mvsh : MvsH | list[MvsH]</span>
-<a id="__codelineno-0-955" name="__codelineno-0-955"></a><span class="sd">        The data to plot given as a list of `MvsH` objects.</span>
-<a id="__codelineno-0-956" name="__codelineno-0-956"></a><span class="sd">    normalized : bool, optional</span>
-<a id="__codelineno-0-957" name="__codelineno-0-957"></a><span class="sd">        If `True`, the magnetization will be normalized to the maximum value, by</span>
-<a id="__codelineno-0-958" name="__codelineno-0-958"></a><span class="sd">        default False.</span>
-<a id="__codelineno-0-959" name="__codelineno-0-959"></a><span class="sd">    segment : {&quot;&quot;, &quot;virgin&quot;, &quot;forward&quot;, &quot;reverse&quot;, &quot;loop&quot;}, optional</span>
-<a id="__codelineno-0-960" name="__codelineno-0-960"></a><span class="sd">        If a segment is given, only that segment will be plotted, by default &quot;&quot;.</span>
-<a id="__codelineno-0-961" name="__codelineno-0-961"></a><span class="sd">    colors : str | list[str], optional</span>
-<a id="__codelineno-0-962" name="__codelineno-0-962"></a><span class="sd">        A list of colors corresponding to the `MvsH` objects in `mvsh`, by default</span>
-<a id="__codelineno-0-963" name="__codelineno-0-963"></a><span class="sd">        &quot;auto&quot;. If &quot;auto&quot; and `mvsh` is a list of `MvsH` objects with different</span>
-<a id="__codelineno-0-964" name="__codelineno-0-964"></a><span class="sd">        temperatures, the colors will be a linear gradient from blue to red. If</span>
-<a id="__codelineno-0-965" name="__codelineno-0-965"></a><span class="sd">        &quot;auto&quot; and `mvsh` is a list of `MvsH` objects with the same temperature, the</span>
-<a id="__codelineno-0-966" name="__codelineno-0-966"></a><span class="sd">        colors will be the default `matplotlib` colors.</span>
-<a id="__codelineno-0-967" name="__codelineno-0-967"></a><span class="sd">    labels : str | list[str] | None, optional</span>
-<a id="__codelineno-0-968" name="__codelineno-0-968"></a><span class="sd">        The labels to assign the `MvsH` objects in the axes legend, by default &quot;auto&quot;.</span>
-<a id="__codelineno-0-969" name="__codelineno-0-969"></a><span class="sd">        If &quot;auto&quot;, the labels will be the `temperature` of the `MvsH` objects.</span>
-<a id="__codelineno-0-970" name="__codelineno-0-970"></a><span class="sd">    title : str, optional</span>
-<a id="__codelineno-0-971" name="__codelineno-0-971"></a><span class="sd">        The title of the plot, by default &quot;&quot;.</span>
-<a id="__codelineno-0-972" name="__codelineno-0-972"></a><span class="sd">    **kwargs</span>
-<a id="__codelineno-0-973" name="__codelineno-0-973"></a><span class="sd">        Keyword arguments mostly meant to affect the plot style. See</span>
-<a id="__codelineno-0-974" name="__codelineno-0-974"></a><span class="sd">        `magnetopy.experiments.plot_utils.handle_options` for details.</span>
-<a id="__codelineno-0-975" name="__codelineno-0-975"></a>
-<a id="__codelineno-0-976" name="__codelineno-0-976"></a><span class="sd">    Returns</span>
-<a id="__codelineno-0-977" name="__codelineno-0-977"></a><span class="sd">    -------</span>
-<a id="__codelineno-0-978" name="__codelineno-0-978"></a><span class="sd">    tuple[plt.Figure, plt.Axes]</span>
-<a id="__codelineno-0-979" name="__codelineno-0-979"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-980" name="__codelineno-0-980"></a>    <span class="n">options</span> <span class="o">=</span> <span class="n">handle_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<a id="__codelineno-0-981" name="__codelineno-0-981"></a>
-<a id="__codelineno-0-982" name="__codelineno-0-982"></a>    <span class="k">if</span> <span class="n">colors</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-983" name="__codelineno-0-983"></a>        <span class="n">colors</span> <span class="o">=</span> <span class="n">default_colors</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mvsh</span><span class="p">))</span>
-<a id="__codelineno-0-984" name="__codelineno-0-984"></a>    <span class="k">if</span> <span class="n">_check_if_variable_temperature</span><span class="p">(</span><span class="n">mvsh</span><span class="p">):</span>
-<a id="__codelineno-0-985" name="__codelineno-0-985"></a>        <span class="n">mvsh</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">temperature</span><span class="p">)</span>
-<a id="__codelineno-0-986" name="__codelineno-0-986"></a>        <span class="n">colors</span> <span class="o">=</span> <span class="n">linear_color_gradient</span><span class="p">(</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">mvsh</span><span class="p">))</span>
-<a id="__codelineno-0-987" name="__codelineno-0-987"></a>        <span class="k">if</span> <span class="n">labels</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-988" name="__codelineno-0-988"></a>            <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">temperature</span><span class="si">}</span><span class="s2"> K&quot;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mvsh</span><span class="p">]</span>
-<a id="__codelineno-0-989" name="__codelineno-0-989"></a>    <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-990" name="__codelineno-0-990"></a>        <span class="n">labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">mvsh</span><span class="p">)</span>
-<a id="__codelineno-0-991" name="__codelineno-0-991"></a>
-<a id="__codelineno-0-992" name="__codelineno-0-992"></a>    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
-<a id="__codelineno-0-993" name="__codelineno-0-993"></a>    <span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">mvsh</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
-<a id="__codelineno-0-994" name="__codelineno-0-994"></a>        <span class="n">x</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">simplified_data</span><span class="p">(</span><span class="n">segment</span><span class="p">)[</span><span class="s2">&quot;field&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10000</span>
-<a id="__codelineno-0-995" name="__codelineno-0-995"></a>        <span class="n">y</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">simplified_data</span><span class="p">(</span><span class="n">segment</span><span class="p">)[</span><span class="s2">&quot;moment&quot;</span><span class="p">]</span>
-<a id="__codelineno-0-996" name="__codelineno-0-996"></a>        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">/</span> <span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="k">if</span> <span class="n">normalized</span> <span class="k">else</span> <span class="n">y</span>
-<a id="__codelineno-0-997" name="__codelineno-0-997"></a>        <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
-<a id="__codelineno-0-998" name="__codelineno-0-998"></a>            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
-<a id="__codelineno-0-999" name="__codelineno-0-999"></a>        <span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-0-1000" name="__codelineno-0-1000"></a>            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
-<a id="__codelineno-0-1001" name="__codelineno-0-1001"></a>
-<a id="__codelineno-0-1002" name="__codelineno-0-1002"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Field (T)&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-1003" name="__codelineno-0-1003"></a>    <span class="k">if</span> <span class="n">normalized</span><span class="p">:</span>
-<a id="__codelineno-0-1004" name="__codelineno-0-1004"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Normalized Magnetization&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-1005" name="__codelineno-0-1005"></a>    <span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-0-1006" name="__codelineno-0-1006"></a>        <span class="n">ylabel</span> <span class="o">=</span> <span class="n">get_ylabel</span><span class="p">(</span><span class="s2">&quot;moment&quot;</span><span class="p">,</span> <span class="n">mvsh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scaling</span><span class="p">)</span>
-<a id="__codelineno-0-1007" name="__codelineno-0-1007"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
-<a id="__codelineno-0-1008" name="__codelineno-0-1008"></a>
-<a id="__codelineno-0-1009" name="__codelineno-0-1009"></a>    <span class="n">handle_options</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">title</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
-<a id="__codelineno-0-1010" name="__codelineno-0-1010"></a>    <span class="n">force_aspect</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-<a id="__codelineno-0-1011" name="__codelineno-0-1011"></a>    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;save&quot;</span><span class="p">]:</span>
-<a id="__codelineno-0-1012" name="__codelineno-0-1012"></a>        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-<a id="__codelineno-0-1013" name="__codelineno-0-1013"></a>            <span class="n">options</span><span class="p">[</span><span class="s2">&quot;save&quot;</span><span class="p">],</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;w&quot;</span>
-<a id="__codelineno-0-1014" name="__codelineno-0-1014"></a>        <span class="p">)</span>
-<a id="__codelineno-0-1015" name="__codelineno-0-1015"></a>    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span>
+<span class="normal"><a href="#__codelineno-0-1015">1015</a></span>
+<span class="normal"><a href="#__codelineno-0-1016">1016</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-942" name="__codelineno-0-942"></a><span class="k">def</span> <span class="nf">plot_multiple_mvsh</span><span class="p">(</span>
+<a id="__codelineno-0-943" name="__codelineno-0-943"></a>    <span class="n">mvsh</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">MvsH</span><span class="p">],</span>
+<a id="__codelineno-0-944" name="__codelineno-0-944"></a>    <span class="n">normalized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-0-945" name="__codelineno-0-945"></a>    <span class="n">segment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-946" name="__codelineno-0-946"></a>    <span class="n">colors</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;auto&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-947" name="__codelineno-0-947"></a>    <span class="n">labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-948" name="__codelineno-0-948"></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-949" name="__codelineno-0-949"></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<a id="__codelineno-0-950" name="__codelineno-0-950"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">,</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]:</span>
+<a id="__codelineno-0-951" name="__codelineno-0-951"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Plots several M vs. H experiment on the same axes.</span>
+<a id="__codelineno-0-952" name="__codelineno-0-952"></a>
+<a id="__codelineno-0-953" name="__codelineno-0-953"></a><span class="sd">    Parameters</span>
+<a id="__codelineno-0-954" name="__codelineno-0-954"></a><span class="sd">    ----------</span>
+<a id="__codelineno-0-955" name="__codelineno-0-955"></a><span class="sd">    mvsh : MvsH | list[MvsH]</span>
+<a id="__codelineno-0-956" name="__codelineno-0-956"></a><span class="sd">        The data to plot given as a list of `MvsH` objects.</span>
+<a id="__codelineno-0-957" name="__codelineno-0-957"></a><span class="sd">    normalized : bool, optional</span>
+<a id="__codelineno-0-958" name="__codelineno-0-958"></a><span class="sd">        If `True`, the magnetization will be normalized to the maximum value, by</span>
+<a id="__codelineno-0-959" name="__codelineno-0-959"></a><span class="sd">        default False.</span>
+<a id="__codelineno-0-960" name="__codelineno-0-960"></a><span class="sd">    segment : {&quot;&quot;, &quot;virgin&quot;, &quot;forward&quot;, &quot;reverse&quot;, &quot;loop&quot;}, optional</span>
+<a id="__codelineno-0-961" name="__codelineno-0-961"></a><span class="sd">        If a segment is given, only that segment will be plotted, by default &quot;&quot;.</span>
+<a id="__codelineno-0-962" name="__codelineno-0-962"></a><span class="sd">    colors : str | list[str], optional</span>
+<a id="__codelineno-0-963" name="__codelineno-0-963"></a><span class="sd">        A list of colors corresponding to the `MvsH` objects in `mvsh`, by default</span>
+<a id="__codelineno-0-964" name="__codelineno-0-964"></a><span class="sd">        &quot;auto&quot;. If &quot;auto&quot; and `mvsh` is a list of `MvsH` objects with different</span>
+<a id="__codelineno-0-965" name="__codelineno-0-965"></a><span class="sd">        temperatures, the colors will be a linear gradient from blue to red. If</span>
+<a id="__codelineno-0-966" name="__codelineno-0-966"></a><span class="sd">        &quot;auto&quot; and `mvsh` is a list of `MvsH` objects with the same temperature, the</span>
+<a id="__codelineno-0-967" name="__codelineno-0-967"></a><span class="sd">        colors will be the default `matplotlib` colors.</span>
+<a id="__codelineno-0-968" name="__codelineno-0-968"></a><span class="sd">    labels : str | list[str] | None, optional</span>
+<a id="__codelineno-0-969" name="__codelineno-0-969"></a><span class="sd">        The labels to assign the `MvsH` objects in the axes legend, by default &quot;auto&quot;.</span>
+<a id="__codelineno-0-970" name="__codelineno-0-970"></a><span class="sd">        If &quot;auto&quot;, the labels will be the `temperature` of the `MvsH` objects.</span>
+<a id="__codelineno-0-971" name="__codelineno-0-971"></a><span class="sd">    title : str, optional</span>
+<a id="__codelineno-0-972" name="__codelineno-0-972"></a><span class="sd">        The title of the plot, by default &quot;&quot;.</span>
+<a id="__codelineno-0-973" name="__codelineno-0-973"></a><span class="sd">    **kwargs</span>
+<a id="__codelineno-0-974" name="__codelineno-0-974"></a><span class="sd">        Keyword arguments mostly meant to affect the plot style. See</span>
+<a id="__codelineno-0-975" name="__codelineno-0-975"></a><span class="sd">        `magnetopy.experiments.plot_utils.handle_options` for details.</span>
+<a id="__codelineno-0-976" name="__codelineno-0-976"></a>
+<a id="__codelineno-0-977" name="__codelineno-0-977"></a><span class="sd">    Returns</span>
+<a id="__codelineno-0-978" name="__codelineno-0-978"></a><span class="sd">    -------</span>
+<a id="__codelineno-0-979" name="__codelineno-0-979"></a><span class="sd">    tuple[plt.Figure, plt.Axes]</span>
+<a id="__codelineno-0-980" name="__codelineno-0-980"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-981" name="__codelineno-0-981"></a>    <span class="n">options</span> <span class="o">=</span> <span class="n">handle_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<a id="__codelineno-0-982" name="__codelineno-0-982"></a>
+<a id="__codelineno-0-983" name="__codelineno-0-983"></a>    <span class="k">if</span> <span class="n">colors</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-984" name="__codelineno-0-984"></a>        <span class="n">colors</span> <span class="o">=</span> <span class="n">default_colors</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mvsh</span><span class="p">))</span>
+<a id="__codelineno-0-985" name="__codelineno-0-985"></a>    <span class="k">if</span> <span class="n">_check_if_variable_temperature</span><span class="p">(</span><span class="n">mvsh</span><span class="p">):</span>
+<a id="__codelineno-0-986" name="__codelineno-0-986"></a>        <span class="n">mvsh</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">temperature</span><span class="p">)</span>
+<a id="__codelineno-0-987" name="__codelineno-0-987"></a>        <span class="n">colors</span> <span class="o">=</span> <span class="n">linear_color_gradient</span><span class="p">(</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">mvsh</span><span class="p">))</span>
+<a id="__codelineno-0-988" name="__codelineno-0-988"></a>        <span class="k">if</span> <span class="n">labels</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-989" name="__codelineno-0-989"></a>            <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">temperature</span><span class="si">}</span><span class="s2"> K&quot;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mvsh</span><span class="p">]</span>
+<a id="__codelineno-0-990" name="__codelineno-0-990"></a>    <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-991" name="__codelineno-0-991"></a>        <span class="n">labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">mvsh</span><span class="p">)</span>
+<a id="__codelineno-0-992" name="__codelineno-0-992"></a>
+<a id="__codelineno-0-993" name="__codelineno-0-993"></a>    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<a id="__codelineno-0-994" name="__codelineno-0-994"></a>    <span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">mvsh</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+<a id="__codelineno-0-995" name="__codelineno-0-995"></a>        <span class="n">x</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">simplified_data</span><span class="p">(</span><span class="n">segment</span><span class="p">)[</span><span class="s2">&quot;field&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10000</span>
+<a id="__codelineno-0-996" name="__codelineno-0-996"></a>        <span class="n">y</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">simplified_data</span><span class="p">(</span><span class="n">segment</span><span class="p">)[</span><span class="s2">&quot;moment&quot;</span><span class="p">]</span>
+<a id="__codelineno-0-997" name="__codelineno-0-997"></a>        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">/</span> <span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="k">if</span> <span class="n">normalized</span> <span class="k">else</span> <span class="n">y</span>
+<a id="__codelineno-0-998" name="__codelineno-0-998"></a>        <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
+<a id="__codelineno-0-999" name="__codelineno-0-999"></a>            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+<a id="__codelineno-0-1000" name="__codelineno-0-1000"></a>        <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-1001" name="__codelineno-0-1001"></a>            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+<a id="__codelineno-0-1002" name="__codelineno-0-1002"></a>
+<a id="__codelineno-0-1003" name="__codelineno-0-1003"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Field (T)&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-1004" name="__codelineno-0-1004"></a>    <span class="k">if</span> <span class="n">normalized</span><span class="p">:</span>
+<a id="__codelineno-0-1005" name="__codelineno-0-1005"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Normalized Magnetization&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-1006" name="__codelineno-0-1006"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-1007" name="__codelineno-0-1007"></a>        <span class="n">ylabel</span> <span class="o">=</span> <span class="n">get_ylabel</span><span class="p">(</span><span class="s2">&quot;moment&quot;</span><span class="p">,</span> <span class="n">mvsh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scaling</span><span class="p">)</span>
+<a id="__codelineno-0-1008" name="__codelineno-0-1008"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+<a id="__codelineno-0-1009" name="__codelineno-0-1009"></a>
+<a id="__codelineno-0-1010" name="__codelineno-0-1010"></a>    <span class="n">handle_options</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">title</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+<a id="__codelineno-0-1011" name="__codelineno-0-1011"></a>    <span class="n">force_aspect</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+<a id="__codelineno-0-1012" name="__codelineno-0-1012"></a>    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;save&quot;</span><span class="p">]:</span>
+<a id="__codelineno-0-1013" name="__codelineno-0-1013"></a>        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+<a id="__codelineno-0-1014" name="__codelineno-0-1014"></a>            <span class="n">options</span><span class="p">[</span><span class="s2">&quot;save&quot;</span><span class="p">],</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;w&quot;</span>
+<a id="__codelineno-0-1015" name="__codelineno-0-1015"></a>        <span class="p">)</span>
+<a id="__codelineno-0-1016" name="__codelineno-0-1016"></a>    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
