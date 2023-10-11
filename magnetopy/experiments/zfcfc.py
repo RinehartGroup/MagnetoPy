@@ -375,6 +375,7 @@ class ZFCFC:
             and `"scaling"`.
         """
         return {
+            "_class_": self.__class__.__name__,
             "origin_file": self.origin_file,
             "field": self.field,
             "temperature_range": self.temperature_range,

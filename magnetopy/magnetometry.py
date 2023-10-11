@@ -124,7 +124,9 @@ class SampleInfo:
         -------
         dict[str, foat | str | None]
         """
-        return asdict(self)
+        output = asdict(self)
+        output["_class_"] = self.__class__.__name__
+        return output
 
 
 class Analysis(Protocol):
@@ -159,6 +161,9 @@ class Analysis(Protocol):
     def as_dict(self) -> dict[str, Any]:
         """Return a dictionary representation of the analysis. Should include the
         results of the analysis along with any parsing and fitting arguments used.
+
+        The dictionary must include a field "_class_" with the name of the class of
+        the analysis object (e.g. "MvsHAnalysis", "ZFCAnalysis", etc.).
 
         Returns
         -------
@@ -510,6 +515,7 @@ class Magnetometry:
         dict[str, Any]
         """
         return {
+            "_class_": self.__class__.__name__,
             "sample_id": self.sample_id,
             "files": self.files,
             "sample_info": self.sample_info,

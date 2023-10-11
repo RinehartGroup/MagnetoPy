@@ -582,6 +582,7 @@ class MvsH:
             `"field_correction_file"`, and `"scaling"`.
         """
         return {
+            "_class_": self.__class__.__name__,
             "origin_file": self.origin_file,
             "temperature": self.temperature,
             "field_range": self.field_range,

@@ -77,6 +77,7 @@ class GenericFile:
             Contains the following keys: local_path, length, date_created, sha512
         """
         return {
+            "_class_": self.__class__.__name__,
             "experiment_type": self.experiment_type,
             "local_path": str(self.local_path),
             "length": self.length,
@@ -348,6 +349,7 @@ class DatFile(GenericFile):
             experiments_in_file.
         """
         output = super().as_dict()
+        output["_class_"] = self.__class__.__name__
         output["experiments_in_file"] = self.experiments_in_file
         return output
 

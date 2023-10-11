@@ -28,7 +28,9 @@ class SimpleMvsHAnalysisParsingArgs:
     segments: Literal["auto", "loop", "forward", "reverse"] = "auto"
 
     def as_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        output = asdict(self)
+        output["_class_"] = self.__class__.__name__
+        return output
 
 
 @dataclass
@@ -59,7 +61,9 @@ class SimpleMvsHAnalysisResults:
     segments: Literal["forward", "reverse"]
 
     def as_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        output = asdict(self)
+        output["_class_"] = self.__class__.__name__
+        return output
 
 
 class SimpleMvsHAnalysis:
@@ -156,6 +160,7 @@ class SimpleMvsHAnalysis:
             Keys are `"mvsh"`, `"parsing_args"`, and `"results"`.
         """
         return {
+            "_class_": self.__class__.__name__,
             "mvsh": self.mvsh,
             "parsing_args": self.parsing_args,
             "results": self.results,
