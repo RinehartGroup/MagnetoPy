@@ -20,6 +20,7 @@ dependencies = [
     "matplotlib",
     "scikit-learn",
     "GitPython",
+    "lmfit",
 ]
 
 [project.optional-dependencies]
