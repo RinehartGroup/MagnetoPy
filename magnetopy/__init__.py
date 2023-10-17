@@ -29,3 +29,13 @@ from magnetopy.analyses.simple_mvsh import (
     SimpleMvsHAnalysisResults,
     SimpleMvsHAnalysisParsingArgs,
 )
+from magnetopy.analyses.cauchy.fits import (
+    CauchyParsingArgs,
+    CauchyParams,
+    CauchyFittingArgs,
+    CauchyTermResults,
+    CauchyAnalysisResults,
+    CauchyPDFAnalysis,
+    cauchy_pdf,
+    fit_cauchy_pdf,
+)
