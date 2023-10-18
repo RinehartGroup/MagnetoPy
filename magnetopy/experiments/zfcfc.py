@@ -815,7 +815,7 @@ def plot_single_zfcfc(
         ylabel = get_ylabel(y_val, zfc.scaling)
         ax.set_ylabel(ylabel)
 
-    handle_options(ax, label, title, options)
+    handle_options(ax, options, label, title)
 
     force_aspect(ax)
     if options["save"]:
@@ -905,7 +905,7 @@ def plot_multiple_zfcfc(
         ylabel = get_ylabel(y_val, zfc[0].scaling)
         ax.set_ylabel(ylabel)
 
-    handle_options(ax, labels[0], title, options)
+    handle_options(ax, options, labels[0], title)
 
     force_aspect(ax)
     if options["save"]:

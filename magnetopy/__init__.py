@@ -29,7 +29,7 @@ from magnetopy.analyses.simple_mvsh import (
     SimpleMvsHAnalysisResults,
     SimpleMvsHAnalysisParsingArgs,
 )
-from magnetopy.analyses.cauchy.fits import (
+from magnetopy.analyses.cauchy.standalone import (
     CauchyParsingArgs,
     CauchyParams,
     CauchyFittingArgs,
@@ -39,3 +39,4 @@ from magnetopy.analyses.cauchy.fits import (
     cauchy_pdf,
     fit_cauchy_pdf,
 )
+from magnetopy.analyses.cauchy.plots import plot_cauchy_pdf

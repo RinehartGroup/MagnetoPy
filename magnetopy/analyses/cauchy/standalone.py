@@ -10,7 +10,7 @@ from lmfit import Parameters, minimize, minimizer
 from magnetopy.magnetometry import Magnetometry
 from magnetopy.experiments.mvsh import MvsH
 
-FitVal = TypeVar("FitVal", float, npt.NDArray)
+FitVal = TypeVar("FitVal", float, npt.ArrayLike)
 
 
 @dataclass
@@ -273,18 +273,18 @@ class CauchyFittingArgs:
         params.add("chi_pd", value=0)
         return params
 
-    def generate_pdf_data(self, x: npt.NDArray) -> npt.NDArray:
+    def generate_pdf_data(self, x: npt.ArrayLike) -> npt.ArrayLike:
         """Generates simulated data representing a sum of Cauchy PDFs using the
         individual terms given during object creation.
 
         Parameters
         ----------
-        x : npt.NDArray
+        x : npt.ArrayLike
             The x data, e.g., magnetic field.
 
         Returns
         -------
-        npt.NDArray
+        npt.ArrayLike
             The y data, e.g., the derivative of magnetization with respect to field.
         """
         params = Parameters()
@@ -444,18 +444,18 @@ class CauchyAnalysisResults:
         output["_class_"] = self.__class__.__name__
         return output
 
-    def simulate_pdf_data(self, x: npt.NDArray) -> npt.NDArray:
+    def simulate_pdf_data(self, x: npt.ArrayLike) -> npt.ArrayLike:
         """Generates simulated data representing a sum of Cauchy PDFs using the
         individual terms resulting from the fit.
 
         Parameters
         ----------
-        x : npt.NDArray
+        x : npt.ArrayLike
             The x data, e.g., magnetic field.
 
         Returns
         -------
-        npt.NDArray
+        npt.ArrayLike
             The y data, e.g., the derivative of magnetization with respect to field.
         """
         fit_params = Parameters()
@@ -573,7 +573,7 @@ def cauchy_pdf(h: FitVal, params: Parameters) -> FitVal:
 
 
 def fit_cauchy_pdf(
-    x: npt.NDArray, y: npt.NDArray, fitting_args: CauchyFittingArgs | int
+    x: npt.ArrayLike, y: npt.ArrayLike, fitting_args: CauchyFittingArgs | int
 ) -> CauchyAnalysisResults:
     """Fits given x and y data (e.g., magnetic field and the derivative of
     magnetization with respect to field) to a sum of Cauchy probability density
@@ -581,9 +581,9 @@ def fit_cauchy_pdf(
 
     Parameters
     ----------
-    x : npt.NDArray
+    x : npt.ArrayLike
         The x data, e.g., magnetic field.
-    y : npt.NDArray
+    y : npt.ArrayLike
         The y data, e.g., the derivative of magnetization with respect to field.
     fitting_args : CauchyFittingArgs | int
         The arguments needed to perform the fit. If an `int` is given, the number of
