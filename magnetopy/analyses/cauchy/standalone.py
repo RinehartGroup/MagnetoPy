@@ -475,7 +475,7 @@ class CauchyPDFAnalysis:
 
     $$
     \\frac{dM}{dH}(H, M_s, H_c, \\gamma) = \\chi_{pd} + \\
-    \\sum_1^n \\frac{8M_{s,n}}{\pi} \\frac{\\gamma_n}{16 (H-H_{c,n})^2 + \\
+    \\sum_1^n \\frac{8M_{s,n}}{\\pi} \\frac{\\gamma_n}{16 (H-H_{c,n})^2 + \\
     \\gamma_n^2 }
     $$
 
