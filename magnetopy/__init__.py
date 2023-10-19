@@ -30,13 +30,15 @@ from magnetopy.analyses.simple_mvsh import (
     SimpleMvsHAnalysisParsingArgs,
 )
 from magnetopy.analyses.cauchy.standalone import (
-    CauchyParsingArgs,
     CauchyParams,
     CauchyFittingArgs,
     CauchyTermResults,
     CauchyAnalysisResults,
-    CauchyPDFAnalysis,
     cauchy_pdf,
     fit_cauchy_pdf,
 )
 from magnetopy.analyses.cauchy.plots import plot_cauchy_pdf
+from magnetopy.analyses.cauchy.magpy_compatible import (
+    CauchyParsingArgs,
+    CauchyPDFAnalysis,
+)

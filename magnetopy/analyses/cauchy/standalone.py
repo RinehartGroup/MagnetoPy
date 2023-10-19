@@ -1,124 +1,12 @@
 from __future__ import annotations
 from dataclasses import dataclass, asdict
-from typing import Any, Literal, TypeVar
+from typing import Any, TypeVar
 
-import pandas as pd
 import numpy as np
 import numpy.typing as npt
 from lmfit import Parameters, minimize, minimizer
 
-from magnetopy.magnetometry import Magnetometry
-from magnetopy.experiments.mvsh import MvsH
-
 FitVal = TypeVar("FitVal", float, npt.ArrayLike)
-
-
-@dataclass
-class CauchyParsingArgs:
-    """Arguments needed to parse a `Magnetometry` object during the course of an
-    analysis performed by `CauchyPDFAnalysis` or `CauchyCDFAnalysis`.
-
-    Attributes
-    ----------
-    temperature : float
-        The temperature in Kelvin of the measurement to be analyzed.
-    segments : Literal["auto", "loop", "forward", "reverse"], optional
-        The segments of the measurement to be analyzed. If `"auto"`, the forward and
-        reverse segments will be analyzed if they exist and will be ignored if they
-        don't. If `"loop"`, the forward and reverse segments will be analyzed if they
-        exist and an error will be raised if they don't. If `"forward"` or `"reverse"`,
-        only the forward or reverse segment will be analyzed, respectively.
-    experiment : Literal["MvsH"], optional
-        The type of measurement to be analyzed. Reserved for future use (e.g., `"ACvsH"`
-        experiments). Defaults to `"MvsH"`.
-    """
-
-    temperature: float
-    segments: Literal["auto", "loop", "forward", "reverse"] = "auto"
-    experiment: Literal["MvsH"] = "MvsH"
-
-    class InvalidExperimentError(Exception):
-        """Raised when the experiment is not supported by the analysis."""
-
-    def as_dict(self) -> dict[str, Any]:
-        output = asdict(self)
-        output["_class_"] = self.__class__.__name__
-        return output
-
-    def prepare_data(
-        self, dataset: Magnetometry, analysis: Literal["cdf", "pdf"]
-    ) -> pd.DataFrame:
-        """Parses the given dataset and returns a DataFrame containing the data to be
-        analyzed.
-
-        Parameters
-        ----------
-        dataset : Magnetometry
-            The Magnetometry object containing the data to be analyzed.
-        analysis : Literal["cdf", "pdf"]
-            The type of analysis to be performed.
-
-        Returns
-        -------
-        pd.DataFrame
-            DataFrame has two columns: "h" and "target", where "h" is the applied field
-            and "target" is the value under investigation, e.g., the magnetization (M),
-            the derivative of magnetization with respect to field (dM/dH),
-            or a form of susceptibility (e.g., chi, chi', chi").
-
-        Raises
-        ------
-        InvalidExperimentError
-            If the experiment is not supported by the analysis.
-        """
-        if self.experiment == "MvsH":
-            return self._prepare_mvsh_data(dataset, analysis)
-        raise self.InvalidExperimentError(
-            f"Experiment {self.experiment} is not supported by the analysis."
-        )
-
-    def _prepare_mvsh_data(
-        self, dataset: Magnetometry, analysis: Literal["cdf", "pdf"]
-    ) -> pd.DataFrame:
-        mvsh = dataset.get_mvsh(self.temperature)
-        data = pd.DataFrame()
-
-        def _get_segment_data(segment: str):
-            # uses `analysis` and `mvsh` from the outer scope
-            df = pd.DataFrame()
-            df["h"] = mvsh.simplified_data(segment)["field"]
-            if analysis == "cdf":
-                df["target"] = mvsh.simplified_data(segment)["moment"]
-            else:
-                df["target"] = np.gradient(
-                    mvsh.simplified_data(segment)["moment"],
-                    mvsh.simplified_data(segment)["field"],
-                )
-            return df
-
-        if self.segments == "auto":
-            try:
-                temp = _get_segment_data("forward")
-                data = pd.concat([data, temp])
-            except MvsH.SegmentError:
-                pass
-            try:
-                temp = _get_segment_data("reverse")
-                data = pd.concat([data, temp])
-            except MvsH.SegmentError:
-                pass
-        else:
-            if self.segments in ["loop", "forward"]:
-                temp = _get_segment_data("forward")
-                data = pd.concat([data, temp])
-            if self.segments in ["loop", "reverse"]:
-                temp = _get_segment_data("reverse")
-                data = pd.concat([data, temp])
-
-        return data
-
-    def get_units(self):
-        pass
 
 
 @dataclass
@@ -163,12 +51,12 @@ class CauchyParams:
     ] = 0.0  # either an inital value or (initial_value, min, max)
 
     def __post_init__(self):
-        if isinstance(self.m_s, float):
-            self.m_s = tuple(self.m_s)
-        if isinstance(self.h_c, float):
-            self.h_c = tuple(self.h_c)
-        if isinstance(self.gamma, float):
-            self.gamma = tuple(self.gamma)
+        if isinstance(self.m_s, float | int):
+            self.m_s = tuple([self.m_s])
+        if isinstance(self.h_c, float | int):
+            self.h_c = tuple([self.h_c])
+        if isinstance(self.gamma, float | int):
+            self.gamma = tuple([self.gamma])
 
     def as_dict(self) -> dict[str, Any]:
         """Returns a dictionary representation of the object.
@@ -466,75 +354,28 @@ class CauchyAnalysisResults:
         fit_params.add(name="chi_pd", value=self.chi_pd)
         return cauchy_pdf(x, fit_params)
 
+    def simulate_pdf_data_by_term(self, x: npt.ArrayLike) -> list[npt.ArrayLike]:
+        """Generates simulated data representing each individual term resulting from the
+        fit.
 
-class CauchyPDFAnalysis:
-    """An analysis of dM/dH vs. H data using a sum of Cauchy probability density
-    functions (PDFs).
-
-    Equation:
-
-    $$
-    \\frac{dM}{dH}(H, M_s, H_c, \\gamma) = \\chi_{pd} + \\
-    \\sum_1^n \\frac{8M_{s,n}}{\\pi} \\frac{\\gamma_n}{16 (H-H_{c,n})^2 + \\
-    \\gamma_n^2 }
-    $$
-
-    Parameters
-    ----------
-    dataset : Magnetometry
-        The Magnetometry object containing the data to be analyzed.
-    parsing_args : CauchyParsingArgs
-        The arguments needed to parse the dataset and obtain the data to be analyzed.
-    fitting_args : CauchyFittingArgs | int
-        The arguments needed to perform the fit. If an `int` is given, the number of
-        terms to be used in the fit. If a `CauchyFittingArgs` object is given, the
-        parameters to be used in the fit.
-
-    Attributes
-    ----------
-    parsing_args : CauchyParsingArgs
-        The arguments needed to parse the dataset and obtain the data to be analyzed.
-    fitting_args : CauchyFittingArgs
-        The arguments needed to perform the fit.
-    results : CauchyAnalysisResults
-        The results of the fit.
-    """
-
-    def __init__(
-        self,
-        dataset: Magnetometry,
-        parsing_args: CauchyParsingArgs,
-        fitting_args: CauchyFittingArgs | int,
-    ) -> None:
-        self.parsing_args = parsing_args
-        self.fitting_args = fitting_args
-
-        data = self.parsing_args.prepare_data(dataset, "pdf")
-
-        x_range = (np.min(data["h"]), np.max(data["h"]))
-        y_max = np.max(abs(data["target"]))
-        if isinstance(fitting_args, int):
-            fitting_args = CauchyFittingArgs.build_from_num_terms(
-                fitting_args, x_range, y_max
-            )
-        params = fitting_args.build_params(x_range, y_max)
-
-        self.results = fit_cauchy_pdf(data["h"], data["target"], params)
-
-    def as_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of the object.
+        Parameters
+        ----------
+        x : npt.ArrayLike
+            The x data, e.g., magnetic field.
 
         Returns
         -------
-        dict[str, Any]
-            Keys are:
+        list[npt.ArrayLike]
+            The y data, e.g., the derivative of magnetization with respect to field.
         """
-        return {
-            "_class_": self.__class__.__name__,
-            "parsing_args": self.parsing_args,
-            "fitting_args": self.fitting_args,
-            "results": self.results,
-        }
+        simulated_data = []
+        for term in self.terms:
+            params = Parameters()
+            params.add(name="m_s_0", value=term.m_s)
+            params.add(name="h_c_0", value=term.h_c)
+            params.add(name="gamma_0", value=term.gamma)
+            simulated_data.append(cauchy_pdf(x, params))
+        return simulated_data
 
 
 def cauchy_pdf(h: FitVal, params: Parameters) -> FitVal:
