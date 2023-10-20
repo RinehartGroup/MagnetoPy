@@ -1,12 +1,188 @@
 from __future__ import annotations
 from dataclasses import dataclass, asdict
-from typing import Any, TypeVar
+from typing import Any, Literal, TypeVar
 
 import numpy as np
 import numpy.typing as npt
+import pandas as pd
 from lmfit import Parameters, minimize, minimizer
 
 FitVal = TypeVar("FitVal", float, npt.ArrayLike)
+
+
+def cauchy_pdf(h: FitVal, params: Parameters) -> FitVal:
+    """Generates data representing a sum of Cauchy probability density functions
+    (PDFs).
+
+    Equation:
+
+    $$
+    \\frac{dM}{dH}(H, M_s, H_c, \\gamma) = \\chi_{pd} + \\
+    \\sum_1^n \\frac{8M_{s,n}}{\\pi} \\frac{\\gamma_n}{16 (H-H_{c,n})^2 + \\
+    \\gamma_n^2 }
+    $$
+
+    Parameters
+    ----------
+    h : FitVal
+        A FitVal (either a float or a numpy array) representing the x data (e.g.,
+        magnetic field).
+    params : Parameters
+        Params must contain the following parameters as a valid `lmfit.Parameters`
+        object:
+            - `m_s_0`, `h_c_0`, `gamma_0`
+            - `m_s_1`, `h_c_1`, `gamma_1`
+            - ...
+            - `chi_pd`
+
+    Returns
+    -------
+    FitVal
+        The float or numpy array representing the y data (e.g., the derivative of
+        magnetization with respect to field).
+    """
+    try:
+        m = params["chi_pd"]
+    except KeyError:
+        m = 0
+    for i in range(0, len(params) - 1, 3):
+        j = i // 3
+        m += (8 * params[f"m_s_{j}"] * params[f"gamma_{j}"]) / (
+            np.pi * (16 * (h - params[f"h_c_{j}"]) ** 2 + params[f"gamma_{j}"] ** 2)
+        )
+    return m
+
+
+def fit_cauchy_pdf(
+    x: npt.ArrayLike, y: npt.ArrayLike, fitting_args: CauchyFittingArgs | int
+) -> CauchyAnalysisResults:
+    """Fits given x and y data (e.g., magnetic field and the derivative of
+    magnetization with respect to field) to a sum of Cauchy probability density
+    functions (PDFs).
+
+    Parameters
+    ----------
+    x : npt.ArrayLike
+        The x data, e.g., magnetic field.
+    y : npt.ArrayLike
+        The y data, e.g., the derivative of magnetization with respect to field.
+    fitting_args : CauchyFittingArgs | int
+        The arguments needed to perform the fit. If an `int` is given, the number of
+        terms to be used in the fit. If a `CauchyFittingArgs` object is given, the
+        parameters to be used in the fit.
+
+    Returns
+    -------
+    CauchyAnalysisResults
+        The results of the fit.
+    """
+    x_range = (np.min(x), np.max(x))
+    integral_y: npt.NDArray = np.cumsum(y * np.gradient(x))
+    y_sat = (integral_y.max() - integral_y.min()) / 2
+    if isinstance(fitting_args, int):
+        fitting_args = CauchyFittingArgs.build_from_num_terms(
+            fitting_args, x_range, y_sat
+        )
+    params = fitting_args.build_params(x_range, y_sat)
+
+    def residual(params: Parameters, h: float, dmdh_data: float) -> float:
+        return cauchy_pdf(h, params) - dmdh_data
+
+    lmfit_results: minimizer.MinimizerResult = minimize(
+        residual,
+        params,
+        args=(x, y),
+    )
+
+    results = _build_results(lmfit_results, len(params) // 3)
+
+    return results
+
+
+def cauchy_cdf(h: FitVal, params: Parameters) -> FitVal:
+    """Generates data representing a sum of Cauchy cumulative distribution functions
+    (CDFs).
+
+    Equation:
+
+    $$
+    M(H, M_s, H_c, \\gamma) = \\chi_{pd}H + \\sum_1^n \\frac{2M_{s,n}}{\\pi}
+    \\arctan\\left(\\frac{H-H_{c,n}}{\\gamma_n}\\right)
+    $$
+
+    Parameters
+    ----------
+    h : FitVal
+        A FitVal (either a float or a numpy array) representing the x data (e.g.,
+        magnetic field).
+    params : Parameters
+        Params must contain the following parameters as a valid `lmfit.Parameters`
+        object:
+            - `m_s_0`, `h_c_0`, `gamma_0`
+            - `m_s_1`, `h_c_1`, `gamma_1`
+            - ...
+            - `chi_pd`
+
+    Returns
+    -------
+    FitVal
+        The float or numpy array representing the y data (e.g., the magnetization with
+        respect to field).
+    """
+    try:
+        m = h * params["chi_pd"]
+    except KeyError:
+        m = 0
+    for i in range(0, len(params) - 1, 3):
+        j = i // 3
+        m += (2 * params[f"m_s_{j}"] / np.pi) * np.arctan(
+            (h - params[f"h_c_{j}"]) / params[f"gamma_{j}"]
+        )
+    return m
+
+
+def fit_cauchy_cdf(
+    x: npt.ArrayLike, y: npt.ArrayLike, fitting_args: CauchyFittingArgs | int
+) -> CauchyAnalysisResults:
+    """Fits given x and y data (e.g., magnetic field and magnetization) to a sum of
+    Cauchy cumulative distribution functions (CDFs).
+
+    Parameters
+    ----------
+    x : npt.ArrayLike
+        The x data, e.g., magnetic field.
+    y : npt.ArrayLike
+        The y data, e.g., the magnetization.
+    fitting_args : CauchyFittingArgs | int
+        The arguments needed to perform the fit. If an `int` is given, the number of
+        terms to be used in the fit. If a `CauchyFittingArgs` object is given, the
+        parameters to be used in the fit.
+
+    Returns
+    -------
+    CauchyAnalysisResults
+        The results of the fit.
+    """
+    x_range = (np.min(x), np.max(x))
+    y_sat = np.max(y)
+    if isinstance(fitting_args, int):
+        fitting_args = CauchyFittingArgs.build_from_num_terms(
+            fitting_args, x_range, y_sat
+        )
+    params = fitting_args.build_params(x_range, y_sat)
+
+    def residual(params: Parameters, h: float, dmdh_data: float) -> float:
+        return cauchy_cdf(h, params) - dmdh_data
+
+    lmfit_results: minimizer.MinimizerResult = minimize(
+        residual,
+        params,
+        args=(x, y),
+    )
+
+    results = _build_results(lmfit_results, len(params) // 3)
+
+    return results
 
 
 @dataclass
@@ -161,7 +337,9 @@ class CauchyFittingArgs:
         params.add("chi_pd", value=0)
         return params
 
-    def generate_pdf_data(self, x: npt.ArrayLike) -> npt.ArrayLike:
+    def generate_data(
+        self, x: npt.ArrayLike, form: Literal["pdf", "cdf"]
+    ) -> npt.ArrayLike:
         """Generates simulated data representing a sum of Cauchy PDFs using the
         individual terms given during object creation.
 
@@ -169,6 +347,8 @@ class CauchyFittingArgs:
         ----------
         x : npt.ArrayLike
             The x data, e.g., magnetic field.
+        form : {"pdf", "cdf"}
+            The form of the Cauchy distribution to generate.
 
         Returns
         -------
@@ -181,7 +361,13 @@ class CauchyFittingArgs:
             params.add(name=f"h_c_{i}", value=term.h_c[0])
             params.add(name=f"gamma_{i}", value=term.gamma[0])
         params.add(name="chi_pd", value=0)
-        return cauchy_pdf(x, params)
+        if form.lower() == "cdf":
+            simulated_data = cauchy_cdf(x, params)
+        elif form.lower() == "pdf":
+            simulated_data = cauchy_pdf(x, params)
+        else:
+            raise ValueError(f"`form` argument must be 'pdf' or 'cdf', not {form}")
+        return simulated_data
 
     def as_dict(self) -> dict[str, Any]:
         """Returns a dictionary representation of the object.
@@ -328,33 +514,45 @@ class CauchyAnalysisResults:
             Keys are: "_class_", "terms", "chi_pd", "chi_pd_err", "chi_squared",
             "reduced_chi_squared", "m_s_unit", "h_c_unit", "gamma_unit", "chi_pd_unit".
         """
-        output = asdict(self)
-        output["_class_"] = self.__class__.__name__
+        output = {"_class_": self.__class__.__name__}
+        output.update(asdict(self))
         return output
 
-    def simulate_pdf_data(self, x: npt.ArrayLike) -> npt.ArrayLike:
-        """Generates simulated data representing a sum of Cauchy PDFs using the
+    def generate_data(
+        self, x: npt.ArrayLike, form: Literal["pdf", "cdf"]
+    ) -> npt.ArrayLike:
+        """Generates simulated data representing a sum of Cauchy PDFs or CDFs using the
         individual terms resulting from the fit.
 
         Parameters
         ----------
         x : npt.ArrayLike
             The x data, e.g., magnetic field.
+        form : {"pdf", "cdf"}
+            The form of the Cauchy distribution to generate.
 
         Returns
         -------
         npt.ArrayLike
             The y data, e.g., the derivative of magnetization with respect to field.
         """
-        fit_params = Parameters()
+        params = Parameters()
         for i, term in enumerate(self.terms):
-            fit_params.add(name=f"m_s_{i}", value=term.m_s)
-            fit_params.add(name=f"h_c_{i}", value=term.h_c)
-            fit_params.add(name=f"gamma_{i}", value=term.gamma)
-        fit_params.add(name="chi_pd", value=self.chi_pd)
-        return cauchy_pdf(x, fit_params)
+            params.add(name=f"m_s_{i}", value=term.m_s)
+            params.add(name=f"h_c_{i}", value=term.h_c)
+            params.add(name=f"gamma_{i}", value=term.gamma)
+            params.add(name="chi_pd", value=0)
+        if form.lower() == "cdf":
+            simulated_data = cauchy_cdf(x, params)
+        elif form.lower() == "pdf":
+            simulated_data = cauchy_pdf(x, params)
+        else:
+            raise ValueError(f"`form` argument must be 'pdf' or 'cdf', not {form}")
+        return simulated_data
 
-    def simulate_pdf_data_by_term(self, x: npt.ArrayLike) -> list[npt.ArrayLike]:
+    def generate_data_by_term(
+        self, x: npt.ArrayLike, form: Literal["pdf", "cdf"]
+    ) -> list[npt.ArrayLike]:
         """Generates simulated data representing each individual term resulting from the
         fit.
 
@@ -362,6 +560,8 @@ class CauchyAnalysisResults:
         ----------
         x : npt.ArrayLike
             The x data, e.g., magnetic field.
+        form : {"pdf", "cdf"}
+            The form of the Cauchy distribution to generate.
 
         Returns
         -------
@@ -374,89 +574,23 @@ class CauchyAnalysisResults:
             params.add(name="m_s_0", value=term.m_s)
             params.add(name="h_c_0", value=term.h_c)
             params.add(name="gamma_0", value=term.gamma)
-            simulated_data.append(cauchy_pdf(x, params))
+            if form.lower() == "cdf":
+                simulated_data.append(cauchy_cdf(x, params))
+            elif form.lower() == "pdf":
+                simulated_data.append(cauchy_pdf(x, params))
+            else:
+                raise ValueError(f"`form` argument must be 'pdf' or 'cdf', not {form}")
         return simulated_data
 
 
-def cauchy_pdf(h: FitVal, params: Parameters) -> FitVal:
-    """Generates data representing a sum of Cauchy probability density functions
-    (PDFs).
-
-    Parameters
-    ----------
-    h : FitVal
-        A FitVal (either a float or a numpy array) representing the x data (e.g.,
-        magnetic field).
-    params : Parameters
-        Params must contain the following parameters as a valid `lmfit.Parameters`
-        object:
-            - `m_s_0`, `h_c_0`, `gamma_0`
-            - `m_s_1`, `h_c_1`, `gamma_1`
-            - ...
-            - `chi_pd`
-
-    Returns
-    -------
-    FitVal
-        The float or numpy array representing the y data (e.g., the derivative of
-        magnetization with respect to field).
-    """
-    try:
-        m = params["chi_pd"]
-    except KeyError:
-        m = 0
-    for i in range(0, len(params) - 1, 3):
-        j = i // 3
-        m += (8 * params[f"m_s_{j}"] * params[f"gamma_{j}"]) / (
-            np.pi * (16 * (h - params[f"h_c_{j}"]) ** 2 + params[f"gamma_{j}"] ** 2)
-        )
-    return m
-
-
-def fit_cauchy_pdf(
-    x: npt.ArrayLike, y: npt.ArrayLike, fitting_args: CauchyFittingArgs | int
-) -> CauchyAnalysisResults:
-    """Fits given x and y data (e.g., magnetic field and the derivative of
-    magnetization with respect to field) to a sum of Cauchy probability density
-    functions (PDFs).
-
-    Parameters
-    ----------
-    x : npt.ArrayLike
-        The x data, e.g., magnetic field.
-    y : npt.ArrayLike
-        The y data, e.g., the derivative of magnetization with respect to field.
-    fitting_args : CauchyFittingArgs | int
-        The arguments needed to perform the fit. If an `int` is given, the number of
-        terms to be used in the fit. If a `CauchyFittingArgs` object is given, the
-        parameters to be used in the fit.
-
-    Returns
-    -------
-    CauchyAnalysisResults
-        The results of the fit.
-    """
-    x_range = (np.min(x), np.max(x))
-    integral_y = np.cumsum(y * np.gradient(x))
-    y_sat = (integral_y.max() - integral_y.min()) / 2
-    if isinstance(fitting_args, int):
-        fitting_args = CauchyFittingArgs.build_from_num_terms(
-            fitting_args, x_range, y_sat
-        )
-    params = fitting_args.build_params(x_range, y_sat)
-
-    def residual(params: Parameters, h: float, dmdh_data: float) -> float:
-        return cauchy_pdf(h, params) - dmdh_data
-
-    lmfit_results: minimizer.MinimizerResult = minimize(
-        residual,
-        params,
-        args=(x, y),
-    )
-
-    results = _build_results(lmfit_results, len(params) // 3)
-
-    return results
+def reverse_sequence(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
+    df = df.copy()
+    for column in columns:
+        try:
+            df[column] = df[column] * -1
+        except KeyError:
+            continue
+    return df
 
 
 def _build_results(

@@ -2,13 +2,19 @@ from typing import Any, Literal
 from dataclasses import dataclass, asdict
 
 import numpy as np
+import numpy.typing as npt
 import pandas as pd
 import matplotlib.pyplot as plt
 
 from magnetopy.magnetometry import Magnetometry
 from magnetopy.experiments.mvsh import MvsH
-from magnetopy.analyses.cauchy.standalone import fit_cauchy_pdf, CauchyFittingArgs
-from magnetopy.analyses.cauchy.plots import plot_cauchy_pdf
+from magnetopy.analyses.cauchy.standalone import (
+    fit_cauchy_cdf,
+    fit_cauchy_pdf,
+    CauchyFittingArgs,
+    reverse_sequence,
+)
+from magnetopy.analyses.cauchy.plots import plot_cauchy_cdf, plot_cauchy_pdf
 
 
 @dataclass
@@ -102,7 +108,7 @@ class CauchyParsingArgs:
                 pass
             try:
                 temp = _get_segment_data("reverse")
-                temp = self.reverse_sequence(temp, ["h"])
+                temp = reverse_sequence(temp, ["h"])
                 data = pd.concat([data, temp])
             except MvsH.SegmentError:
                 pass
@@ -112,23 +118,156 @@ class CauchyParsingArgs:
                 data = pd.concat([data, temp])
             if self.segments in ["loop", "reverse"]:
                 temp = _get_segment_data("reverse")
-                temp = self.reverse_sequence(temp, ["h"])
+                temp = reverse_sequence(temp, ["h"])
                 data = pd.concat([data, temp])
 
         return data
 
-    @staticmethod
-    def reverse_sequence(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
-        df = df.copy()
-        for column in columns:
-            try:
-                df[column] = df[column] * -1
-            except KeyError:
-                continue
-        return df
 
-    def get_units(self):
-        pass
+class CauchyCDFAnalysis:
+    """An analysis of dM/dH vs. H data using a sum of Cauchy cumulative distribution
+    functions (CDFs).
+
+    Equation:
+
+    $$
+    M(H, M_s, H_c, \\gamma) = \\chi_{pd}H + \\sum_1^n \\frac{2M_{s,n}}{\\pi}
+    \\arctan\\left(\\frac{H-H_{c,n}}{\\gamma_n}\\right)
+    $$
+
+    Parameters
+    ----------
+    dataset : Magnetometry
+        The Magnetometry object containing the data to be analyzed.
+    parsing_args : CauchyParsingArgs
+        The arguments needed to parse the dataset and obtain the data to be analyzed.
+    fitting_args : CauchyFittingArgs | int
+        The arguments needed to perform the fit. If an `int` is given, the number of
+        terms to be used in the fit. If a `CauchyFittingArgs` object is given, the
+        parameters to be used in the fit.
+
+    Attributes
+    ----------
+    parsing_args : CauchyParsingArgs
+        The arguments needed to parse the dataset and obtain the data to be analyzed.
+    fitting_args : CauchyFittingArgs
+        The arguments needed to perform the fit.
+    results : CauchyAnalysisResults
+        The results of the fit.
+    """
+
+    def __init__(
+        self,
+        dataset: Magnetometry,
+        parsing_args: CauchyParsingArgs,
+        fitting_args: CauchyFittingArgs | int,
+    ) -> None:
+        self.parsing_args = parsing_args
+
+        self._dataset = dataset
+        self.data = self.parsing_args.prepare_data(dataset, "cdf")
+        self.data.sort_values(by="h", inplace=True)
+
+        self.fitting_args = fitting_args
+        if isinstance(self.fitting_args, int):
+            x_range = (np.min(self.data["h"]), np.max(self.data["h"]))
+            y_sat = np.max(self.data["target"])
+            self.fitting_args = CauchyFittingArgs.build_from_num_terms(
+                self.fitting_args, x_range, y_sat
+            )
+
+        self.results = fit_cauchy_cdf(
+            self.data["h"], self.data["target"], self.fitting_args
+        )
+
+    def plot(
+        self,
+        segment: Literal["", "forward", "reverse", "loop"] = "",
+        show_full_fit: bool = True,
+        show_fit_components: bool = False,
+        show_input: bool = False,
+        **kwargs,
+    ) -> tuple[plt.Figure, plt.Axes]:
+        """Plots the results of a Cauchy CDF analysis.
+
+        Parameters
+        ----------
+        segment : {"", "forward", "reverse", "loop"}, optional
+            The segment of the measurement to be plotted. The default option, `""`
+            plots the data as it was prepared for the analysis (if `"auto"` or `"loop"`
+            were selected, the data is transformed into one "forward" sweep with data
+            from both forward and reverse segments). If `"loop"` is selected, the fits
+            and/or input simulated data will be plotted in both the forward and reverse
+            directions as well.
+        show_full_fit : bool, optional
+            Whether to show the full fit (i.e., the composite of the individual terms),
+            by default True.
+        show_fit_components : bool, optional
+            Whether to show the individual fit components, by default False.
+        show_input : bool, optional
+            Whether to show the input simulated data, by default False.
+
+        Returns
+        -------
+        tuple[plt.Figure, plt.Axes]
+            The figure and axes objects.
+        """
+        input_params = None if not show_input else self.fitting_args
+        add_reversed_data = (False,)
+        add_reversed_simulated = False
+        if segment == "forward":
+            temp = self._dataset.get_mvsh(
+                self.parsing_args.temperature
+            ).simplified_data("forward")
+            data = pd.DataFrame()
+            data["h"] = temp["field"]
+            data["target"] = temp["moment"]
+        elif segment == "reverse":
+            temp = self._dataset.get_mvsh(
+                self.parsing_args.temperature
+            ).simplified_data("reverse")
+            data = pd.DataFrame()
+            data["h"] = temp["field"]
+            data["target"] = temp["moment"]
+        elif segment == "loop":
+            data = self._dataset.get_mvsh(
+                self.parsing_args.temperature
+            ).simplified_data("loop")
+            data = pd.DataFrame(data)
+            data["h"] = data["field"]
+            data["target"] = data["moment"]
+            add_reversed_data = True
+            add_reversed_simulated = True
+        else:
+            data = self.data
+
+        fig, ax = plot_cauchy_cdf(
+            data["h"],
+            data["target"],
+            self.results,
+            add_reversed_data,
+            add_reversed_simulated,
+            show_full_fit,
+            show_fit_components,
+            input_params,
+            **kwargs,
+        )
+        return fig, ax
+
+    def as_dict(self) -> dict[str, Any]:
+        """Returns a dictionary representation of the object.
+
+        Returns
+        -------
+        dict[str, Any]
+            Keys are:
+        """
+        return {
+            "_class_": self.__class__.__name__,
+            "parsing_args": self.parsing_args,
+            "fitting_args": self.fitting_args,
+            "results": self.results,
+        }
 
 
 class CauchyPDFAnalysis:
@@ -176,10 +315,12 @@ class CauchyPDFAnalysis:
         self.data.sort_values(by="h", inplace=True)
 
         self.fitting_args = fitting_args
-        x_range = (np.min(self.data["h"]), np.max(self.data["h"]))
-        integral_y = np.cumsum(self.data["target"] * np.gradient(self.data["h"]))
-        y_sat = (integral_y.max() - integral_y.min()) / 2
         if isinstance(self.fitting_args, int):
+            x_range = (np.min(self.data["h"]), np.max(self.data["h"]))
+            integral_y: npt.NDArray = np.cumsum(
+                self.data["target"] * np.gradient(self.data["h"])
+            )
+            y_sat = (integral_y.max() - integral_y.min()) / 2
             self.fitting_args = CauchyFittingArgs.build_from_num_terms(
                 self.fitting_args, x_range, y_sat
             )
@@ -216,18 +357,16 @@ class CauchyPDFAnalysis:
         tuple[plt.Figure, plt.Axes]
             The figure and axes objects.
         """
-        if input_params:
-            input_params = self.fitting_args
-        fig, ax = plot_cauchy_pdf(
+        input_params = self.fitting_args if input_params else None
+        return plot_cauchy_pdf(
             self.data["h"],
             self.data["target"],
-            results=self.results,
-            show_full_fit=show_full_fit,
-            show_fit_components=show_fit_components,
-            input_params=input_params,
+            self.results,
+            show_full_fit,
+            show_fit_components,
+            input_params,
             **kwargs,
         )
-        return fig, ax
 
     def as_dict(self) -> dict[str, Any]:
         """Returns a dictionary representation of the object.

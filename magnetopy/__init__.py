@@ -36,9 +36,12 @@ from magnetopy.analyses.cauchy.standalone import (
     CauchyAnalysisResults,
     cauchy_pdf,
     fit_cauchy_pdf,
+    cauchy_cdf,
+    fit_cauchy_cdf,
 )
-from magnetopy.analyses.cauchy.plots import plot_cauchy_pdf
+from magnetopy.analyses.cauchy.plots import plot_cauchy
 from magnetopy.analyses.cauchy.magpy_compatible import (
     CauchyParsingArgs,
     CauchyPDFAnalysis,
+    CauchyCDFAnalysis,
 )
