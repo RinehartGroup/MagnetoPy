@@ -39,7 +39,11 @@ from magnetopy.analyses.cauchy.standalone import (
     cauchy_cdf,
     fit_cauchy_cdf,
 )
-from magnetopy.analyses.cauchy.plots import plot_cauchy
+from magnetopy.analyses.cauchy.plots import (
+    plot_cauchy,
+    plot_cauchy_cdf,
+    plot_cauchy_pdf,
+)
 from magnetopy.analyses.cauchy.magpy_compatible import (
     CauchyParsingArgs,
     CauchyPDFAnalysis,

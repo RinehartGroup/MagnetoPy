@@ -87,40 +87,39 @@ class CauchyParsingArgs:
         mvsh = dataset.get_mvsh(self.temperature)
         data = pd.DataFrame()
 
-        def _get_segment_data(segment: str):
+        def _get_segment_data(data: pd.DataFrame, segment: str):
             # uses `analysis` and `mvsh` from the outer scope
             df = pd.DataFrame()
             df["h"] = mvsh.simplified_data(segment)["field"]
             if analysis == "cdf":
                 df["target"] = mvsh.simplified_data(segment)["moment"]
+                if segment == "reverse":
+                    df = reverse_sequence(df, ["h", "target"])
             else:
                 df["target"] = np.gradient(
                     mvsh.simplified_data(segment)["moment"],
                     mvsh.simplified_data(segment)["field"],
                 )
-            return df
+                if segment == "reverse":
+                    df = reverse_sequence(df, ["h"])
+                # account for derivative artifacts at the ends of the data
+                df = df[2:-2]
+            return pd.concat([data, df])
 
         if self.segments == "auto":
             try:
-                temp = _get_segment_data("forward")
-                data = pd.concat([data, temp])
+                data = _get_segment_data(data, "forward")
             except MvsH.SegmentError:
                 pass
             try:
-                temp = _get_segment_data("reverse")
-                temp = reverse_sequence(temp, ["h"])
-                data = pd.concat([data, temp])
+                data = _get_segment_data(data, "reverse")
             except MvsH.SegmentError:
                 pass
         else:
             if self.segments in ["loop", "forward"]:
-                temp = _get_segment_data("forward")
-                data = pd.concat([data, temp])
+                data = _get_segment_data(data, "forward")
             if self.segments in ["loop", "reverse"]:
-                temp = _get_segment_data("reverse")
-                temp = reverse_sequence(temp, ["h"])
-                data = pd.concat([data, temp])
-
+                data = _get_segment_data(data, "reverse")
         return data
 
 
@@ -240,6 +239,10 @@ class CauchyCDFAnalysis:
             add_reversed_simulated = True
         else:
             data = self.data
+
+        if segment == "" and self.parsing_args.segments in ["auto", "loop"]:
+            add_reversed_data = True
+            add_reversed_simulated = True
 
         fig, ax = plot_cauchy_cdf(
             data["h"],

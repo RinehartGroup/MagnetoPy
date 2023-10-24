@@ -171,8 +171,8 @@ def fit_cauchy_cdf(
         )
     params = fitting_args.build_params(x_range, y_sat)
 
-    def residual(params: Parameters, h: float, dmdh_data: float) -> float:
-        return cauchy_cdf(h, params) - dmdh_data
+    def residual(params: Parameters, h: float, data: float) -> float:
+        return cauchy_cdf(h, params) - data
 
     lmfit_results: minimizer.MinimizerResult = minimize(
         residual,
@@ -407,10 +407,11 @@ class CauchyFittingArgs:
             The input parameters for a Cauchy fit.
         """
         terms = []
+        y_sat_padded = 1.5 * y_sat
         for _ in range(num_terms):
             terms.append(
                 CauchyParams(
-                    m_s=(y_sat / num_terms, 0, y_sat),
+                    m_s=(y_sat / num_terms, 0, y_sat_padded),
                     h_c=((x_range[0] + x_range[1]) / 2, x_range[0], x_range[1]),
                     gamma=((x_range[1] - x_range[0]) / 10, 0, x_range[1] - x_range[0]),
                 )
@@ -541,7 +542,7 @@ class CauchyAnalysisResults:
             params.add(name=f"m_s_{i}", value=term.m_s)
             params.add(name=f"h_c_{i}", value=term.h_c)
             params.add(name=f"gamma_{i}", value=term.gamma)
-            params.add(name="chi_pd", value=0)
+        params.add(name="chi_pd", value=self.chi_pd)
         if form.lower() == "cdf":
             simulated_data = cauchy_cdf(x, params)
         elif form.lower() == "pdf":
