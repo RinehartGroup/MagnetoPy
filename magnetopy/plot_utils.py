@@ -72,9 +72,9 @@ def linear_color_gradient(
 
     start = hex_to_rgb(start_color)
     finish = hex_to_rgb(finish_color)
-    # Initilize a list of the output colors with the starting color
+    # Initialize a list of the output colors with the starting color
     rgb_list = [start]
-    # Calcuate a color at each evenly spaced value of t from 1 to n
+    # Calculate a color at each evenly spaced value of t from 1 to n
     if isinstance(n, int):
         for t in range(1, n):
             # Interpolate RGB vector for color at the current value of t
