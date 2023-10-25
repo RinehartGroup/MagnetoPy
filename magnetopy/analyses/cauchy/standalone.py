@@ -16,11 +16,11 @@ def cauchy_pdf(h: FitVal, params: Parameters) -> FitVal:
 
     Equation:
 
-    $$
+    ```math
     \\frac{dM}{dH}(H, M_s, H_c, \\gamma) = \\chi_{pd} + \\
     \\sum_1^n \\frac{8M_{s,n}}{\\pi} \\frac{\\gamma_n}{16 (H-H_{c,n})^2 + \\
     \\gamma_n^2 }
-    $$
+    ```
 
     Parameters
     ----------
@@ -105,10 +105,10 @@ def cauchy_cdf(h: FitVal, params: Parameters) -> FitVal:
 
     Equation:
 
-    $$
+    ```math
     M(H, M_s, H_c, \\gamma) = \\chi_{pd}H + \\sum_1^n \\frac{2M_{s,n}}{\\pi}
     \\arctan\\left(\\frac{H-H_{c,n}}{\\gamma_n}\\right)
-    $$
+    ```
 
     Parameters
     ----------
