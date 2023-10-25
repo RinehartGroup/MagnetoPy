@@ -200,7 +200,7 @@ def plot_cauchy(
                 if add_reversed_simulated:
                     x_fit_ = np.concatenate([x_fit, -1 * x_fit])
                     y_fit = np.concatenate([y_fit, -1 * y_fit])
-                ax.plot(x_fit_, y_fit, label=f"Fit Term {i}")
+                ax.plot(x_fit_, y_fit, label=f"Fit Term {i + 1}")
 
     if options["xlabel"]:
         ax.set_xlabel(options["xlabel"])
