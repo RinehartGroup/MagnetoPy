@@ -8,18 +8,20 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from magnetopy.data_files import DatFile, plot_raw, plot_raw_residual
-from magnetopy.experiments.plot_utils import (
-    get_ylabel,
-    handle_kwargs,
-    handle_options,
-)
+from magnetopy.experiments.plot_utils import get_ylabel
 from magnetopy.experiments.utils import (
     scale_dc_data,
     add_uncorrected_moment_columns,
     num_digits_after_decimal,
 )
 from magnetopy.parsing_utils import find_sequence_starts, label_clusters, unique_values
-from magnetopy.plot_utils import default_colors, force_aspect, linear_color_gradient
+from magnetopy.plot_utils import (
+    default_colors,
+    force_aspect,
+    linear_color_gradient,
+    handle_kwargs,
+    handle_options,
+)
 
 
 class TemperatureDetectionError(Exception):

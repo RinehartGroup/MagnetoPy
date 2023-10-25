@@ -22,7 +22,13 @@ from magnetopy.experiments.zfcfc import (
     plot_single_zfcfc,
     plot_multiple_zfcfc,
 )
-from magnetopy.plot_utils import force_aspect, linear_color_gradient
+from magnetopy.plot_utils import (
+    force_aspect,
+    linear_color_gradient,
+    default_colors,
+    handle_kwargs,
+    handle_options,
+)
 from magnetopy.magnetometry import SampleInfo, Magnetometry
 from magnetopy.analyses.simple_mvsh import (
     SimpleMvsHAnalysis,

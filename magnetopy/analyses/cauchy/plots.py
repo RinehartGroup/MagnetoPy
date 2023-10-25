@@ -7,7 +7,7 @@ from magnetopy.analyses.cauchy.standalone import (
     CauchyFittingArgs,
     CauchyAnalysisResults,
 )
-from magnetopy.experiments.plot_utils import (
+from magnetopy.plot_utils import (
     handle_kwargs,
     handle_options,
 )
@@ -129,7 +129,7 @@ def plot_cauchy(
     input_params: CauchyFittingArgs | None = None,
     **kwargs,
 ) -> tuple[plt.Figure, plt.Axes]:
-    """Plots the results of a Cauchy PDF analysis.
+    """Plots the results of a Cauchy analysis.
 
     Parameters
     ----------

@@ -176,3 +176,67 @@ def force_aspect(ax: plt.Axes, aspect=1) -> None:
     elif xscale_str == "linear" and yscale_str == "log":
         asp = abs((xmax - xmin) / (np.log10(ymax) - np.log10(ymin))) / aspect
     ax.set_aspect(asp)
+
+
+def handle_kwargs(**kwargs):
+    """Returns a dictionary with either user-entered or default values for the
+    arguments supported by `handle_options()`.
+
+    Also supports a "save" arguments which will save the figure to the specified
+    filename if it is not None.
+    """
+    options = {
+        "figsize": (5, 5),
+        "xlim": None,
+        "ylim": None,
+        "loc": None,
+        "save": None,
+        "xlabel": None,
+        "ylabel": None,
+        "title": None,
+    }
+    options.update(kwargs)
+    return options
+
+
+def handle_options(
+    ax: plt.Axes,
+    options: dict[str, str],
+    label: str | None = None,
+    title: str | None = None,
+) -> None:
+    """Handles some of the typical options for plotting functions in matplotlib. The
+    currently supported options are in the parameter list below.
+
+    Parameters
+    ----------
+    ax : plt.Axes
+        The axes to handle the options for.
+    options : dict[str, str]
+        A dictionary of options. The currently supported options are:
+            - "xlim": A tuple of the x-axis limits.
+            - "ylim": A tuple of the y-axis limits.
+            - "loc": The location of the legend.
+            - "xlabel": The x-axis label.
+            - "ylabel": The y-axis label.
+            - "title": The title of the plot.
+    label : str, optional
+        The label for the legend, by default None.
+    title : str, optional
+        The title of the plot, by default None.
+    """
+    if label or title:
+        if options["loc"]:
+            ax.legend(frameon=False, loc=options["loc"], title=title)
+        else:
+            ax.legend(frameon=False, loc="best", title=title)
+    if options["xlim"]:
+        ax.set_xlim(options["xlim"])
+    if options["ylim"]:
+        ax.set_ylim(options["ylim"])
+    if options["xlabel"]:
+        ax.set_xlabel(options["xlabel"])
+    if options["ylabel"]:
+        ax.set_ylabel(options["ylabel"])
+    if options["title"]:
+        ax.set_title(options["title"])
