@@ -19,3 +19,4 @@ Datasets:
 Analyses:
 
 - [A Simple M vs. H Analysis](mvsh_analysis)
+- [Quantification of Hysteresis Data using Cauchy Distribution Functions](cauchy)
