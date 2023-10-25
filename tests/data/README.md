@@ -68,4 +68,4 @@
 | dataset3 | mvsh6.dat, zfcfc4.dat                                 |                                                                                                               |
 | dataset4 | mvsh9.dat, fc5.dat, fc5.rw.dat, zfc5.dat, zfc5.rw.dat |                                                                                                               |
 | dataset5 | mvsh12.dat, zfcfc6.dat                                | From [Kirkpatrick, et al. Chem. Sci. 2023](https://pubs.rsc.org/en/content/articlelanding/2023/SC/D3SC02113K) |
-| dataset6 | mvsh13.dat,                                           |
+| dataset6 | mvsh13.dat, zfc7 - zfc13, fc7 - fc13                  | From [Orlova, et al. JACS 2023](https://pubs.acs.org/doi/full/10.1021/jacs.3c08946#)                          |

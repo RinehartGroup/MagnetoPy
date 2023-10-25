@@ -263,7 +263,7 @@ class CauchyCDFAnalysis:
         Returns
         -------
         dict[str, Any]
-            Keys are:
+            Keys are: "_class_", "parsing_args", "fitting_args", "results".
         """
         return {
             "_class_": self.__class__.__name__,
@@ -343,10 +343,6 @@ class CauchyPDFAnalysis:
 
         Parameters
         ----------
-        x : npt.ArrayLike
-            The x data, e.g., magnetic field.
-        y : npt.ArrayLike
-            They y data, e.g., derivative of magnetization with respect to magnetic field.
         show_full_fit : bool, optional
             Whether to show the full fit, by default True.
         show_fit_components : bool, optional
@@ -377,7 +373,7 @@ class CauchyPDFAnalysis:
         Returns
         -------
         dict[str, Any]
-            Keys are:
+            Keys are: "_class_", "parsing_args", "fitting_args", "results".
         """
         return {
             "_class_": self.__class__.__name__,

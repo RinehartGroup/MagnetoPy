@@ -26,6 +26,10 @@ nav:
           - Analyses:
               - Analysis (Protocol): api/analysis.md
               - SimpleMvsHAnalysis: api/simple_mvsh_analysis.md
+              - Cauchy Analysis:
+                  - MagnetoPy Compatible: api/cauchy_magnetopy.md
+                  - MagnetoPy Independent: api/cauchy_independent.md
+                  - Plotting: api/cauchy_plotting.md
           - Utils:
               - Parsing: api/parsing_utils.md
               - Plotting: api/plot_utils.md
@@ -57,6 +61,7 @@ plugins:
           paths: [.]
           options:
             show_root_heading: true
+            show_root_full_path: false
             members_order: source
             docstring_style: numpy
 watch:
