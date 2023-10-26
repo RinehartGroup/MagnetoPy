@@ -40,7 +40,12 @@ dev = [
 mp-calibration = "magnetopy.cli.calibration_install:main"
 
 [tool.setuptools]
-packages = ["magnetopy", "magnetopy.experiments", "magnetopy.analyses"]
+packages = [
+    "magnetopy",
+    "magnetopy.experiments",
+    "magnetopy.analyses",
+    "magnetopy.analyses.cauchy",
+]
 
 [project.urls]
 "Homepage" = "https://github.com/RinehartGroup/MagnetoPy.git"
