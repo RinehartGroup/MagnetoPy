@@ -410,6 +410,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/cauchy/" class="md-nav__link">
+        Quantification of Hysteresis Data using Cauchy Distribution Functions
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -838,6 +852,84 @@
 
             
           
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_1_4_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1_4_3" id="__nav_3_1_4_3_label" tabindex="0">
+          Cauchy Analysis
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_3_1_4_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_1_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Cauchy Analysis
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cauchy_magnetopy/" class="md-nav__link">
+        MagnetoPy Compatible
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cauchy_independent/" class="md-nav__link">
+        MagnetoPy Independent
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cauchy_plotting/" class="md-nav__link">
+        Plotting
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1101,7 +1193,7 @@
 
 
 <h2 id="magnetopy.data_files.DatFile" class="doc doc-heading">
-          <code>magnetopy.data_files.DatFile</code>
+          <code>DatFile</code>
 
 
 </h2>
@@ -2641,7 +2733,7 @@ experiments_in_file.</p>
 
 
 <h2 id="magnetopy.data_files.DcMeasurement" class="doc doc-heading">
-          <code>magnetopy.data_files.DcMeasurement</code>
+          <code>DcMeasurement</code>
 
 
 </h2>
@@ -3001,7 +3093,7 @@ position.</p>
 
 
 <h2 id="magnetopy.data_files.RawDcScan" class="doc doc-heading">
-          <code>magnetopy.data_files.RawDcScan</code>
+          <code>RawDcScan</code>
 
 
 </h2>
@@ -3455,7 +3547,7 @@ around V=0, and the results of those corrections are stored in the
 
 
 <h2 id="magnetopy.data_files.FitDcScan" class="doc doc-heading">
-          <code>magnetopy.data_files.FitDcScan</code>
+          <code>FitDcScan</code>
 
 
 </h2>
@@ -3637,7 +3729,7 @@ float (Free C Fitted) and one for the case in which the center position is fixed
 
 
 <h2 id="magnetopy.data_files.plot_raw" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">magnetopy</span><span class="o">.</span><span class="n">data_files</span><span class="o">.</span><span class="n">plot_raw</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data_slice</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scan</span><span class="o">=</span><span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="s1">&#39;free&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">plot_raw</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data_slice</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scan</span><span class="o">=</span><span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="s1">&#39;free&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span></code>
 
 </h2>
 
@@ -3997,7 +4089,7 @@ scans.</p>
 
 
 <h2 id="magnetopy.data_files.plot_raw_residual" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">magnetopy</span><span class="o">.</span><span class="n">data_files</span><span class="o">.</span><span class="n">plot_raw_residual</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data_slice</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scan</span><span class="o">=</span><span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="s1">&#39;free&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">plot_raw_residual</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data_slice</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scan</span><span class="o">=</span><span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="s1">&#39;free&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span></code>
 
 </h2>
 

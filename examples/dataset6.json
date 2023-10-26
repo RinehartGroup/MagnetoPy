@@ -1,0 +1,1305 @@
+{
+    "_class_": "Magnetometry",
+    "sample_id": "dataset6",
+    "files": [
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset6\\fc10.dat",
+            "length": 102184,
+            "date_created": "2023-04-12T08:41:00",
+            "sha512": "7735d227e4525a02512a348da12710be5700b8eb35c3a12be4ef6ea818ac1894c527c7053c66f647e89029bec4c49c307860a5e95d31a130d648ea4ee16bd340",
+            "experiments_in_file": [
+                "fc"
+            ]
+        },
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset6\\fc11.dat",
+            "length": 102664,
+            "date_created": "2023-04-10T19:35:00",
+            "sha512": "45ee2adbf5194cf3f3603e9b5260d61c9d141a0537521fd1da763c4df4be67c052619a72182c0e60fc588c7cb3cf0e62ad14aecfd56a59943122e1ae05ed153c",
+            "experiments_in_file": [
+                "fc"
+            ]
+        },
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset6\\fc12.dat",
+            "length": 98568,
+            "date_created": "2023-05-17T02:27:00",
+            "sha512": "e185f3075d19ed1e19f6880f27b80fc30c2d3a4e247db598b6d7ac3468aba79d9ec839e2694ecb76f203a9e4c472d4d388a0bdd570480d6f067b4b876ae67e97",
+            "experiments_in_file": [
+                "fc"
+            ]
+        },
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset6\\fc13.dat",
+            "length": 99669,
+            "date_created": "2023-05-23T17:16:00",
+            "sha512": "87bbc070b9f80e03499e8ba2b0f33d1f26dc10e2dbd430b723bf02fb2015cc6570bbb40089505c36c62ebd14b1f8ef6456548d8d1fa4b08257c380e10dba1544",
+            "experiments_in_file": [
+                "fc"
+            ]
+        },
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset6\\fc7.dat",
+            "length": 102255,
+            "date_created": "2022-05-19T20:41:00",
+            "sha512": "6807cec8068ca151f8c6d57f5bb05d381315b99fa382a9d4a061926ef41cfb73901d4bcb923dc4940e0e27b84b76e8e8a403be219b11a20d47059ea080952269",
+            "experiments_in_file": [
+                "fc"
+            ]
+        },
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset6\\fc8.dat",
+            "length": 102091,
+            "date_created": "2023-04-11T20:19:00",
+            "sha512": "27da042fdfee104bb2ae5c64b7579ca77eefcc8684ce92a823f6413b5d8b35cd42372e316f3ce3267f025049e6404785abea48e6aeb60715c26394051bf20527",
+            "experiments_in_file": [
+                "fc"
+            ]
+        },
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset6\\fc9.dat",
+            "length": 102490,
+            "date_created": "2023-04-11T07:57:00",
+            "sha512": "4816c66f6149f2f34bd636ffa4aa6638791d2cb78b759526316c55a45a5e0c6f567ca46bc60eb2330e979f5c53bd294d8824805b2b4cf1fc70062eb0e95406a4",
+            "experiments_in_file": [
+                "fc"
+            ]
+        },
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset6\\mvsh13.dat",
+            "length": 6122673,
+            "date_created": "2022-07-07T09:02:00",
+            "sha512": "ca104eead2c4d1e9967d7740ddcdbf9baf662117708c7f519a0d93049c2a01443cedace32d27f112b5a0aeb63ba4c7b4e87a88dc61107d7f37b7a335b1670623",
+            "experiments_in_file": [
+                "mvsh"
+            ]
+        },
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset6\\zfc10.dat",
+            "length": 102268,
+            "date_created": "2023-04-12T02:32:00",
+            "sha512": "062b34266d7c3e9ebd74a53b82ef40d34c3b40c84e2fc1c4c15b9e126947df7ee02b9b1f8a084c52d40497aa90b4d2849a22c7a1b94f8a1f985bac774492640c",
+            "experiments_in_file": [
+                "zfc"
+            ]
+        },
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset6\\zfc11.dat",
+            "length": 102442,
+            "date_created": "2023-04-10T13:24:00",
+            "sha512": "361078b4e275765292937ab384732dd6c6a3a8fd5023234023dbef79db137f80e249e7441da6ac311c0db4bd27e163ec329008791bd06de28429f16031b8dc29",
+            "experiments_in_file": [
+                "zfc"
+            ]
+        },
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset6\\zfc12.dat",
+            "length": 96646,
+            "date_created": "2023-05-16T20:18:00",
+            "sha512": "f84150dab8119d51edc99033685d8452bcd4dbd19788ca983fd618b4aad6cb5be4fb00432f8c9a999c58ee7f6e6240b5c2c958e3c7b0860c98cc16a7c74d767e",
+            "experiments_in_file": [
+                "zfc"
+            ]
+        },
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset6\\zfc13.dat",
+            "length": 99842,
+            "date_created": "2023-05-23T11:04:00",
+            "sha512": "323b1ff9ef6ee007f235988d4f9caf429927ac22dd2b8d15077e9741d5f9a3a8ec98b82ac87e0d90ce4095b37631557b366eb0a96ac2b64ed1163f3640674c30",
+            "experiments_in_file": [
+                "zfc"
+            ]
+        },
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset6\\zfc7.dat",
+            "length": 102214,
+            "date_created": "2022-05-19T14:27:00",
+            "sha512": "a141e0c5c5bde713d8a2d6bfbb12295dbc98132791de2362b51f3f4acafa4372cc16a369e44d2c5462116ab143055506b5f66c28fd1d5818ce61a17e1d5e6715",
+            "experiments_in_file": [
+                "zfc"
+            ]
+        },
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset6\\zfc8.dat",
+            "length": 102005,
+            "date_created": "2023-04-11T14:09:00",
+            "sha512": "64bf942d091076fab864d354a3388434d049688de3f5541f35bdfff55445600dedb0381fb1e7585b38e269d4c654d15e9a8dc8ef4319d39d4e2c8306f7e3a2c7",
+            "experiments_in_file": [
+                "zfc"
+            ]
+        },
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset6\\zfc9.dat",
+            "length": 102347,
+            "date_created": "2023-04-11T01:47:00",
+            "sha512": "fe8e3c00d2da077f684945edef9ebaf08a6294a41d3147425af992ab19f1af0269721a50b502f58468d8277c96e7b76511b829c8d271281dc26dd207e132602e",
+            "experiments_in_file": [
+                "zfc"
+            ]
+        }
+    ],
+    "sample_info": {
+        "material": "[CoCp2star][ErCOT2]",
+        "comment": "dark blue powder in eicosane",
+        "mass": 10.1,
+        "volume": null,
+        "molecular_weight": 704.95,
+        "size": null,
+        "shape": null,
+        "holder": "Standard",
+        "holder_detail": "Standard",
+        "offset": 65.71,
+        "eicosane_mass": 17.3,
+        "diamagnetic_correction": -0.000319,
+        "_class_": "SampleInfo"
+    },
+    "mvsh": [
+        {
+            "_class_": "MvsH",
+            "origin_file": "mvsh13.dat",
+            "temperature": 2,
+            "field_range": [
+                -70000.328125,
+                70000.265625
+            ],
+            "field_correction_file": "",
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        },
+        {
+            "_class_": "MvsH",
+            "origin_file": "mvsh13.dat",
+            "temperature": 4,
+            "field_range": [
+                -70000.359375,
+                70000.2734375
+            ],
+            "field_correction_file": "",
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        },
+        {
+            "_class_": "MvsH",
+            "origin_file": "mvsh13.dat",
+            "temperature": 6,
+            "field_range": [
+                -70029.328125,
+                70000.328125
+            ],
+            "field_correction_file": "",
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        },
+        {
+            "_class_": "MvsH",
+            "origin_file": "mvsh13.dat",
+            "temperature": 8,
+            "field_range": [
+                -70000.3984375,
+                70000.375
+            ],
+            "field_correction_file": "",
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        },
+        {
+            "_class_": "MvsH",
+            "origin_file": "mvsh13.dat",
+            "temperature": 300,
+            "field_range": [
+                -70030.375,
+                69999.5703125
+            ],
+            "field_correction_file": "",
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        }
+    ],
+    "zfc": [
+        {
+            "_class_": "ZFC",
+            "origin_file": "zfc7.dat",
+            "field": 100,
+            "temperature_range": [
+                2.00064396858215,
+                299.93342590332
+            ],
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        },
+        {
+            "_class_": "ZFC",
+            "origin_file": "zfc8.dat",
+            "field": 250,
+            "temperature_range": [
+                1.99989068508148,
+                299.923034667969
+            ],
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        },
+        {
+            "_class_": "ZFC",
+            "origin_file": "zfc9.dat",
+            "field": 500,
+            "temperature_range": [
+                2.00094890594482,
+                299.925979614258
+            ],
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        },
+        {
+            "_class_": "ZFC",
+            "origin_file": "zfc10.dat",
+            "field": 750,
+            "temperature_range": [
+                2.00123906135559,
+                299.923522949219
+            ],
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        },
+        {
+            "_class_": "ZFC",
+            "origin_file": "zfc11.dat",
+            "field": 1000,
+            "temperature_range": [
+                2.00110006332397,
+                299.928009033203
+            ],
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        },
+        {
+            "_class_": "ZFC",
+            "origin_file": "zfc12.dat",
+            "field": 10000,
+            "temperature_range": [
+                2.0006856918335,
+                299.929977416992
+            ],
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        },
+        {
+            "_class_": "ZFC",
+            "origin_file": "zfc13.dat",
+            "field": 40000,
+            "temperature_range": [
+                2.0002481341362,
+                299.927261352539
+            ],
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        }
+    ],
+    "fc": [
+        {
+            "_class_": "FC",
+            "origin_file": "fc7.dat",
+            "field": 100,
+            "temperature_range": [
+                2.00080764293671,
+                299.934524536133
+            ],
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        },
+        {
+            "_class_": "FC",
+            "origin_file": "fc8.dat",
+            "field": 250,
+            "temperature_range": [
+                2.00049018859863,
+                299.928512573242
+            ],
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        },
+        {
+            "_class_": "FC",
+            "origin_file": "fc9.dat",
+            "field": 500,
+            "temperature_range": [
+                2.00026506185532,
+                299.925750732422
+            ],
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        },
+        {
+            "_class_": "FC",
+            "origin_file": "fc10.dat",
+            "field": 750,
+            "temperature_range": [
+                2.0013564825058,
+                299.930618286133
+            ],
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        },
+        {
+            "_class_": "FC",
+            "origin_file": "fc11.dat",
+            "field": 1000,
+            "temperature_range": [
+                2.00092244148254,
+                299.930297851562
+            ],
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        },
+        {
+            "_class_": "FC",
+            "origin_file": "fc12.dat",
+            "field": 10000,
+            "temperature_range": [
+                2.0009343624115,
+                299.926010131836
+            ],
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        },
+        {
+            "_class_": "FC",
+            "origin_file": "fc13.dat",
+            "field": 40000,
+            "temperature_range": [
+                2.0001305937767,
+                299.928955078125
+            ],
+            "scaling": [
+                "molar",
+                "eicosane",
+                "diamagnetic_correction"
+            ]
+        }
+    ],
+    "analyses": [
+        {
+            "_class_": "CauchyCDFAnalysis",
+            "parsing_args": {
+                "temperature": 2,
+                "segments": "auto",
+                "experiment": "MvsH",
+                "_class_": "CauchyParsingArgs"
+            },
+            "fitting_args": {
+                "_class_": "CauchyFittingArgs",
+                "terms": [
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            0.22366542777168782,
+                            0.00044733085554337563,
+                            1.341992566630127
+                        ],
+                        "h_c": [
+                            -20000,
+                            -60000,
+                            -5000
+                        ],
+                        "gamma": [
+                            25000,
+                            5000,
+                            200000
+                        ]
+                    },
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            2.236654277716878,
+                            0.0,
+                            4.473308555433756
+                        ],
+                        "h_c": [
+                            0,
+                            -100,
+                            100
+                        ],
+                        "gamma": [
+                            100,
+                            5,
+                            1000
+                        ]
+                    },
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            2.236654277716878,
+                            0.0,
+                            4.473308555433756
+                        ],
+                        "h_c": [
+                            15000,
+                            10000,
+                            30000
+                        ],
+                        "gamma": [
+                            10000,
+                            2500,
+                            40000
+                        ]
+                    }
+                ]
+            },
+            "results": {
+                "_class_": "CauchyAnalysisResults",
+                "terms": [
+                    {
+                        "m_s": 0.07741144720638182,
+                        "m_s_err": 0.0033155371008914765,
+                        "h_c": -41192.659141626056,
+                        "h_c_err": 995.3451203908253,
+                        "gamma": 15263.976312510466,
+                        "gamma_err": 1402.7616019248278
+                    },
+                    {
+                        "m_s": 2.276684407704984,
+                        "m_s_err": 0.0023230958852124375,
+                        "h_c": 10.940775723115735,
+                        "h_c_err": 1.3923929917343096,
+                        "gamma": 104.31771089022766,
+                        "gamma_err": 1.6568161223814883
+                    },
+                    {
+                        "m_s": 2.165632550621333,
+                        "m_s_err": 0.004652206449237822,
+                        "h_c": 13591.43469131535,
+                        "h_c_err": 10.451623607406411,
+                        "gamma": 2833.591165423849,
+                        "gamma_err": 17.63458024457063
+                    }
+                ],
+                "chi_pd": -1.7745808791152008e-06,
+                "chi_pd_err": 9.345205830792118e-08,
+                "chi_squared": 3.290818859010221,
+                "reduced_chi_squared": 0.0012067542570627873,
+                "m_s_unit": "bohr_magneton",
+                "h_c_unit": "Oe",
+                "gamma_unit": "Oe",
+                "chi_pd_unit": "bohr_magneton/Oe"
+            }
+        },
+        {
+            "_class_": "CauchyCDFAnalysis",
+            "parsing_args": {
+                "temperature": 4,
+                "segments": "auto",
+                "experiment": "MvsH",
+                "_class_": "CauchyParsingArgs"
+            },
+            "fitting_args": {
+                "_class_": "CauchyFittingArgs",
+                "terms": [
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            0.22366542777168782,
+                            0.00044733085554337563,
+                            1.341992566630127
+                        ],
+                        "h_c": [
+                            -20000,
+                            -60000,
+                            -5000
+                        ],
+                        "gamma": [
+                            25000,
+                            5000,
+                            200000
+                        ]
+                    },
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            2.236654277716878,
+                            0.0,
+                            4.473308555433756
+                        ],
+                        "h_c": [
+                            0,
+                            -100,
+                            100
+                        ],
+                        "gamma": [
+                            100,
+                            5,
+                            1000
+                        ]
+                    },
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            2.236654277716878,
+                            0.0,
+                            4.473308555433756
+                        ],
+                        "h_c": [
+                            15000,
+                            10000,
+                            30000
+                        ],
+                        "gamma": [
+                            10000,
+                            2500,
+                            40000
+                        ]
+                    }
+                ]
+            },
+            "results": {
+                "_class_": "CauchyAnalysisResults",
+                "terms": [
+                    {
+                        "m_s": 0.3781402533686233,
+                        "m_s_err": 0.005769579531941173,
+                        "h_c": -16506.41075511992,
+                        "h_c_err": 171.9875573392971,
+                        "gamma": 8667.260078592453,
+                        "gamma_err": 214.56803745762315
+                    },
+                    {
+                        "m_s": 1.942527687887252,
+                        "m_s_err": 0.002914619126224068,
+                        "h_c": 1.0457839550241204,
+                        "h_c_err": 1.4210404975750093,
+                        "gamma": 89.65534303061824,
+                        "gamma_err": 1.7189902455283803
+                    },
+                    {
+                        "m_s": 2.079001972921458,
+                        "m_s_err": 0.004082404289715656,
+                        "h_c": 13742.128001087787,
+                        "h_c_err": 10.83508248190367,
+                        "gamma": 2956.5870374087713,
+                        "gamma_err": 17.131498068676635
+                    }
+                ],
+                "chi_pd": 1.3764567614721748e-07,
+                "chi_pd_err": 9.00029770058616e-08,
+                "chi_squared": 2.941154401781793,
+                "reduced_chi_squared": 0.0010793227162501993,
+                "m_s_unit": "bohr_magneton",
+                "h_c_unit": "Oe",
+                "gamma_unit": "Oe",
+                "chi_pd_unit": "bohr_magneton/Oe"
+            }
+        },
+        {
+            "_class_": "CauchyCDFAnalysis",
+            "parsing_args": {
+                "temperature": 6,
+                "segments": "auto",
+                "experiment": "MvsH",
+                "_class_": "CauchyParsingArgs"
+            },
+            "fitting_args": {
+                "_class_": "CauchyFittingArgs",
+                "terms": [
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            0.22366542777168782,
+                            0.00044733085554337563,
+                            1.341992566630127
+                        ],
+                        "h_c": [
+                            -20000,
+                            -60000,
+                            -5000
+                        ],
+                        "gamma": [
+                            25000,
+                            5000,
+                            200000
+                        ]
+                    },
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            2.236654277716878,
+                            0.0,
+                            4.473308555433756
+                        ],
+                        "h_c": [
+                            0,
+                            -100,
+                            100
+                        ],
+                        "gamma": [
+                            100,
+                            5,
+                            1000
+                        ]
+                    },
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            2.236654277716878,
+                            0.0,
+                            4.473308555433756
+                        ],
+                        "h_c": [
+                            15000,
+                            10000,
+                            30000
+                        ],
+                        "gamma": [
+                            10000,
+                            2500,
+                            40000
+                        ]
+                    }
+                ]
+            },
+            "results": {
+                "_class_": "CauchyAnalysisResults",
+                "terms": [
+                    {
+                        "m_s": 0.6732330414413735,
+                        "m_s_err": 0.006320936470415982,
+                        "h_c": -16752.44704628252,
+                        "h_c_err": 90.76920964084718,
+                        "gamma": 7112.240906858864,
+                        "gamma_err": 123.76573662292861
+                    },
+                    {
+                        "m_s": 1.4640242846674163,
+                        "m_s_err": 0.003495528848582666,
+                        "h_c": -5.139532110436349,
+                        "h_c_err": 2.146501662726085,
+                        "gamma": 78.4664139583599,
+                        "gamma_err": 2.649782440032563
+                    },
+                    {
+                        "m_s": 2.0711706353459585,
+                        "m_s_err": 0.005565386673193779,
+                        "h_c": 13958.841412814003,
+                        "h_c_err": 15.875731654712535,
+                        "gamma": 3626.641575772883,
+                        "gamma_err": 25.468836525166118
+                    }
+                ],
+                "chi_pd": 3.107702589194569e-06,
+                "chi_pd_err": 1.1802685413361344e-07,
+                "chi_squared": 4.466488922143562,
+                "reduced_chi_squared": 0.001645115625098918,
+                "m_s_unit": "bohr_magneton",
+                "h_c_unit": "Oe",
+                "gamma_unit": "Oe",
+                "chi_pd_unit": "bohr_magneton/Oe"
+            }
+        },
+        {
+            "_class_": "CauchyCDFAnalysis",
+            "parsing_args": {
+                "temperature": 8,
+                "segments": "auto",
+                "experiment": "MvsH",
+                "_class_": "CauchyParsingArgs"
+            },
+            "fitting_args": {
+                "_class_": "CauchyFittingArgs",
+                "terms": [
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            0.22366542777168782,
+                            0.00044733085554337563,
+                            1.341992566630127
+                        ],
+                        "h_c": [
+                            -20000,
+                            -60000,
+                            -5000
+                        ],
+                        "gamma": [
+                            25000,
+                            5000,
+                            200000
+                        ]
+                    },
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            2.236654277716878,
+                            0.0,
+                            4.473308555433756
+                        ],
+                        "h_c": [
+                            0,
+                            -100,
+                            100
+                        ],
+                        "gamma": [
+                            100,
+                            5,
+                            1000
+                        ]
+                    },
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            2.236654277716878,
+                            0.0,
+                            4.473308555433756
+                        ],
+                        "h_c": [
+                            15000,
+                            10000,
+                            30000
+                        ],
+                        "gamma": [
+                            10000,
+                            2500,
+                            40000
+                        ]
+                    }
+                ]
+            },
+            "results": {
+                "_class_": "CauchyAnalysisResults",
+                "terms": [
+                    {
+                        "m_s": 0.9121200864237176,
+                        "m_s_err": 0.007553574958864421,
+                        "h_c": -17335.185280059457,
+                        "h_c_err": 81.5565148161029,
+                        "gamma": 7739.370073728459,
+                        "gamma_err": 113.63203219612448
+                    },
+                    {
+                        "m_s": 1.0089259818063734,
+                        "m_s_err": 0.003994972439491823,
+                        "h_c": -52.72232009904578,
+                        "h_c_err": 3.670536829734909,
+                        "gamma": 70.03592710331353,
+                        "gamma_err": 3.7043630354961232
+                    },
+                    {
+                        "m_s": 2.084670936797315,
+                        "m_s_err": 0.007699937305149766,
+                        "h_c": 14043.014082755302,
+                        "h_c_err": 23.397829575732807,
+                        "gamma": 4800.483295993682,
+                        "gamma_err": 38.690407194443935
+                    }
+                ],
+                "chi_pd": 5.94436793057113e-06,
+                "chi_pd_err": 1.4986260621670263e-07,
+                "chi_squared": 5.611427708998648,
+                "reduced_chi_squared": 0.0020630248930142087,
+                "m_s_unit": "bohr_magneton",
+                "h_c_unit": "Oe",
+                "gamma_unit": "Oe",
+                "chi_pd_unit": "bohr_magneton/Oe"
+            }
+        },
+        {
+            "_class_": "CauchyPDFAnalysis",
+            "parsing_args": {
+                "temperature": 2,
+                "segments": "auto",
+                "experiment": "MvsH",
+                "_class_": "CauchyParsingArgs"
+            },
+            "fitting_args": {
+                "_class_": "CauchyFittingArgs",
+                "terms": [
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            0.22366542777168782,
+                            0.00044733085554337563,
+                            1.341992566630127
+                        ],
+                        "h_c": [
+                            -20000,
+                            -60000,
+                            -5000
+                        ],
+                        "gamma": [
+                            25000,
+                            5000,
+                            200000
+                        ]
+                    },
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            2.236654277716878,
+                            0.0,
+                            4.473308555433756
+                        ],
+                        "h_c": [
+                            0,
+                            -100,
+                            100
+                        ],
+                        "gamma": [
+                            100,
+                            5,
+                            1000
+                        ]
+                    },
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            2.236654277716878,
+                            0.0,
+                            4.473308555433756
+                        ],
+                        "h_c": [
+                            15000,
+                            10000,
+                            30000
+                        ],
+                        "gamma": [
+                            10000,
+                            2500,
+                            40000
+                        ]
+                    }
+                ]
+            },
+            "results": {
+                "_class_": "CauchyAnalysisResults",
+                "terms": [
+                    {
+                        "m_s": 0.2309785313992219,
+                        "m_s_err": 0.19724704645956903,
+                        "h_c": -34705.932606640155,
+                        "h_c_err": 3854.699036074647,
+                        "gamma": 24620.17312528851,
+                        "gamma_err": 25490.90081813087
+                    },
+                    {
+                        "m_s": 2.876982188925886,
+                        "m_s_err": 0.02883172186599036,
+                        "h_c": 29.67783531199339,
+                        "h_c_err": 1.8927251421832394,
+                        "gamma": 809.7436595141176,
+                        "gamma_err": 11.247291313986702
+                    },
+                    {
+                        "m_s": 2.4325718591107326,
+                        "m_s_err": 0.1169033898615804,
+                        "h_c": 13228.32852646616,
+                        "h_c_err": 114.624342220967,
+                        "gamma": 11350.822064490687,
+                        "gamma_err": 703.1573895790928
+                    }
+                ],
+                "chi_pd": -1.2090180066195508e-05,
+                "chi_pd_err": 4.297033030041369e-06,
+                "chi_squared": 5.710898302034709e-05,
+                "reduced_chi_squared": 2.1003671577913605e-08,
+                "m_s_unit": "bohr_magneton",
+                "h_c_unit": "Oe",
+                "gamma_unit": "Oe",
+                "chi_pd_unit": "bohr_magneton/Oe"
+            }
+        },
+        {
+            "_class_": "CauchyPDFAnalysis",
+            "parsing_args": {
+                "temperature": 4,
+                "segments": "auto",
+                "experiment": "MvsH",
+                "_class_": "CauchyParsingArgs"
+            },
+            "fitting_args": {
+                "_class_": "CauchyFittingArgs",
+                "terms": [
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            0.22366542777168782,
+                            0.00044733085554337563,
+                            1.341992566630127
+                        ],
+                        "h_c": [
+                            -20000,
+                            -60000,
+                            -5000
+                        ],
+                        "gamma": [
+                            25000,
+                            5000,
+                            200000
+                        ]
+                    },
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            2.236654277716878,
+                            0.0,
+                            4.473308555433756
+                        ],
+                        "h_c": [
+                            0,
+                            -100,
+                            100
+                        ],
+                        "gamma": [
+                            100,
+                            5,
+                            1000
+                        ]
+                    },
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            2.236654277716878,
+                            0.0,
+                            4.473308555433756
+                        ],
+                        "h_c": [
+                            15000,
+                            10000,
+                            30000
+                        ],
+                        "gamma": [
+                            10000,
+                            2500,
+                            40000
+                        ]
+                    }
+                ]
+            },
+            "results": {
+                "_class_": "CauchyAnalysisResults",
+                "terms": [
+                    {
+                        "m_s": 0.2637130970229169,
+                        "m_s_err": 0.08240045464215243,
+                        "h_c": -16032.747535380651,
+                        "h_c_err": 1067.5149231557475,
+                        "gamma": 16711.980246325405,
+                        "gamma_err": 6667.792859848824
+                    },
+                    {
+                        "m_s": 2.281062172731499,
+                        "m_s_err": 0.013628134265112212,
+                        "h_c": 12.135213852798941,
+                        "h_c_err": 1.0154008811324344,
+                        "gamma": 677.6696398061473,
+                        "gamma_err": 5.639527827923435
+                    },
+                    {
+                        "m_s": 2.300599740580564,
+                        "m_s_err": 0.06870895133624595,
+                        "h_c": 13443.443136239768,
+                        "h_c_err": 81.69905903755001,
+                        "gamma": 12582.851317541566,
+                        "gamma_err": 491.9083835510716
+                    }
+                ],
+                "chi_pd": -5.9174321651874645e-06,
+                "chi_pd_err": 2.203247594510832e-06,
+                "chi_squared": 1.869987092140586e-05,
+                "reduced_chi_squared": 6.882543585353648e-09,
+                "m_s_unit": "bohr_magneton",
+                "h_c_unit": "Oe",
+                "gamma_unit": "Oe",
+                "chi_pd_unit": "bohr_magneton/Oe"
+            }
+        },
+        {
+            "_class_": "CauchyPDFAnalysis",
+            "parsing_args": {
+                "temperature": 6,
+                "segments": "auto",
+                "experiment": "MvsH",
+                "_class_": "CauchyParsingArgs"
+            },
+            "fitting_args": {
+                "_class_": "CauchyFittingArgs",
+                "terms": [
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            0.22366542777168782,
+                            0.00044733085554337563,
+                            1.341992566630127
+                        ],
+                        "h_c": [
+                            -20000,
+                            -60000,
+                            -5000
+                        ],
+                        "gamma": [
+                            25000,
+                            5000,
+                            200000
+                        ]
+                    },
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            2.236654277716878,
+                            0.0,
+                            4.473308555433756
+                        ],
+                        "h_c": [
+                            0,
+                            -100,
+                            100
+                        ],
+                        "gamma": [
+                            100,
+                            5,
+                            1000
+                        ]
+                    },
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            2.236654277716878,
+                            0.0,
+                            4.473308555433756
+                        ],
+                        "h_c": [
+                            15000,
+                            10000,
+                            30000
+                        ],
+                        "gamma": [
+                            10000,
+                            2500,
+                            40000
+                        ]
+                    }
+                ]
+            },
+            "results": {
+                "_class_": "CauchyAnalysisResults",
+                "terms": [
+                    {
+                        "m_s": 0.40410488907597075,
+                        "m_s_err": 0.17377546175337585,
+                        "h_c": -16312.779136428842,
+                        "h_c_err": 1511.9685779128854,
+                        "gamma": 17397.920555413533,
+                        "gamma_err": 9574.162352013987
+                    },
+                    {
+                        "m_s": 1.8699668812414458,
+                        "m_s_err": 0.029972245053641846,
+                        "h_c": 15.447800769507182,
+                        "h_c_err": 2.9509203444554104,
+                        "gamma": 752.666726607101,
+                        "gamma_err": 16.97205075917297
+                    },
+                    {
+                        "m_s": 2.0737061134258115,
+                        "m_s_err": 0.1327362722862168,
+                        "h_c": 13066.986668661366,
+                        "h_c_err": 160.5439140865263,
+                        "gamma": 11500.634889112896,
+                        "gamma_err": 969.0157488932463
+                    }
+                ],
+                "chi_pd": 8.382620814086836e-06,
+                "chi_pd_err": 4.498622421021892e-06,
+                "chi_squared": 7.760029354246306e-05,
+                "reduced_chi_squared": 2.8666528829871834e-08,
+                "m_s_unit": "bohr_magneton",
+                "h_c_unit": "Oe",
+                "gamma_unit": "Oe",
+                "chi_pd_unit": "bohr_magneton/Oe"
+            }
+        },
+        {
+            "_class_": "CauchyPDFAnalysis",
+            "parsing_args": {
+                "temperature": 8,
+                "segments": "auto",
+                "experiment": "MvsH",
+                "_class_": "CauchyParsingArgs"
+            },
+            "fitting_args": {
+                "_class_": "CauchyFittingArgs",
+                "terms": [
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            0.22366542777168782,
+                            0.00044733085554337563,
+                            1.341992566630127
+                        ],
+                        "h_c": [
+                            -20000,
+                            -60000,
+                            -5000
+                        ],
+                        "gamma": [
+                            25000,
+                            5000,
+                            200000
+                        ]
+                    },
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            2.236654277716878,
+                            0.0,
+                            4.473308555433756
+                        ],
+                        "h_c": [
+                            0,
+                            -100,
+                            100
+                        ],
+                        "gamma": [
+                            100,
+                            5,
+                            1000
+                        ]
+                    },
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            2.236654277716878,
+                            0.0,
+                            4.473308555433756
+                        ],
+                        "h_c": [
+                            15000,
+                            10000,
+                            30000
+                        ],
+                        "gamma": [
+                            10000,
+                            2500,
+                            40000
+                        ]
+                    }
+                ]
+            },
+            "results": {
+                "_class_": "CauchyAnalysisResults",
+                "terms": [
+                    {
+                        "m_s": 0.7778668083145244,
+                        "m_s_err": 0.10822354366408413,
+                        "h_c": -17262.232384745243,
+                        "h_c_err": 645.9119472560797,
+                        "gamma": 25016.867969794253,
+                        "gamma_err": 4262.789544212591
+                    },
+                    {
+                        "m_s": 1.3690227000148938,
+                        "m_s_err": 0.014262467143286942,
+                        "h_c": -15.675839492633187,
+                        "h_c_err": 1.9724313699492109,
+                        "gamma": 773.1514496113284,
+                        "gamma_err": 11.31729434179194
+                    },
+                    {
+                        "m_s": 1.9409145427394143,
+                        "m_s_err": 0.07109979036676291,
+                        "h_c": 13199.686677689248,
+                        "h_c_err": 107.22764644824008,
+                        "gamma": 13740.289311196248,
+                        "gamma_err": 653.4515148909225
+                    }
+                ],
+                "chi_pd": 5.149794319146844e-06,
+                "chi_pd_err": 2.318781601704555e-06,
+                "chi_squared": 1.7445885009391224e-05,
+                "reduced_chi_squared": 6.432848454790274e-09,
+                "m_s_unit": "bohr_magneton",
+                "h_c_unit": "Oe",
+                "gamma_unit": "Oe",
+                "chi_pd_unit": "bohr_magneton/Oe"
+            }
+        }
+    ]
+}

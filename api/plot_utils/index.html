@@ -410,6 +410,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/cauchy/" class="md-nav__link">
+        Quantification of Hysteresis Data using Cauchy Distribution Functions
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -705,6 +719,84 @@
 
             
           
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_1_4_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1_4_3" id="__nav_3_1_4_3_label" tabindex="0">
+          Cauchy Analysis
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_3_1_4_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_1_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Cauchy Analysis
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cauchy_magnetopy/" class="md-nav__link">
+        MagnetoPy Compatible
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cauchy_independent/" class="md-nav__link">
+        MagnetoPy Independent
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cauchy_plotting/" class="md-nav__link">
+        Plotting
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -827,6 +919,20 @@
         <li class="md-nav__item">
   <a href="#magnetopy.plot_utils.force_aspect" class="md-nav__link">
     force_aspect()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#magnetopy.plot_utils.handle_kwargs" class="md-nav__link">
+    handle_kwargs()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#magnetopy.plot_utils.handle_options" class="md-nav__link">
+    handle_options()
   </a>
   
 </li>
@@ -955,6 +1061,20 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#magnetopy.plot_utils.handle_kwargs" class="md-nav__link">
+    handle_kwargs()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#magnetopy.plot_utils.handle_options" class="md-nav__link">
+    handle_options()
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -981,7 +1101,7 @@
 
 
 <h2 id="magnetopy.plot_utils.linear_color_gradient" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">magnetopy</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">linear_color_gradient</span><span class="p">(</span><span class="n">start_color</span><span class="p">,</span> <span class="n">finish_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">linear_color_gradient</span><span class="p">(</span><span class="n">start_color</span><span class="p">,</span> <span class="n">finish_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1242,9 +1362,9 @@ finish colors.</p>
 <a id="__codelineno-0-72" name="__codelineno-0-72"></a>
 <a id="__codelineno-0-73" name="__codelineno-0-73"></a>    <span class="n">start</span> <span class="o">=</span> <span class="n">hex_to_rgb</span><span class="p">(</span><span class="n">start_color</span><span class="p">)</span>
 <a id="__codelineno-0-74" name="__codelineno-0-74"></a>    <span class="n">finish</span> <span class="o">=</span> <span class="n">hex_to_rgb</span><span class="p">(</span><span class="n">finish_color</span><span class="p">)</span>
-<a id="__codelineno-0-75" name="__codelineno-0-75"></a>    <span class="c1"># Initilize a list of the output colors with the starting color</span>
+<a id="__codelineno-0-75" name="__codelineno-0-75"></a>    <span class="c1"># Initialize a list of the output colors with the starting color</span>
 <a id="__codelineno-0-76" name="__codelineno-0-76"></a>    <span class="n">rgb_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">start</span><span class="p">]</span>
-<a id="__codelineno-0-77" name="__codelineno-0-77"></a>    <span class="c1"># Calcuate a color at each evenly spaced value of t from 1 to n</span>
+<a id="__codelineno-0-77" name="__codelineno-0-77"></a>    <span class="c1"># Calculate a color at each evenly spaced value of t from 1 to n</span>
 <a id="__codelineno-0-78" name="__codelineno-0-78"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
 <a id="__codelineno-0-79" name="__codelineno-0-79"></a>        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
 <a id="__codelineno-0-80" name="__codelineno-0-80"></a>            <span class="c1"># Interpolate RGB vector for color at the current value of t</span>
@@ -1293,7 +1413,7 @@ finish colors.</p>
 
 
 <h2 id="magnetopy.plot_utils.default_colors" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">magnetopy</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">default_colors</span><span class="p">(</span><span class="n">n</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">default_colors</span><span class="p">(</span><span class="n">n</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1438,7 +1558,7 @@ the number of colors to return.</p>
 
 
 <h2 id="magnetopy.plot_utils.force_aspect" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">magnetopy</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">force_aspect</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">force_aspect</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1549,6 +1669,252 @@ x and y limits to calculate the aspect ratio. Works for both linear and log scal
 <a id="__codelineno-0-176" name="__codelineno-0-176"></a>    <span class="k">elif</span> <span class="n">xscale_str</span> <span class="o">==</span> <span class="s2">&quot;linear&quot;</span> <span class="ow">and</span> <span class="n">yscale_str</span> <span class="o">==</span> <span class="s2">&quot;log&quot;</span><span class="p">:</span>
 <a id="__codelineno-0-177" name="__codelineno-0-177"></a>        <span class="n">asp</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">((</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ymax</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ymin</span><span class="p">)))</span> <span class="o">/</span> <span class="n">aspect</span>
 <a id="__codelineno-0-178" name="__codelineno-0-178"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="n">asp</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="magnetopy.plot_utils.handle_kwargs" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">handle_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Returns a dictionary with either user-entered or default values for the
+arguments supported by <code>handle_options()</code>.</p>
+<p>Also supports a "save" arguments which will save the figure to the specified
+filename if it is not None.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>magnetopy\plot_utils.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-181">181</a></span>
+<span class="normal"><a href="#__codelineno-0-182">182</a></span>
+<span class="normal"><a href="#__codelineno-0-183">183</a></span>
+<span class="normal"><a href="#__codelineno-0-184">184</a></span>
+<span class="normal"><a href="#__codelineno-0-185">185</a></span>
+<span class="normal"><a href="#__codelineno-0-186">186</a></span>
+<span class="normal"><a href="#__codelineno-0-187">187</a></span>
+<span class="normal"><a href="#__codelineno-0-188">188</a></span>
+<span class="normal"><a href="#__codelineno-0-189">189</a></span>
+<span class="normal"><a href="#__codelineno-0-190">190</a></span>
+<span class="normal"><a href="#__codelineno-0-191">191</a></span>
+<span class="normal"><a href="#__codelineno-0-192">192</a></span>
+<span class="normal"><a href="#__codelineno-0-193">193</a></span>
+<span class="normal"><a href="#__codelineno-0-194">194</a></span>
+<span class="normal"><a href="#__codelineno-0-195">195</a></span>
+<span class="normal"><a href="#__codelineno-0-196">196</a></span>
+<span class="normal"><a href="#__codelineno-0-197">197</a></span>
+<span class="normal"><a href="#__codelineno-0-198">198</a></span>
+<span class="normal"><a href="#__codelineno-0-199">199</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-181" name="__codelineno-0-181"></a><span class="k">def</span> <span class="nf">handle_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<a id="__codelineno-0-182" name="__codelineno-0-182"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a dictionary with either user-entered or default values for the</span>
+<a id="__codelineno-0-183" name="__codelineno-0-183"></a><span class="sd">    arguments supported by `handle_options()`.</span>
+<a id="__codelineno-0-184" name="__codelineno-0-184"></a>
+<a id="__codelineno-0-185" name="__codelineno-0-185"></a><span class="sd">    Also supports a &quot;save&quot; arguments which will save the figure to the specified</span>
+<a id="__codelineno-0-186" name="__codelineno-0-186"></a><span class="sd">    filename if it is not None.</span>
+<a id="__codelineno-0-187" name="__codelineno-0-187"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-188" name="__codelineno-0-188"></a>    <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-0-189" name="__codelineno-0-189"></a>        <span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+<a id="__codelineno-0-190" name="__codelineno-0-190"></a>        <span class="s2">&quot;xlim&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-191" name="__codelineno-0-191"></a>        <span class="s2">&quot;ylim&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-192" name="__codelineno-0-192"></a>        <span class="s2">&quot;loc&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-193" name="__codelineno-0-193"></a>        <span class="s2">&quot;save&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-194" name="__codelineno-0-194"></a>        <span class="s2">&quot;xlabel&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-195" name="__codelineno-0-195"></a>        <span class="s2">&quot;ylabel&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-196" name="__codelineno-0-196"></a>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-197" name="__codelineno-0-197"></a>    <span class="p">}</span>
+<a id="__codelineno-0-198" name="__codelineno-0-198"></a>    <span class="n">options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+<a id="__codelineno-0-199" name="__codelineno-0-199"></a>    <span class="k">return</span> <span class="n">options</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="magnetopy.plot_utils.handle_options" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">handle_options</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents first">
+  
+      <p>Handles some of the typical options for plotting functions in matplotlib. The
+currently supported options are in the parameter list below.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>ax</code></td>
+          <td>
+                <code><span title="matplotlib">plt</span>.<span title="matplotlib.Axes">Axes</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The axes to handle the options for.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>options</code></td>
+          <td>
+                <code>dict[str, str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A dictionary of options. The currently supported options are:
+    - "xlim": A tuple of the x-axis limits.
+    - "ylim": A tuple of the y-axis limits.
+    - "loc": The location of the legend.
+    - "xlabel": The x-axis label.
+    - "ylabel": The y-axis label.
+    - "title": The title of the plot.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>label</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The label for the legend, by default None.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>title</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The title of the plot, by default None.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>magnetopy\plot_utils.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-202">202</a></span>
+<span class="normal"><a href="#__codelineno-0-203">203</a></span>
+<span class="normal"><a href="#__codelineno-0-204">204</a></span>
+<span class="normal"><a href="#__codelineno-0-205">205</a></span>
+<span class="normal"><a href="#__codelineno-0-206">206</a></span>
+<span class="normal"><a href="#__codelineno-0-207">207</a></span>
+<span class="normal"><a href="#__codelineno-0-208">208</a></span>
+<span class="normal"><a href="#__codelineno-0-209">209</a></span>
+<span class="normal"><a href="#__codelineno-0-210">210</a></span>
+<span class="normal"><a href="#__codelineno-0-211">211</a></span>
+<span class="normal"><a href="#__codelineno-0-212">212</a></span>
+<span class="normal"><a href="#__codelineno-0-213">213</a></span>
+<span class="normal"><a href="#__codelineno-0-214">214</a></span>
+<span class="normal"><a href="#__codelineno-0-215">215</a></span>
+<span class="normal"><a href="#__codelineno-0-216">216</a></span>
+<span class="normal"><a href="#__codelineno-0-217">217</a></span>
+<span class="normal"><a href="#__codelineno-0-218">218</a></span>
+<span class="normal"><a href="#__codelineno-0-219">219</a></span>
+<span class="normal"><a href="#__codelineno-0-220">220</a></span>
+<span class="normal"><a href="#__codelineno-0-221">221</a></span>
+<span class="normal"><a href="#__codelineno-0-222">222</a></span>
+<span class="normal"><a href="#__codelineno-0-223">223</a></span>
+<span class="normal"><a href="#__codelineno-0-224">224</a></span>
+<span class="normal"><a href="#__codelineno-0-225">225</a></span>
+<span class="normal"><a href="#__codelineno-0-226">226</a></span>
+<span class="normal"><a href="#__codelineno-0-227">227</a></span>
+<span class="normal"><a href="#__codelineno-0-228">228</a></span>
+<span class="normal"><a href="#__codelineno-0-229">229</a></span>
+<span class="normal"><a href="#__codelineno-0-230">230</a></span>
+<span class="normal"><a href="#__codelineno-0-231">231</a></span>
+<span class="normal"><a href="#__codelineno-0-232">232</a></span>
+<span class="normal"><a href="#__codelineno-0-233">233</a></span>
+<span class="normal"><a href="#__codelineno-0-234">234</a></span>
+<span class="normal"><a href="#__codelineno-0-235">235</a></span>
+<span class="normal"><a href="#__codelineno-0-236">236</a></span>
+<span class="normal"><a href="#__codelineno-0-237">237</a></span>
+<span class="normal"><a href="#__codelineno-0-238">238</a></span>
+<span class="normal"><a href="#__codelineno-0-239">239</a></span>
+<span class="normal"><a href="#__codelineno-0-240">240</a></span>
+<span class="normal"><a href="#__codelineno-0-241">241</a></span>
+<span class="normal"><a href="#__codelineno-0-242">242</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-202" name="__codelineno-0-202"></a><span class="k">def</span> <span class="nf">handle_options</span><span class="p">(</span>
+<a id="__codelineno-0-203" name="__codelineno-0-203"></a>    <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">,</span>
+<a id="__codelineno-0-204" name="__codelineno-0-204"></a>    <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+<a id="__codelineno-0-205" name="__codelineno-0-205"></a>    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-206" name="__codelineno-0-206"></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-207" name="__codelineno-0-207"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-208" name="__codelineno-0-208"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Handles some of the typical options for plotting functions in matplotlib. The</span>
+<a id="__codelineno-0-209" name="__codelineno-0-209"></a><span class="sd">    currently supported options are in the parameter list below.</span>
+<a id="__codelineno-0-210" name="__codelineno-0-210"></a>
+<a id="__codelineno-0-211" name="__codelineno-0-211"></a><span class="sd">    Parameters</span>
+<a id="__codelineno-0-212" name="__codelineno-0-212"></a><span class="sd">    ----------</span>
+<a id="__codelineno-0-213" name="__codelineno-0-213"></a><span class="sd">    ax : plt.Axes</span>
+<a id="__codelineno-0-214" name="__codelineno-0-214"></a><span class="sd">        The axes to handle the options for.</span>
+<a id="__codelineno-0-215" name="__codelineno-0-215"></a><span class="sd">    options : dict[str, str]</span>
+<a id="__codelineno-0-216" name="__codelineno-0-216"></a><span class="sd">        A dictionary of options. The currently supported options are:</span>
+<a id="__codelineno-0-217" name="__codelineno-0-217"></a><span class="sd">            - &quot;xlim&quot;: A tuple of the x-axis limits.</span>
+<a id="__codelineno-0-218" name="__codelineno-0-218"></a><span class="sd">            - &quot;ylim&quot;: A tuple of the y-axis limits.</span>
+<a id="__codelineno-0-219" name="__codelineno-0-219"></a><span class="sd">            - &quot;loc&quot;: The location of the legend.</span>
+<a id="__codelineno-0-220" name="__codelineno-0-220"></a><span class="sd">            - &quot;xlabel&quot;: The x-axis label.</span>
+<a id="__codelineno-0-221" name="__codelineno-0-221"></a><span class="sd">            - &quot;ylabel&quot;: The y-axis label.</span>
+<a id="__codelineno-0-222" name="__codelineno-0-222"></a><span class="sd">            - &quot;title&quot;: The title of the plot.</span>
+<a id="__codelineno-0-223" name="__codelineno-0-223"></a><span class="sd">    label : str, optional</span>
+<a id="__codelineno-0-224" name="__codelineno-0-224"></a><span class="sd">        The label for the legend, by default None.</span>
+<a id="__codelineno-0-225" name="__codelineno-0-225"></a><span class="sd">    title : str, optional</span>
+<a id="__codelineno-0-226" name="__codelineno-0-226"></a><span class="sd">        The title of the plot, by default None.</span>
+<a id="__codelineno-0-227" name="__codelineno-0-227"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-228" name="__codelineno-0-228"></a>    <span class="k">if</span> <span class="n">label</span> <span class="ow">or</span> <span class="n">title</span><span class="p">:</span>
+<a id="__codelineno-0-229" name="__codelineno-0-229"></a>        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">]:</span>
+<a id="__codelineno-0-230" name="__codelineno-0-230"></a>            <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+<a id="__codelineno-0-231" name="__codelineno-0-231"></a>        <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-232" name="__codelineno-0-232"></a>            <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+<a id="__codelineno-0-233" name="__codelineno-0-233"></a>    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;xlim&quot;</span><span class="p">]:</span>
+<a id="__codelineno-0-234" name="__codelineno-0-234"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;xlim&quot;</span><span class="p">])</span>
+<a id="__codelineno-0-235" name="__codelineno-0-235"></a>    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;ylim&quot;</span><span class="p">]:</span>
+<a id="__codelineno-0-236" name="__codelineno-0-236"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;ylim&quot;</span><span class="p">])</span>
+<a id="__codelineno-0-237" name="__codelineno-0-237"></a>    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;xlabel&quot;</span><span class="p">]:</span>
+<a id="__codelineno-0-238" name="__codelineno-0-238"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;xlabel&quot;</span><span class="p">])</span>
+<a id="__codelineno-0-239" name="__codelineno-0-239"></a>    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;ylabel&quot;</span><span class="p">]:</span>
+<a id="__codelineno-0-240" name="__codelineno-0-240"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;ylabel&quot;</span><span class="p">])</span>
+<a id="__codelineno-0-241" name="__codelineno-0-241"></a>    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]:</span>
+<a id="__codelineno-0-242" name="__codelineno-0-242"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">])</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
