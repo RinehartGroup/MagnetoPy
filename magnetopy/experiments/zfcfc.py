@@ -792,10 +792,12 @@ def plot_single_zfcfc(
     fig, ax = plt.subplots()
     x_zfc = zfc.simplified_data()["temperature"]
     y_zfc = zfc.simplified_data()[y_val]
-    y_zfc = y_zfc / y_zfc.max() if normalized else y_zfc
     x_fc = fc.simplified_data()["temperature"]
     y_fc = fc.simplified_data()[y_val]
-    y_fc = y_fc / y_fc.max() if normalized else y_fc
+    if normalized:
+        max_yval = max(y_zfc.max(), y_fc.max())
+        y_zfc = y_zfc / max_yval
+        y_fc = y_fc / max_yval
     if label is None:
         ax.plot(x_zfc, y_zfc, c=color, ls="--")
         ax.plot(x_fc, y_fc, c=color)
@@ -887,10 +889,12 @@ def plot_multiple_zfcfc(
     for zfc_i, fc_i, color, label in zip(zfc, fc, colors, labels):
         x_zfc = zfc_i.simplified_data()["temperature"]
         y_zfc = zfc_i.simplified_data()[y_val]
-        y_zfc = y_zfc / y_zfc.max() if normalized else y_zfc
         x_fc = fc_i.simplified_data()["temperature"]
         y_fc = fc_i.simplified_data()[y_val]
-        y_fc = y_fc / y_fc.max() if normalized else y_fc
+        if normalized:
+            max_yval = max(y_zfc.max(), y_fc.max())
+            y_zfc = y_zfc / max_yval
+            y_fc = y_fc / max_yval
         if label:
             ax.plot(x_zfc, y_zfc, c=color, ls="--", label=label)
             ax.plot(x_fc, y_fc, c=color, label="")
