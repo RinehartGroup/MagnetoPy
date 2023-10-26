@@ -1,0 +1,194 @@
+{
+    "_class_": "Magnetometry",
+    "sample_id": "dataset5",
+    "files": [
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset5\\mvsh12.dat",
+            "length": 231028,
+            "date_created": "2021-10-28T13:41:00",
+            "sha512": "981e7b10d005bc3c61dd3c4b6d6d889522ddf821e8f0b5f45ff3331b43bcb2f4e7cb2d0103c10d90f5f8cdd9418f9888e3894abe262cbdcc2be28de87481a7b9",
+            "experiments_in_file": [
+                "mvsh"
+            ]
+        },
+        {
+            "_class_": "DatFile",
+            "experiment_type": "magnetometry",
+            "local_path": "..\\..\\tests\\data\\dataset5\\zfcfc6.dat",
+            "length": 270411,
+            "date_created": "2021-10-28T11:07:00",
+            "sha512": "1f64382ef84afa3804d43297212d5ec15cc7ec3f84c4f0e060162c6b2b5faf8d4cc22d6cea3e58c99ca3585203b5c2bb2e7a5a78159db37bb97e515226a9aa4c",
+            "experiments_in_file": [
+                "zfcfc"
+            ]
+        }
+    ],
+    "sample_info": {
+        "material": "KMK245",
+        "comment": null,
+        "mass": 1.2,
+        "volume": null,
+        "molecular_weight": null,
+        "size": null,
+        "shape": null,
+        "holder": "Straw",
+        "holder_detail": "Standard",
+        "offset": 65.64,
+        "eicosane_mass": null,
+        "diamagnetic_correction": null,
+        "_class_": "SampleInfo"
+    },
+    "mvsh": [
+        {
+            "_class_": "MvsH",
+            "origin_file": "mvsh12.dat",
+            "temperature": 300,
+            "field_range": [
+                -70000.453125,
+                70000.3515625
+            ],
+            "field_correction_file": "",
+            "scaling": [
+                "mass"
+            ]
+        }
+    ],
+    "zfc": [
+        {
+            "_class_": "ZFC",
+            "origin_file": "zfcfc6.dat",
+            "field": 100,
+            "temperature_range": [
+                5.00220847129822,
+                299.934646606445
+            ],
+            "scaling": [
+                "mass"
+            ]
+        }
+    ],
+    "fc": [
+        {
+            "_class_": "FC",
+            "origin_file": "zfcfc6.dat",
+            "field": 100,
+            "temperature_range": [
+                5.00219106674194,
+                299.928070068359
+            ],
+            "scaling": [
+                "mass"
+            ]
+        }
+    ],
+    "analyses": [
+        {
+            "_class_": "CauchyCDFAnalysis",
+            "parsing_args": {
+                "temperature": 300,
+                "segments": "auto",
+                "experiment": "MvsH",
+                "_class_": "CauchyParsingArgs"
+            },
+            "fitting_args": {
+                "_class_": "CauchyFittingArgs",
+                "terms": [
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            73.96080646358534,
+                            0,
+                            110.941209695378
+                        ],
+                        "h_c": [
+                            0.05078125,
+                            -70000.3515625,
+                            70000.453125
+                        ],
+                        "gamma": [
+                            14000.08046875,
+                            0,
+                            140000.8046875
+                        ]
+                    }
+                ]
+            },
+            "results": {
+                "_class_": "CauchyAnalysisResults",
+                "terms": [
+                    {
+                        "m_s": 75.03724020620552,
+                        "m_s_err": 0.11925848772738318,
+                        "h_c": -34.31170744568226,
+                        "h_c_err": 0.6478114712706113,
+                        "gamma": 430.5388202281289,
+                        "gamma_err": 1.5752435387603634
+                    }
+                ],
+                "chi_pd": -1.7049129783740228e-05,
+                "chi_pd_err": 3.7123223076830374e-06,
+                "chi_squared": 294.0901931547078,
+                "reduced_chi_squared": 0.6653624279518275,
+                "m_s_unit": "emu/g",
+                "h_c_unit": "Oe",
+                "gamma_unit": "Oe",
+                "chi_pd_unit": "emu/g/Oe"
+            }
+        },
+        {
+            "_class_": "CauchyPDFAnalysis",
+            "parsing_args": {
+                "temperature": 300,
+                "segments": "auto",
+                "experiment": "MvsH",
+                "_class_": "CauchyParsingArgs"
+            },
+            "fitting_args": {
+                "_class_": "CauchyFittingArgs",
+                "terms": [
+                    {
+                        "_class_": "CauchyParams",
+                        "m_s": [
+                            76.0568406251639,
+                            0,
+                            114.08526093774586
+                        ],
+                        "h_c": [
+                            0.05078125,
+                            -70000.3515625,
+                            70000.453125
+                        ],
+                        "gamma": [
+                            14000.08046875,
+                            0,
+                            140000.8046875
+                        ]
+                    }
+                ]
+            },
+            "results": {
+                "_class_": "CauchyAnalysisResults",
+                "terms": [
+                    {
+                        "m_s": 65.48294829372644,
+                        "m_s_err": 1.053675497449061,
+                        "h_c": -33.829399450303754,
+                        "h_c_err": 3.000743493975065,
+                        "gamma": 1438.4987133930617,
+                        "gamma_err": 22.96705233571282
+                    }
+                ],
+                "chi_pd": 0.003279463077545651,
+                "chi_pd_err": 0.0006301748162560155,
+                "chi_squared": 0.0228494343040301,
+                "reduced_chi_squared": 5.1695552724050007e-05,
+                "m_s_unit": "unknown",
+                "h_c_unit": "unknown",
+                "gamma_unit": "unknown",
+                "chi_pd_unit": "unknown"
+            }
+        }
+    ]
+}

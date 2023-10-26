@@ -5,3 +5,7 @@ The plotting functions within `magnetopy` handle many basic use cases but are un
 ::: magnetopy.plot_utils.default_colors
 
 ::: magnetopy.plot_utils.force_aspect
+
+::: magnetopy.plot_utils.handle_kwargs
+
+::: magnetopy.plot_utils.handle_options

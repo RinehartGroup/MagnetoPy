@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "magnetopy"
-version = "0.2.2"
+version = "0.3.0"
 description = "Magnetism in Python"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -20,6 +20,7 @@ dependencies = [
     "matplotlib",
     "scikit-learn",
     "GitPython",
+    "lmfit",
 ]
 
 [project.optional-dependencies]
@@ -43,3 +44,4 @@ packages = ["magnetopy", "magnetopy.experiments", "magnetopy.analyses"]
 
 [project.urls]
 "Homepage" = "https://github.com/RinehartGroup/MagnetoPy.git"
+"Documentation" = "https://rinehartgroup.github.io/MagnetoPy/"

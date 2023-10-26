@@ -8,14 +8,20 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from magnetopy.data_files import DatFile, filename_label, plot_raw, plot_raw_residual
-from magnetopy.experiments.plot_utils import get_ylabel, handle_kwargs, handle_options
+from magnetopy.experiments.plot_utils import get_ylabel
 from magnetopy.experiments.utils import (
     add_uncorrected_moment_columns,
     num_digits_after_decimal,
     scale_dc_data,
 )
 from magnetopy.parsing_utils import find_temp_turnaround_point
-from magnetopy.plot_utils import default_colors, force_aspect, linear_color_gradient
+from magnetopy.plot_utils import (
+    default_colors,
+    force_aspect,
+    linear_color_gradient,
+    handle_kwargs,
+    handle_options,
+)
 
 
 class FieldDetectionError(Exception):
@@ -815,7 +821,7 @@ def plot_single_zfcfc(
         ylabel = get_ylabel(y_val, zfc.scaling)
         ax.set_ylabel(ylabel)
 
-    handle_options(ax, label, title, options)
+    handle_options(ax, options, label, title)
 
     force_aspect(ax)
     if options["save"]:
@@ -905,7 +911,7 @@ def plot_multiple_zfcfc(
         ylabel = get_ylabel(y_val, zfc[0].scaling)
         ax.set_ylabel(ylabel)
 
-    handle_options(ax, labels[0], title, options)
+    handle_options(ax, options, labels[0], title)
 
     force_aspect(ax)
     if options["save"]:

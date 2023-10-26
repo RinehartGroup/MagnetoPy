@@ -37,9 +37,35 @@
 | zfc5.rw.dat | n/a         | n/a                 | n/a                      | n/a       | Unprocessed data (voltage vs position) from zfc5.dat      |
 | fc5.dat     | DC          | 200                 | 2 - 300 (settle)         | No        | only FC at 200 Oe                                         |
 | fc5.rw.dat  | n/a         | n/a                 | n/a                      | n/a       | Unprocessed data (voltage vs position) from fc5.dat       |
+| zfcfc6.dat  | DC          | 100                 | 5 - 300 (scan)           | No        | ZFC 5 to 300 K, then temperature drop, then FC 5 to 300 K |
+| fc7.dat     | DC          | 100                 | 2 - 300 (scan)           | No        | only FC at 100 Oe                                         |
+| zfc7.dat    | DC          | 100                 | 2 - 300 (scan)           | No        | only ZFC at 100 Oe                                        |
+| fc8.dat     | DC          | 250                 | 2 - 300 (scan)           | No        | only FC at 250 Oe                                         |
+| zfc8.dat    | DC          | 250                 | 2 - 300 (scan)           | No        | only ZFC at 250 Oe                                        |
+| fc9.dat     | DC          | 500                 | 2 - 300 (scan)           | No        | only FC at 500 Oe                                         |
+| zfc9.dat    | DC          | 500                 | 2 - 300 (scan)           | No        | only ZFC at 500 Oe                                        |
+| fc10.dat    | DC          | 750                 | 2 - 300 (scan)           | No        | only FC at 750 Oe                                         |
+| zfc10.dat   | DC          | 750                 | 2 - 300 (scan)           | No        | only ZFC at 750 Oe                                        |
+| fc11.dat    | DC          | 1000                | 2 - 300 (scan)           | No        | only FC at 1000 Oe                                        |
+| zfc11.dat   | DC          | 1000                | 2 - 300 (scan)           | No        | only ZFC at 1000 Oe                                       |
+| fc12.dat    | DC          | 10000               | 2 - 300 (scan)           | No        | only FC at 10000 Oe                                       |
+| zfc12.dat   | DC          | 10000               | 2 - 300 (scan)           | No        | only ZFC at 10000 Oe                                      |
+| fc13.dat    | DC          | 40000               | 2 - 300 (scan)           | No        | only FC at 40000 Oe                                       |
+| zfc13.dat   | DC          | 40000               | 2 - 300 (scan)           | No        | only ZFC at 40000 Oe                                      |
 
 ### Mixed Files
 
 | File         | Measurement | Nominal Fields (Oe)   | Nominal Temperatures (K) | Comments? | Description                              |
 | ------------ | ----------- | --------------------- | ------------------------ | --------- | ---------------------------------------- |
 | dataset4.dat | VSM, DC     | 100, 1000, -70k - 70k | 5 - 310 (scan), 293      | Yes       | combines zfc4a, fc4a, zfc4b, fc4b, mvsh4 |
+
+## Datasets
+
+| Name     | Files                                                 | Notes                                                                                                         |
+| -------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| dataset1 | mvsh1.dat, zfcfc1.dat                                 |                                                                                                               |
+| dataset2 | mvsh5.dat, mvsh5.rw.dat, zfcfc2.dat                   |                                                                                                               |
+| dataset3 | mvsh6.dat, zfcfc4.dat                                 |                                                                                                               |
+| dataset4 | mvsh9.dat, fc5.dat, fc5.rw.dat, zfc5.dat, zfc5.rw.dat |                                                                                                               |
+| dataset5 | mvsh12.dat, zfcfc6.dat                                | From [Kirkpatrick, et al. Chem. Sci. 2023](https://pubs.rsc.org/en/content/articlelanding/2023/SC/D3SC02113K) |
+| dataset6 | mvsh13.dat, zfc7 - zfc13, fc7 - fc13                  | From [Orlova, et al. JACS 2023](https://pubs.acs.org/doi/full/10.1021/jacs.3c08946#)                          |
