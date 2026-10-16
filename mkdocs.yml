@@ -15,6 +15,7 @@ nav:
   - API:
       - Magnetopy:
           - Magnetometry: api/magnetometry.md
+          - Calibration: api/calibration.md
           - Data Files:
               - DatFile: api/dat_file.md
               - GenericFile: api/generic_file.md
