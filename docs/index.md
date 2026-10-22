@@ -54,4 +54,4 @@ After using analyses within MagnetoPy, the serialized form of the magnetometry d
 #### Data Files
 
 - [Quantum Design MPMS3 .dat files](api/dat_file.md#magnetopy.data_files.DatFile)
-- [Quantum Design MPMS3 .rw.dat files](api/dat_file.md#magnetopy.data_files.DcMeasurement) - note that while the `DcMeasurement` class is available to represent an individual DC measurement (i.e., the voltage data underlying a sinlge magnetic moment data point), the raw voltage data is more likely to accessed via the `DatFile.data` attribute, where the `"raw_scan"` column of the `DataFrame` contains the raw voltage data in the form of `DcMeasurement` objects.
+- [Quantum Design MPMS3 .rw.dat files](api/dat_file.md#magnetopy.data_files.DcMeasurement) - note that while the `DcMeasurement` class is available to represent an individual DC measurement (i.e., the voltage data underlying a single magnetic moment data point), the raw voltage data is more likely to accessed via the `DatFile.data` attribute, where the `"raw_scan"` column of the `DataFrame` contains the raw voltage data in the form of `DcMeasurement` objects.
