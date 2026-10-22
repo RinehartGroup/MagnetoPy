@@ -5,7 +5,8 @@ described in https://qdusa.com/siteDocs/appNotes/1500-021.pdf
 The tests require calibration files found in the Rinehart group's GitHub repo:
 https://github.com/RinehartGroup/MagnetoPyCalibration.git, which are installed via
 `mp-calibration https://github.com/RinehartGroup/MagnetoPyCalibration.git`, which will
-install the calibration files in the user's home directory.
+install the calibration files in the user's home directory. The tests are skipped if
+the calibration files are not installed.
 """
 
 import inspect
@@ -21,6 +22,13 @@ DATA_PATH = TESTS_PATH / "data"
 pd_std1_path = DATA_PATH / "Pd_std1.dat"
 mvsh3_path = DATA_PATH / "mvsh3.dat"
 mvsh6_path = DATA_PATH / "mvsh6.dat"
+
+CALIBRATION_JSON = Path.home() / ".magnetopy" / "calibration" / "calibration.json"
+
+pytestmark = pytest.mark.skipif(
+    not CALIBRATION_JSON.is_file(),
+    reason=f"calibration files not installed ({CALIBRATION_JSON} not found)",
+)
 
 
 def test_get_data_file():
