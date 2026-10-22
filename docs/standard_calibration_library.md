@@ -32,4 +32,4 @@ Only two categories of calibration files are currently supported.
 
     Used for [determining the "true field" during an M vs H sequence](https://qdusa.com/siteDocs/appNotes/1500-021.pdf). Per the application note, all measurements should be collected at 298 K. The temperature of the calibration data does not need to match the temperature of the target data, but the sequence of fields should be the exact same.
 
-    The "mvsh" keys are the names of the sequences. These names are referred to by `magnetopy` for easy access to the correct calibration data. See the [field correction example](../../examples/mvsh/#correcting-the-field-for-flux-trapping) for more details.
+    The "mvsh" keys are the names of the sequences. These names are referred to by `magnetopy` for easy access to the correct calibration data. See the [field correction example](examples/mvsh.ipynb#correcting-the-field-for-flux-trapping) for more details.

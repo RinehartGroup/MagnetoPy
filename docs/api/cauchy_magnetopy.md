@@ -1,6 +1,6 @@
-If your data can be read into a `Magnetometry` object and you are trying to analyze an `MvsH` experiment, the `CauchyCDFAnalysis` and `CauchyPDFAnalysis` classes work [within the `MagnetoPy` system](../examples/magnetometry/#analyses-and-serialization).
+If your data can be read into a `Magnetometry` object and you are trying to analyze an `MvsH` experiment, the `CauchyCDFAnalysis` and `CauchyPDFAnalysis` classes work [within the `MagnetoPy` system](../examples/magnetometry.ipynb#analyses-and-serialization).
 
-An example notebook demonstrates how to work with the classes and functions described herein: [Quantification of Hysteresis Data using Cauchy Distribution Functions](../../examples/cauchy)
+An example notebook demonstrates how to work with the classes and functions described herein: [Quantification of Hysteresis Data using Cauchy Distribution Functions](../examples/cauchy.ipynb)
 
 ::: magnetopy.analyses.cauchy.magpy_compatible.CauchyCDFAnalysis
 

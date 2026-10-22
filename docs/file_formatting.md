@@ -4,9 +4,9 @@ MagnetoPy can read in a variety of raw magnetic data and convert it to useful Py
 
 ## Sample Info and Moment Scaling
 
-When creating a [`Magnetometry`](../api/magnetometry/#magnetopy.magnetometry.Magnetometry) object, MagnetoPy will assume that all files within the given folder are from the same sample. Thus, the `Magnetometry.sample_info` attribute will be created by looking at the sample information in the header of the first file that it finds.
+When creating a [`Magnetometry`](api/magnetometry.md#magnetopy.magnetometry.Magnetometry) object, MagnetoPy will assume that all files within the given folder are from the same sample. Thus, the `Magnetometry.sample_info` attribute will be created by looking at the sample information in the header of the first file that it finds.
 
-The sample information is also used to [automatically scale the magnetic moment data in all dc measurements](../api/magnetometry/#magnetopy.magnetometry.Magnetometry.scale_dc_data) (i.e., all `MvsH`, `ZFC`, and `FC` objects within the dataset).
+The sample information is also used to [automatically scale the magnetic moment data in all dc measurements](api/magnetometry.md#magnetopy.magnetometry.Magnetometry.scale_dc_data) (i.e., all `MvsH`, `ZFC`, and `FC` objects within the dataset).
 
 ## .dat File Conventions
 
@@ -74,4 +74,4 @@ The automatic parsing of uncommented files containing ZFC/FC experiments current
 
 #### MvsH
 
-Files containing M vs. H data can contain one or multiple experiments at different nominal temperatures. Due to the temperature fluctuations, experiments are grouped by nominal temperatures using [scikit-learn's DBSCAN clustering algorithm](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html). Default values for the `eps` and `min_samples` parameters are provided and can be overwritten during [`MvsH` object creation](../../api/mvsh/#magnetopy.experiments.mvsh.MvsH) or [`Magnetometry.extract_mvsh()`](../../api/magnetometry/#magnetopy.magnetometry.Magnetometry.extract_mvsh)
+Files containing M vs. H data can contain one or multiple experiments at different nominal temperatures. Due to the temperature fluctuations, experiments are grouped by nominal temperatures using [scikit-learn's DBSCAN clustering algorithm](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html). Default values for the `eps` and `min_samples` parameters are provided and can be overwritten during [`MvsH` object creation](api/mvsh.md#magnetopy.experiments.mvsh.MvsH) or [`Magnetometry.extract_mvsh()`](api/magnetometry.md#magnetopy.magnetometry.Magnetometry.extract_mvsh)

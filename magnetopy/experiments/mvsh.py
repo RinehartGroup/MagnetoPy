@@ -319,7 +319,7 @@ class MvsH:
 
         References
         ----------
-        [1] [Correcting for the Absolute Field Error using the Pd Standard](https://qdusa.com/siteDocs/appNotes/1500-021.pdf)
+        1. [Correcting for the Absolute Field Error using the Pd Standard](https://qdusa.com/siteDocs/appNotes/1500-021.pdf)
         """
         pd_mvsh = TrueFieldCorrection(field_correction_file)
         if len(pd_mvsh.data) != len(self.data):
@@ -710,7 +710,7 @@ class TrueFieldCorrection(MvsH):
 
     References
     ----------
-    [1] [Correcting for the Absolute Field Error using the Pd Standard](https://qdusa.com/siteDocs/appNotes/1500-021.pdf)
+    1. [Correcting for the Absolute Field Error using the Pd Standard](https://qdusa.com/siteDocs/appNotes/1500-021.pdf)
     """
 
     def __init__(self, sequence: str | Path):
