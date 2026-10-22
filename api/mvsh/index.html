@@ -431,6 +431,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../examples/file_descriptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Data Files
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../examples/reading_dat_file/" class="md-nav__link">
         
   
@@ -3103,7 +3131,7 @@ same number of data points as the MvsH sequence.</p>
 <a id="magnetopy.experiments.mvsh.MvsH--source--__codelineno-0-319" name="magnetopy.experiments.mvsh.MvsH--source--__codelineno-0-319"></a>
 <a id="magnetopy.experiments.mvsh.MvsH--source--__codelineno-0-320" name="magnetopy.experiments.mvsh.MvsH--source--__codelineno-0-320"></a><span class="sd">        References</span>
 <a id="magnetopy.experiments.mvsh.MvsH--source--__codelineno-0-321" name="magnetopy.experiments.mvsh.MvsH--source--__codelineno-0-321"></a><span class="sd">        ----------</span>
-<a id="magnetopy.experiments.mvsh.MvsH--source--__codelineno-0-322" name="magnetopy.experiments.mvsh.MvsH--source--__codelineno-0-322"></a><span class="sd">        [1] [Correcting for the Absolute Field Error using the Pd Standard](https://qdusa.com/siteDocs/appNotes/1500-021.pdf)</span>
+<a id="magnetopy.experiments.mvsh.MvsH--source--__codelineno-0-322" name="magnetopy.experiments.mvsh.MvsH--source--__codelineno-0-322"></a><span class="sd">        1. [Correcting for the Absolute Field Error using the Pd Standard](https://qdusa.com/siteDocs/appNotes/1500-021.pdf)</span>
 <a id="magnetopy.experiments.mvsh.MvsH--source--__codelineno-0-323" name="magnetopy.experiments.mvsh.MvsH--source--__codelineno-0-323"></a><span class="sd">        """</span>
 <a id="magnetopy.experiments.mvsh.MvsH--source--__codelineno-0-324" name="magnetopy.experiments.mvsh.MvsH--source--__codelineno-0-324"></a>        <span class="n">pd_mvsh</span> <span class="o">=</span> <span class="n">TrueFieldCorrection</span><span class="p">(</span><span class="n">field_correction_file</span><span class="p">)</span>
 <a id="magnetopy.experiments.mvsh.MvsH--source--__codelineno-0-325" name="magnetopy.experiments.mvsh.MvsH--source--__codelineno-0-325"></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pd_mvsh</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
@@ -3925,7 +3953,9 @@ standard is applied to the sample data.</p>
 
 <details class="references" open>
   <summary>References</summary>
-  <p>[1][Correcting for the Absolute Field Error using the Pd Standard](https://qdusa.com/siteDocs/appNotes/1500-021.pdf)</p>
+  <ol>
+<li><a href="https://qdusa.com/siteDocs/appNotes/1500-021.pdf">Correcting for the Absolute Field Error using the Pd Standard</a></li>
+</ol>
 </details>
 
             <details class="mkdocstrings-source">
@@ -4022,7 +4052,7 @@ standard is applied to the sample data.</p>
 <a id="magnetopy.experiments.mvsh.MvsH.correct_field--source--__codelineno-0-319" name="magnetopy.experiments.mvsh.MvsH.correct_field--source--__codelineno-0-319"></a>
 <a id="magnetopy.experiments.mvsh.MvsH.correct_field--source--__codelineno-0-320" name="magnetopy.experiments.mvsh.MvsH.correct_field--source--__codelineno-0-320"></a><span class="sd">    References</span>
 <a id="magnetopy.experiments.mvsh.MvsH.correct_field--source--__codelineno-0-321" name="magnetopy.experiments.mvsh.MvsH.correct_field--source--__codelineno-0-321"></a><span class="sd">    ----------</span>
-<a id="magnetopy.experiments.mvsh.MvsH.correct_field--source--__codelineno-0-322" name="magnetopy.experiments.mvsh.MvsH.correct_field--source--__codelineno-0-322"></a><span class="sd">    [1] [Correcting for the Absolute Field Error using the Pd Standard](https://qdusa.com/siteDocs/appNotes/1500-021.pdf)</span>
+<a id="magnetopy.experiments.mvsh.MvsH.correct_field--source--__codelineno-0-322" name="magnetopy.experiments.mvsh.MvsH.correct_field--source--__codelineno-0-322"></a><span class="sd">    1. [Correcting for the Absolute Field Error using the Pd Standard](https://qdusa.com/siteDocs/appNotes/1500-021.pdf)</span>
 <a id="magnetopy.experiments.mvsh.MvsH.correct_field--source--__codelineno-0-323" name="magnetopy.experiments.mvsh.MvsH.correct_field--source--__codelineno-0-323"></a><span class="sd">    """</span>
 <a id="magnetopy.experiments.mvsh.MvsH.correct_field--source--__codelineno-0-324" name="magnetopy.experiments.mvsh.MvsH.correct_field--source--__codelineno-0-324"></a>    <span class="n">pd_mvsh</span> <span class="o">=</span> <span class="n">TrueFieldCorrection</span><span class="p">(</span><span class="n">field_correction_file</span><span class="p">)</span>
 <a id="magnetopy.experiments.mvsh.MvsH.correct_field--source--__codelineno-0-325" name="magnetopy.experiments.mvsh.MvsH.correct_field--source--__codelineno-0-325"></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pd_mvsh</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
@@ -5458,7 +5488,9 @@ standard is applied to the sample data.</p>
 
 <details class="references" open>
   <summary>References</summary>
-  <p>[1][Correcting for the Absolute Field Error using the Pd Standard](https://qdusa.com/siteDocs/appNotes/1500-021.pdf)</p>
+  <ol>
+<li><a href="https://qdusa.com/siteDocs/appNotes/1500-021.pdf">Correcting for the Absolute Field Error using the Pd Standard</a></li>
+</ol>
 </details>
 
 
@@ -5583,7 +5615,7 @@ standard is applied to the sample data.</p>
 <a id="magnetopy.experiments.mvsh.TrueFieldCorrection--source--__codelineno-0-710" name="magnetopy.experiments.mvsh.TrueFieldCorrection--source--__codelineno-0-710"></a>
 <a id="magnetopy.experiments.mvsh.TrueFieldCorrection--source--__codelineno-0-711" name="magnetopy.experiments.mvsh.TrueFieldCorrection--source--__codelineno-0-711"></a><span class="sd">    References</span>
 <a id="magnetopy.experiments.mvsh.TrueFieldCorrection--source--__codelineno-0-712" name="magnetopy.experiments.mvsh.TrueFieldCorrection--source--__codelineno-0-712"></a><span class="sd">    ----------</span>
-<a id="magnetopy.experiments.mvsh.TrueFieldCorrection--source--__codelineno-0-713" name="magnetopy.experiments.mvsh.TrueFieldCorrection--source--__codelineno-0-713"></a><span class="sd">    [1] [Correcting for the Absolute Field Error using the Pd Standard](https://qdusa.com/siteDocs/appNotes/1500-021.pdf)</span>
+<a id="magnetopy.experiments.mvsh.TrueFieldCorrection--source--__codelineno-0-713" name="magnetopy.experiments.mvsh.TrueFieldCorrection--source--__codelineno-0-713"></a><span class="sd">    1. [Correcting for the Absolute Field Error using the Pd Standard](https://qdusa.com/siteDocs/appNotes/1500-021.pdf)</span>
 <a id="magnetopy.experiments.mvsh.TrueFieldCorrection--source--__codelineno-0-714" name="magnetopy.experiments.mvsh.TrueFieldCorrection--source--__codelineno-0-714"></a><span class="sd">    """</span>
 <a id="magnetopy.experiments.mvsh.TrueFieldCorrection--source--__codelineno-0-715" name="magnetopy.experiments.mvsh.TrueFieldCorrection--source--__codelineno-0-715"></a>
 <a id="magnetopy.experiments.mvsh.TrueFieldCorrection--source--__codelineno-0-716" name="magnetopy.experiments.mvsh.TrueFieldCorrection--source--__codelineno-0-716"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">):</span>

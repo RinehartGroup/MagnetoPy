@@ -429,6 +429,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../examples/file_descriptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Data Files
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../examples/reading_dat_file/" class="md-nav__link">
         
   
@@ -1898,7 +1926,7 @@
 <h4 id="zfcfc-zfc-fc_1">ZFCFC, ZFC, FC</h4>
 <p>The automatic parsing of uncommented files containing ZFC/FC experiments currently only supports files with a single ZFC/FC pair. The data must be in the order ZFC then FC. The FC experiment can be collected with increasing or decreasing temperature.</p>
 <h4 id="mvsh_1">MvsH</h4>
-<p>Files containing M vs. H data can contain one or multiple experiments at different nominal temperatures. Due to the temperature fluctuations, experiments are grouped by nominal temperatures using <a href="https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html">scikit-learn's DBSCAN clustering algorithm</a>. Default values for the <code>eps</code> and <code>min_samples</code> parameters are provided and can be overwritten during <a href="../../api/mvsh/#magnetopy.experiments.mvsh.MvsH"><code>MvsH</code> object creation</a> or <a href="../../api/magnetometry/#magnetopy.magnetometry.Magnetometry.extract_mvsh"><code>Magnetometry.extract_mvsh()</code></a></p>
+<p>Files containing M vs. H data can contain one or multiple experiments at different nominal temperatures. Due to the temperature fluctuations, experiments are grouped by nominal temperatures using <a href="https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html">scikit-learn's DBSCAN clustering algorithm</a>. Default values for the <code>eps</code> and <code>min_samples</code> parameters are provided and can be overwritten during <a href="../api/mvsh/#magnetopy.experiments.mvsh.MvsH"><code>MvsH</code> object creation</a> or <a href="../api/magnetometry/#magnetopy.magnetometry.Magnetometry.extract_mvsh"><code>Magnetometry.extract_mvsh()</code></a></p>
 
 
 
