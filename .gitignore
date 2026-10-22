@@ -44,3 +44,6 @@ scratch*/
 
 # MkDocs build output (published from the gh-pages branch)
 site/
+
+# mkdocs-jupyter notebook cache from docs builds
+.cache/
