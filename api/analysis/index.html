@@ -18,8 +18,12 @@
       
         <link rel="next" href="../simple_mvsh_analysis/">
       
+      
+        
+      
+      
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.21">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -27,11 +31,14 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.eebd395e.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
       
 
+
     
+    
+      
     
     
       
@@ -45,11 +52,10 @@
     
       <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
-    
     
     
   </head>
@@ -57,9 +63,6 @@
   
     <body dir="ltr">
   
-    
-    
-      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -87,7 +90,8 @@
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -107,23 +111,32 @@
     </div>
     
     
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
-      <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
-      </label>
-      <div class="md-search" data-md-component="search" role="dialog">
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
         <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </nav>
       
@@ -131,7 +144,7 @@
       
     </form>
     <div class="md-search__output">
-      <div class="md-search__scrollwrap" data-md-scrollfix>
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
             Initializing search
@@ -142,6 +155,7 @@
     </div>
   </div>
 </div>
+      
     
     
   </nav>
@@ -161,26 +175,17 @@
         
   
   
-
-
-  <li class="md-tabs__item">
-    <a href="../.." class="md-tabs__link">
-      Home
-    </a>
-  </li>
-
-      
-        
-  
-  
-
-
-  
   
   
     <li class="md-tabs__item">
-      <a href="../../examples/" class="md-tabs__link">
-        Examples
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
       </a>
     </li>
   
@@ -189,50 +194,93 @@
         
   
   
-    
-  
-
-
-  
   
   
     
+    
+      <li class="md-tabs__item">
+        <a href="../../examples/" class="md-tabs__link">
+          
+  
+  
+  Examples
 
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../magnetometry/" class="md-tabs__link">
+          
+  
+  
+  API
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
   
   
   
     <li class="md-tabs__item">
-      <a href="../magnetometry/" class="md-tabs__link md-tabs__link--active">
-        API
+      <a href="../../file_formatting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  File Formatting
+
       </a>
     </li>
   
 
-  
-
       
         
   
   
-
-
-  <li class="md-tabs__item">
-    <a href="../../file_formatting/" class="md-tabs__link">
-      File Formatting
-    </a>
-  </li>
-
-      
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../standard_calibration_library/" class="md-tabs__link">
         
   
   
+    
+  
+  Standard Calibration Library
 
-
-  <li class="md-tabs__item">
-    <a href="../../standard_calibration_library/" class="md-tabs__link">
-      Standard Calibration Library
-    </a>
-  </li>
+      </a>
+    </li>
+  
 
       
     </ul>
@@ -251,6 +299,7 @@
                   <div class="md-sidebar__inner">
                     
 
+
   
 
 
@@ -268,14 +317,26 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../.." class="md-nav__link">
-        Home
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
@@ -283,419 +344,783 @@
     
       
       
-      
-
+  
   
   
   
     
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
+    
+    
+    
       
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
       
-      
-      
-        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
-          Examples
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2">
-          <span class="md-nav__icon md-icon"></span>
-          Examples
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
           
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Examples
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../examples/" class="md-nav__link">
-        Overview
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../examples/reading_dat_file/" class="md-nav__link">
-        Reading a .dat File
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading a .dat File
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../examples/rwdat_file/" class="md-nav__link">
-        Raw Data and the .rw.dat File
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raw Data and the .rw.dat File
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../examples/mvsh/" class="md-nav__link">
-        The MvsH Experiment Class
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Experiment Class
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../examples/zfcfc/" class="md-nav__link">
-        The ZFC and FC Experiment Classes
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The and Experiment Classes
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../examples/magnetometry/" class="md-nav__link">
-        Datasets in MagnetoPy: The Magnetometry Class
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Datasets in MagnetoPy: The Class
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../examples/mvsh_analysis/" class="md-nav__link">
-        A Simple M vs. H Analysis
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A Simple M vs. H Analysis
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../examples/cauchy/" class="md-nav__link">
-        Quantification of Hysteresis Data using Cauchy Distribution Functions
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantification of Hysteresis Data using Cauchy Distribution Functions
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
     
       
       
-      
-
   
   
     
   
   
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
-      
-      
-      
-        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
-          API
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-        <label class="md-nav__title" for="__nav_3">
-          <span class="md-nav__icon md-icon"></span>
-          API
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
   
     
-  
-  
+    
+    
     
       
+        
+        
+      
+      
+        
+      
+    
     
     <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" checked>
-      
-      
-      
-        <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
-          Magnetopy
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="true">
-        <label class="md-nav__title" for="__nav_3_1">
-          <span class="md-nav__icon md-icon"></span>
-          Magnetopy
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
           
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnetopy
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Magnetopy
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../magnetometry/" class="md-nav__link">
-        Magnetometry
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnetometry
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
+    
+    
+    
       
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_1_2" >
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
       
-      
-      
-        <label class="md-nav__link" for="__nav_3_1_2" id="__nav_3_1_2_label" tabindex="0">
-          Data Files
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_2_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_3_1_2">
-          <span class="md-nav__icon md-icon"></span>
-          Data Files
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
           
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_1_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_2" id="__nav_3_1_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Files
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Data Files
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../dat_file/" class="md-nav__link">
-        DatFile
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DatFile
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../generic_file/" class="md-nav__link">
-        GenericFile
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GenericFile
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
+    
+    
+    
       
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_1_3" >
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
       
-      
-      
-        <label class="md-nav__link" for="__nav_3_1_3" id="__nav_3_1_3_label" tabindex="0">
-          Experiments
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_3_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_3_1_3">
-          <span class="md-nav__icon md-icon"></span>
-          Experiments
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
           
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_1_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_3" id="__nav_3_1_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Experiments
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Experiments
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../dc_experiment/" class="md-nav__link">
-        DcExperiment
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DcExperiment
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../mvsh/" class="md-nav__link">
-        MvsH
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MvsH
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../zfcfc/" class="md-nav__link">
-        ZFC, FC, ZFCFC
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ZFC, FC, ZFCFC
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../experiments_utils/" class="md-nav__link">
-        Utils
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utils
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
     
   
   
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_4" checked>
-      
-      
-      
-        <label class="md-nav__link" for="__nav_3_1_4" id="__nav_3_1_4_label" tabindex="0">
-          Analyses
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_4_label" aria-expanded="true">
-        <label class="md-nav__title" for="__nav_3_1_4">
-          <span class="md-nav__icon md-icon"></span>
-          Analyses
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_4" checked>
+        
           
+          <label class="md-nav__link" for="__nav_3_1_4" id="__nav_3_1_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyses
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Analyses
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
   
   
     
+  
   
   
     <li class="md-nav__item md-nav__item--active">
@@ -705,12 +1130,38 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Analysis (Protocol)
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis (Protocol)
+  
+
+    
+  </span>
+  
+  
+
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Analysis (Protocol)
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis (Protocol)
+  
+
+    
+  </span>
+  
+  
+
       </a>
       
         
@@ -728,22 +1179,23 @@
       
         <li class="md-nav__item">
   <a href="#magnetopy.magnetometry.Analysis" class="md-nav__link">
-    Analysis
+    <span class="md-ellipsis">
+      
+        Analysis
+      
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Analysis">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#magnetopy.magnetometry.Analysis--notes" class="md-nav__link">
-    Notes
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#magnetopy.magnetometry.Analysis.as_dict" class="md-nav__link">
-    as_dict()
+    <span class="md-ellipsis">
+      
+        as_dict
+      
+    </span>
   </a>
   
 </li>
@@ -760,194 +1212,345 @@
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../simple_mvsh_analysis/" class="md-nav__link">
-        SimpleMvsHAnalysis
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SimpleMvsHAnalysis
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
+    
+    
+    
       
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_1_4_3" >
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
       
-      
-      
-        <label class="md-nav__link" for="__nav_3_1_4_3" id="__nav_3_1_4_3_label" tabindex="0">
-          Cauchy Analysis
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_3_1_4_3_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_3_1_4_3">
-          <span class="md-nav__icon md-icon"></span>
-          Cauchy Analysis
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
           
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_1_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_4_3" id="__nav_3_1_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cauchy Analysis
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_3_1_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cauchy Analysis
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../cauchy_magnetopy/" class="md-nav__link">
-        MagnetoPy Compatible
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MagnetoPy Compatible
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../cauchy_independent/" class="md-nav__link">
-        MagnetoPy Independent
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MagnetoPy Independent
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../cauchy_plotting/" class="md-nav__link">
-        Plotting
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plotting
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
+    
+    
+    
       
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_1_5" >
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
       
-      
-      
-        <label class="md-nav__link" for="__nav_3_1_5" id="__nav_3_1_5_label" tabindex="0">
-          Utils
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_5_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_3_1_5">
-          <span class="md-nav__icon md-icon"></span>
-          Utils
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
           
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_1_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_5" id="__nav_3_1_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utils
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Utils
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../parsing_utils/" class="md-nav__link">
-        Parsing
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parsing
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../plot_utils/" class="md-nav__link">
-        Plotting
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plotting
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../file_formatting/" class="md-nav__link">
-        File Formatting
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    File Formatting
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
@@ -955,14 +1558,26 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../standard_calibration_library/" class="md-nav__link">
-        Standard Calibration Library
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Standard Calibration Library
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
@@ -994,22 +1609,23 @@
       
         <li class="md-nav__item">
   <a href="#magnetopy.magnetometry.Analysis" class="md-nav__link">
-    Analysis
+    <span class="md-ellipsis">
+      
+        Analysis
+      
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Analysis">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#magnetopy.magnetometry.Analysis--notes" class="md-nav__link">
-    Notes
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#magnetopy.magnetometry.Analysis.as_dict" class="md-nav__link">
-    as_dict()
+    <span class="md-ellipsis">
+      
+        as_dict
+      
+    </span>
   </a>
   
 </li>
@@ -1029,9 +1645,11 @@
           
           
             <div class="md-content" data-md-component="content">
+              
               <article class="md-content__inner md-typeset">
                 
                   
+
 
 
   <h1>Analysis (Protocol)</h1>
@@ -1041,49 +1659,52 @@
 
 
 <h2 id="magnetopy.magnetometry.Analysis" class="doc doc-heading">
-          <code>Analysis</code>
+            <code>Analysis</code>
 
 
 </h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="typing.Protocol">Protocol</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="typing.Protocol">Protocol</span></code></p>
 
-  
-      <p>A protocol class representing an analysis of one or more magnetometry
+
+
+        <p>A protocol class representing an analysis of one or more magnetometry
 experiments.</p>
 
 
-
-  <p><strong>Attributes:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
         <tr>
-          <td><code>results</code></td>
-          <td>
-                <code><span title="typing.Any">Any</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The results of the analysis. For results more complicated than a simple value,
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="magnetopy.magnetometry.Analysis.results">results</span></code></td>
+            <td>
+                  <code><span title="typing.Any">Any</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The results of the analysis. For results more complicated than a simple value,
 it is recommended that a <code>dataclass</code> be used, and that the <code>dataclass</code> have an
 <code>as_dict</code> method.</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-      <h4 id="magnetopy.magnetometry.Analysis--notes">Notes</h4>
-<p>While not yet enforced, it is strongly recommended that any class that implements
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="note" open>
+  <summary>Notes</summary>
+  <p>While not yet enforced, it is strongly recommended that any class that implements
 this protocol have an <code>__init__</code> method which takes the following arguments:</p>
 <ul>
 <li><code>dataset</code>: a <code>Magnetometry</code> object</li>
@@ -1097,96 +1718,103 @@ It is recommended that this object be a dataclass with an <code>as_dict</code> m
 </ul>
 <p>The <code>__init__</code> method should perform the analysis and store the results in the
 <code>results</code> attribute.</p>
+</details>
 
-            <details class="quote">
-              <summary>Source code in <code>magnetopy\magnetometry.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-132">132</a></span>
-<span class="normal"><a href="#__codelineno-0-133">133</a></span>
-<span class="normal"><a href="#__codelineno-0-134">134</a></span>
-<span class="normal"><a href="#__codelineno-0-135">135</a></span>
-<span class="normal"><a href="#__codelineno-0-136">136</a></span>
-<span class="normal"><a href="#__codelineno-0-137">137</a></span>
-<span class="normal"><a href="#__codelineno-0-138">138</a></span>
-<span class="normal"><a href="#__codelineno-0-139">139</a></span>
-<span class="normal"><a href="#__codelineno-0-140">140</a></span>
-<span class="normal"><a href="#__codelineno-0-141">141</a></span>
-<span class="normal"><a href="#__codelineno-0-142">142</a></span>
-<span class="normal"><a href="#__codelineno-0-143">143</a></span>
-<span class="normal"><a href="#__codelineno-0-144">144</a></span>
-<span class="normal"><a href="#__codelineno-0-145">145</a></span>
-<span class="normal"><a href="#__codelineno-0-146">146</a></span>
-<span class="normal"><a href="#__codelineno-0-147">147</a></span>
-<span class="normal"><a href="#__codelineno-0-148">148</a></span>
-<span class="normal"><a href="#__codelineno-0-149">149</a></span>
-<span class="normal"><a href="#__codelineno-0-150">150</a></span>
-<span class="normal"><a href="#__codelineno-0-151">151</a></span>
-<span class="normal"><a href="#__codelineno-0-152">152</a></span>
-<span class="normal"><a href="#__codelineno-0-153">153</a></span>
-<span class="normal"><a href="#__codelineno-0-154">154</a></span>
-<span class="normal"><a href="#__codelineno-0-155">155</a></span>
-<span class="normal"><a href="#__codelineno-0-156">156</a></span>
-<span class="normal"><a href="#__codelineno-0-157">157</a></span>
-<span class="normal"><a href="#__codelineno-0-158">158</a></span>
-<span class="normal"><a href="#__codelineno-0-159">159</a></span>
-<span class="normal"><a href="#__codelineno-0-160">160</a></span>
-<span class="normal"><a href="#__codelineno-0-161">161</a></span>
-<span class="normal"><a href="#__codelineno-0-162">162</a></span>
-<span class="normal"><a href="#__codelineno-0-163">163</a></span>
-<span class="normal"><a href="#__codelineno-0-164">164</a></span>
-<span class="normal"><a href="#__codelineno-0-165">165</a></span>
-<span class="normal"><a href="#__codelineno-0-166">166</a></span>
-<span class="normal"><a href="#__codelineno-0-167">167</a></span>
-<span class="normal"><a href="#__codelineno-0-168">168</a></span>
-<span class="normal"><a href="#__codelineno-0-169">169</a></span>
-<span class="normal"><a href="#__codelineno-0-170">170</a></span>
-<span class="normal"><a href="#__codelineno-0-171">171</a></span>
-<span class="normal"><a href="#__codelineno-0-172">172</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-132" name="__codelineno-0-132"></a><span class="k">class</span> <span class="nc">Analysis</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
-<a id="__codelineno-0-133" name="__codelineno-0-133"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A protocol class representing an analysis of one or more magnetometry</span>
-<a id="__codelineno-0-134" name="__codelineno-0-134"></a><span class="sd">    experiments.</span>
-<a id="__codelineno-0-135" name="__codelineno-0-135"></a>
-<a id="__codelineno-0-136" name="__codelineno-0-136"></a><span class="sd">    Attributes</span>
-<a id="__codelineno-0-137" name="__codelineno-0-137"></a><span class="sd">    ----------</span>
-<a id="__codelineno-0-138" name="__codelineno-0-138"></a><span class="sd">    results : Any</span>
-<a id="__codelineno-0-139" name="__codelineno-0-139"></a><span class="sd">        The results of the analysis. For results more complicated than a simple value,</span>
-<a id="__codelineno-0-140" name="__codelineno-0-140"></a><span class="sd">        it is recommended that a `dataclass` be used, and that the `dataclass` have an</span>
-<a id="__codelineno-0-141" name="__codelineno-0-141"></a><span class="sd">        `as_dict` method.</span>
-<a id="__codelineno-0-142" name="__codelineno-0-142"></a>
-<a id="__codelineno-0-143" name="__codelineno-0-143"></a><span class="sd">    Notes</span>
-<a id="__codelineno-0-144" name="__codelineno-0-144"></a><span class="sd">    -----</span>
-<a id="__codelineno-0-145" name="__codelineno-0-145"></a><span class="sd">    While not yet enforced, it is strongly recommended that any class that implements</span>
-<a id="__codelineno-0-146" name="__codelineno-0-146"></a><span class="sd">    this protocol have an `__init__` method which takes the following arguments:</span>
-<a id="__codelineno-0-147" name="__codelineno-0-147"></a>
-<a id="__codelineno-0-148" name="__codelineno-0-148"></a><span class="sd">    - `dataset`: a `Magnetometry` object</span>
-<a id="__codelineno-0-149" name="__codelineno-0-149"></a><span class="sd">    - `parsing_args`: an object with attributes that specify how to parse the data;</span>
-<a id="__codelineno-0-150" name="__codelineno-0-150"></a><span class="sd">    these arguments may be used as arguments to be passed to various `Magnetometry`</span>
-<a id="__codelineno-0-151" name="__codelineno-0-151"></a><span class="sd">    methods. It is recommended that this object be a dataclass with an `as_dict`</span>
-<a id="__codelineno-0-152" name="__codelineno-0-152"></a><span class="sd">    method.</span>
-<a id="__codelineno-0-153" name="__codelineno-0-153"></a><span class="sd">    - `fitting_args`: an object with attributes that specify how to fit the data;</span>
-<a id="__codelineno-0-154" name="__codelineno-0-154"></a><span class="sd">    these arguments may include, e.g., starting values, bounds, constraints, etc.</span>
-<a id="__codelineno-0-155" name="__codelineno-0-155"></a><span class="sd">    It is recommended that this object be a dataclass with an `as_dict` method.</span>
-<a id="__codelineno-0-156" name="__codelineno-0-156"></a>
-<a id="__codelineno-0-157" name="__codelineno-0-157"></a><span class="sd">    The `__init__` method should perform the analysis and store the results in the</span>
-<a id="__codelineno-0-158" name="__codelineno-0-158"></a><span class="sd">    `results` attribute.</span>
-<a id="__codelineno-0-159" name="__codelineno-0-159"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-160" name="__codelineno-0-160"></a>
-<a id="__codelineno-0-161" name="__codelineno-0-161"></a>    <span class="k">def</span> <span class="nf">as_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<a id="__codelineno-0-162" name="__codelineno-0-162"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a dictionary representation of the analysis. Should include the</span>
-<a id="__codelineno-0-163" name="__codelineno-0-163"></a><span class="sd">        results of the analysis along with any parsing and fitting arguments used.</span>
-<a id="__codelineno-0-164" name="__codelineno-0-164"></a>
-<a id="__codelineno-0-165" name="__codelineno-0-165"></a><span class="sd">        The dictionary must include a field &quot;_class_&quot; with the name of the class of</span>
-<a id="__codelineno-0-166" name="__codelineno-0-166"></a><span class="sd">        the analysis object (e.g. &quot;MvsHAnalysis&quot;, &quot;ZFCAnalysis&quot;, etc.).</span>
-<a id="__codelineno-0-167" name="__codelineno-0-167"></a>
-<a id="__codelineno-0-168" name="__codelineno-0-168"></a><span class="sd">        Returns</span>
-<a id="__codelineno-0-169" name="__codelineno-0-169"></a><span class="sd">        -------</span>
-<a id="__codelineno-0-170" name="__codelineno-0-170"></a><span class="sd">        dict[str, Any]</span>
-<a id="__codelineno-0-171" name="__codelineno-0-171"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-172" name="__codelineno-0-172"></a>        <span class="o">...</span>
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>magnetopy/magnetometry.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-132">132</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-133">133</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-134">134</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-135">135</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-136">136</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-137">137</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-138">138</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-139">139</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-140">140</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-141">141</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-142">142</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-143">143</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-144">144</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-145">145</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-146">146</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-147">147</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-148">148</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-149">149</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-150">150</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-151">151</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-152">152</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-153">153</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-154">154</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-155">155</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-156">156</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-157">157</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-158">158</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-159">159</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-160">160</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-161">161</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-162">162</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-163">163</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-164">164</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-165">165</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-166">166</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-167">167</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-168">168</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-169">169</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-170">170</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-171">171</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis--source--__codelineno-0-172">172</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-132" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-132"></a><span class="k">class</span><span class="w"> </span><span class="nc">Analysis</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-133" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-133"></a><span class="w">    </span><span class="sd">"""A protocol class representing an analysis of one or more magnetometry</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-134" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-134"></a><span class="sd">    experiments.</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-135" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-135"></a>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-136" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-136"></a><span class="sd">    Attributes</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-137" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-137"></a><span class="sd">    ----------</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-138" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-138"></a><span class="sd">    results : Any</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-139" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-139"></a><span class="sd">        The results of the analysis. For results more complicated than a simple value,</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-140" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-140"></a><span class="sd">        it is recommended that a `dataclass` be used, and that the `dataclass` have an</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-141" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-141"></a><span class="sd">        `as_dict` method.</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-142" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-142"></a>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-143" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-143"></a><span class="sd">    Notes</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-144" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-144"></a><span class="sd">    -----</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-145" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-145"></a><span class="sd">    While not yet enforced, it is strongly recommended that any class that implements</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-146" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-146"></a><span class="sd">    this protocol have an `__init__` method which takes the following arguments:</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-147" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-147"></a>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-148" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-148"></a><span class="sd">    - `dataset`: a `Magnetometry` object</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-149" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-149"></a><span class="sd">    - `parsing_args`: an object with attributes that specify how to parse the data;</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-150" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-150"></a><span class="sd">    these arguments may be used as arguments to be passed to various `Magnetometry`</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-151" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-151"></a><span class="sd">    methods. It is recommended that this object be a dataclass with an `as_dict`</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-152" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-152"></a><span class="sd">    method.</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-153" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-153"></a><span class="sd">    - `fitting_args`: an object with attributes that specify how to fit the data;</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-154" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-154"></a><span class="sd">    these arguments may include, e.g., starting values, bounds, constraints, etc.</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-155" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-155"></a><span class="sd">    It is recommended that this object be a dataclass with an `as_dict` method.</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-156" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-156"></a>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-157" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-157"></a><span class="sd">    The `__init__` method should perform the analysis and store the results in the</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-158" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-158"></a><span class="sd">    `results` attribute.</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-159" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-159"></a><span class="sd">    """</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-160" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-160"></a>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-161" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-161"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">as_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-162" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-162"></a><span class="w">        </span><span class="sd">"""Return a dictionary representation of the analysis. Should include the</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-163" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-163"></a><span class="sd">        results of the analysis along with any parsing and fitting arguments used.</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-164" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-164"></a>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-165" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-165"></a><span class="sd">        The dictionary must include a field "_class_" with the name of the class of</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-166" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-166"></a><span class="sd">        the analysis object (e.g. "MvsHAnalysis", "ZFCAnalysis", etc.).</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-167" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-167"></a>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-168" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-168"></a><span class="sd">        Returns</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-169" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-169"></a><span class="sd">        -------</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-170" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-170"></a><span class="sd">        dict[str, Any]</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-171" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-171"></a><span class="sd">        """</span>
+<a id="magnetopy.magnetometry.Analysis--source--__codelineno-0-172" name="magnetopy.magnetometry.Analysis--source--__codelineno-0-172"></a>        <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
 
-  <div class="doc doc-children">
+
+<div class="doc doc-children">
 
 
 
@@ -1200,72 +1828,71 @@ It is recommended that this object be a dataclass with an <code>as_dict</code> m
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="magnetopy.magnetometry.Analysis.as_dict" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">as_dict</span><span class="p">()</span></code>
+            <code class="highlight language-python"><span class="n">as_dict</span><span class="p">()</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Return a dictionary representation of the analysis. Should include the
+    <div class="doc doc-contents ">
+
+        <p>Return a dictionary representation of the analysis. Should include the
 results of the analysis along with any parsing and fitting arguments used.</p>
 <p>The dictionary must include a field "<em>class</em>" with the name of the class of
 the analysis object (e.g. "MvsHAnalysis", "ZFCAnalysis", etc.).</p>
 
 
-
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
         <tr>
-          <td>
-                <code>dict[str, <span title="typing.Any">Any</span>]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              
-            </div>
-          </td>
+          <th>Type</th>
+          <th>Description</th>
         </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="dict">dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>magnetopy\magnetometry.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-161">161</a></span>
-<span class="normal"><a href="#__codelineno-0-162">162</a></span>
-<span class="normal"><a href="#__codelineno-0-163">163</a></span>
-<span class="normal"><a href="#__codelineno-0-164">164</a></span>
-<span class="normal"><a href="#__codelineno-0-165">165</a></span>
-<span class="normal"><a href="#__codelineno-0-166">166</a></span>
-<span class="normal"><a href="#__codelineno-0-167">167</a></span>
-<span class="normal"><a href="#__codelineno-0-168">168</a></span>
-<span class="normal"><a href="#__codelineno-0-169">169</a></span>
-<span class="normal"><a href="#__codelineno-0-170">170</a></span>
-<span class="normal"><a href="#__codelineno-0-171">171</a></span>
-<span class="normal"><a href="#__codelineno-0-172">172</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-161" name="__codelineno-0-161"></a><span class="k">def</span> <span class="nf">as_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<a id="__codelineno-0-162" name="__codelineno-0-162"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a dictionary representation of the analysis. Should include the</span>
-<a id="__codelineno-0-163" name="__codelineno-0-163"></a><span class="sd">    results of the analysis along with any parsing and fitting arguments used.</span>
-<a id="__codelineno-0-164" name="__codelineno-0-164"></a>
-<a id="__codelineno-0-165" name="__codelineno-0-165"></a><span class="sd">    The dictionary must include a field &quot;_class_&quot; with the name of the class of</span>
-<a id="__codelineno-0-166" name="__codelineno-0-166"></a><span class="sd">    the analysis object (e.g. &quot;MvsHAnalysis&quot;, &quot;ZFCAnalysis&quot;, etc.).</span>
-<a id="__codelineno-0-167" name="__codelineno-0-167"></a>
-<a id="__codelineno-0-168" name="__codelineno-0-168"></a><span class="sd">    Returns</span>
-<a id="__codelineno-0-169" name="__codelineno-0-169"></a><span class="sd">    -------</span>
-<a id="__codelineno-0-170" name="__codelineno-0-170"></a><span class="sd">    dict[str, Any]</span>
-<a id="__codelineno-0-171" name="__codelineno-0-171"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-172" name="__codelineno-0-172"></a>    <span class="o">...</span>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>magnetopy/magnetometry.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-161">161</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-162">162</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-163">163</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-164">164</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-165">165</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-166">166</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-167">167</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-168">168</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-169">169</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-170">170</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-171">171</a></span>
+<span class="normal"><a href="#magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-172">172</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-161" name="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-161"></a><span class="k">def</span><span class="w"> </span><span class="nf">as_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<a id="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-162" name="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-162"></a><span class="w">    </span><span class="sd">"""Return a dictionary representation of the analysis. Should include the</span>
+<a id="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-163" name="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-163"></a><span class="sd">    results of the analysis along with any parsing and fitting arguments used.</span>
+<a id="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-164" name="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-164"></a>
+<a id="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-165" name="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-165"></a><span class="sd">    The dictionary must include a field "_class_" with the name of the class of</span>
+<a id="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-166" name="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-166"></a><span class="sd">    the analysis object (e.g. "MvsHAnalysis", "ZFCAnalysis", etc.).</span>
+<a id="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-167" name="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-167"></a>
+<a id="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-168" name="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-168"></a><span class="sd">    Returns</span>
+<a id="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-169" name="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-169"></a><span class="sd">    -------</span>
+<a id="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-170" name="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-170"></a><span class="sd">    dict[str, Any]</span>
+<a id="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-171" name="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-171"></a><span class="sd">    """</span>
+<a id="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-172" name="magnetopy.magnetometry.Analysis.as_dict--source--__codelineno-0-172"></a>    <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -1273,9 +1900,16 @@ the analysis object (e.g. "MvsHAnalysis", "ZFCAnalysis", etc.).</p>
 
   </div>
 
-  </div>
+    </div>
 
 </div>
+
+
+
+
+
+
+
 
 
 
@@ -1286,14 +1920,16 @@ the analysis object (e.g. "MvsHAnalysis", "ZFCAnalysis", etc.).</p>
             </div>
           
           
-  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
 
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
           <button type="button" class="md-top md-icon" data-md-component="top" hidden>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
-            Back to top
-          </button>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
         
       </main>
       
@@ -1320,10 +1956,14 @@ the analysis object (e.g. "MvsHAnalysis", "ZFCAnalysis", etc.).</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.next_prev", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.220ee61c.min.js"></script>
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.next_prev", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
