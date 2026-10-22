@@ -283,7 +283,7 @@ class MvsH:
         standard with the same sequence as the current `MvsH` object. Adds a column
         called `"true_field"` to the `DataFrame` in the `data` attribute.
 
-        See `magnetopy.cli.calibration_insall` for information on how to create a
+        See `magnetopy.cli.calibration_install` for information on how to create a
         calibration directory.
 
         Parameters

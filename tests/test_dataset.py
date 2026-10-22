@@ -21,6 +21,12 @@ mvsh9_path = DATA_PATH / "mvsh9.dat"
 
 datasets = ["dataset1", "dataset2", "dataset3", "dataset4"]
 
+CALIBRATION_JSON = Path.home() / ".magnetopy" / "calibration" / "calibration.json"
+requires_calibration = pytest.mark.skipif(
+    not CALIBRATION_JSON.is_file(),
+    reason=f"calibration files not installed ({CALIBRATION_JSON} not found)",
+)
+
 ### SampleInfo tests ###
 
 
@@ -203,11 +209,13 @@ def test_diamagnetic_correction_scaling():
 ### Dataset Field Correction Tests ###
 
 
+@requires_calibration
 def test_true_field_correction():
     dataset = Magnetometry(DATA_PATH / "dataset3", true_field_correction="sequence_1")
     assert dataset.mvsh[0].field_correction_file == "mvsh_seq1.dat"
 
 
+@requires_calibration
 def test_field_correction_error():
     with pytest.raises(MvsH.FieldCorrectionError):
         Magnetometry(DATA_PATH / "dataset1", true_field_correction="sequence_1")
