@@ -1,3 +1,15 @@
+"""MPMS3 DC moment calibration from a Pd standard measurement.
+
+Status: not yet validated on real data. The tests use synthetic scans only. A
+check against the Rinehart group's Pd standard (2026-10-22) recovered a constant
+range-normalized calibration factor across SQUID ranges 1-1000, but that factor is
+derived from Quantum Design's own fitted curve and reported moment, so it is
+self-consistent by construction. Fitting the measured "Processed Voltage (V)" scans
+instead gave amplitudes about 0.2-0.3% larger than fitting Quantum Design's fitted
+curve. Moments computed from raw voltages should be compared against reported
+moments on real measurements before this is relied on.
+"""
+
 from __future__ import annotations
 
 import json
@@ -12,8 +24,11 @@ from scipy.optimize import curve_fit
 from magnetopy.data_files import DatFile, DcMeasurement
 
 
-MPMS3_GRADIOMETER_RADIUS_MM = 8.5
-MPMS3_GRADIOMETER_HALF_LENGTH_MM = 8.0
+# Values that reproduce Quantum Design's fitted DC scan curves (relative rms residual
+# ~1e-7 when fit freely to the Pd standard scans); the nominal 8.5 mm / 8.0 mm left a
+# ~0.45% systematic shape mismatch.
+MPMS3_GRADIOMETER_RADIUS_MM = 8.3654
+MPMS3_GRADIOMETER_HALF_LENGTH_MM = 7.9600
 
 DcCenter = Literal["free", "fixed"]
 

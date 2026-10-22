@@ -1,3 +1,6 @@
+**Not yet validated on real data.** See the `magnetopy.calibration` module docstring for
+what has and has not been checked.
+
 ::: magnetopy.calibration.DcFitResult
 
 ::: magnetopy.calibration.MomentCalibrationRecord
